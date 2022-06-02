@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b12e63d5121d64c24895d463ea209e32, type: 3}
+  m_Name: roomtypeicons
+  m_EditorClassIdentifier: 
+  LstSprites:
+  - {fileID: -7185145259061222356, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: 1369102614243984427, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: -6327107731223078017, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: -7404596940508686741, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: 2641297358578130711, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: -4704848311800635442, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: -4087247212413538386, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: 2804968355760249059, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: -6287002357799567390, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: 5980519720129567762, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: -4403777834383266493, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: -3429753330676762978, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: -2021549566146676658, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: 1841073218668525529, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: -7352448776484850027, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  - {fileID: 4473492142677930137, guid: 301682aa3e6cc01429550bd83146c6cf, type: 3}
+  LstPrefabs: []
+  LstTexts: []

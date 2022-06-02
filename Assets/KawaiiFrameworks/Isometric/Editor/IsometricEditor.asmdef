@@ -1,0 +1,17 @@
+{
+    "name": "IsometricEditor",
+    "references": [
+        "GUID:090a2f04e226c4bf196dcf477d06e59d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

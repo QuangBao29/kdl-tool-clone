@@ -1,0 +1,17 @@
+{
+    "name": "Kawaii.ResourceManager.Editor",
+    "references": [
+        "GUID:ee55c57535ec4442e95d72f4dc4210ac"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

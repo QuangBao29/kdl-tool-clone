@@ -1,0 +1,827 @@
+fileFormatVersion: 2
+guid: 44a4bca4325f6574bbf02384b7df4eef
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2374222918679686493
+    second: 1
+  - first:
+      213: -761933863725385812
+    second: 2
+  - first:
+      213: -5906598218874874896
+    second: 3
+  - first:
+      213: -1816755548282093316
+    second: 4
+  - first:
+      213: -7937143571174015179
+    second: Appliance
+  - first:
+      213: -7108554976079482156
+    second: BathExtra
+  - first:
+      213: -1848161722098593413
+    second: Bathtub
+  - first:
+      213: -6327107731223078017
+    second: Bed
+  - first:
+      213: -5273654737383767399
+    second: Bedside
+  - first:
+      213: -4396492550072192881
+    second: Carpet
+  - first:
+      213: 1391849852316778699
+    second: Chair
+  - first:
+      213: -2948349559182545530
+    second: Closet
+  - first:
+      213: -618993216863426524
+    second: FloorDecor
+  - first:
+      213: 9012335263068153786
+    second: KitDevice
+  - first:
+      213: 8375136145213477977
+    second: KitExtra
+  - first:
+      213: 1221688856409441069
+    second: KitFurniture
+  - first:
+      213: -4403777834383266493
+    second: Lavabo
+  - first:
+      213: -884034603010724719
+    second: Partition
+  - first:
+      213: -3429753330676762978
+    second: Plant
+  - first:
+      213: 4473492142677930137
+    second: Table
+  - first:
+      213: 5426970061134755516
+    second: Tile
+  - first:
+      213: 1734089330981326749
+    second: Toilet
+  - first:
+      213: -1667515821976023690
+    second: Vanity
+  - first:
+      213: -4828462204439671106
+    second: WallDecor
+  - first:
+      213: -8371347703574186731
+    second: Wallpaper
+  - first:
+      213: -7461414615733012063
+    second: Partitions
+  - first:
+      213: 5089659562054436814
+    second: Storage
+  - first:
+      213: 2008176328888099268
+    second: 5
+  - first:
+      213: 6967745887157389618
+    second: 6
+  - first:
+      213: 6501298950303736333
+    second: 7
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 48
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 1
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 259
+        width: 50
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a2918aa5d01d0fd0800000000000000
+      internalID: -2374222918679686493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 209
+        width: 50
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca7be4610311d65f0800000000000000
+      internalID: -761933863725385812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 309
+        width: 46
+        height: 67
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f31205e63c870ea0800000000000000
+      internalID: -5906598218874874896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320
+        width: 61
+        height: 78
+      alignment: 9
+      pivot: {x: 0.5, y: 0.056090258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf00de4547699c6e0800000000000000
+      internalID: -1816755548282093316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 5
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 357
+        width: 60
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c129b93bb97edb10800000000000000
+      internalID: 2008176328888099268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 136
+        width: 44
+        height: 65
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2398439b7f762b060800000000000000
+      internalID: 6967745887157389618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 399
+        width: 80
+        height: 74
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d02697f23f0493a50800000000000000
+      internalID: 6501298950303736333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Appliance
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 166
+        width: 43
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53fb5ec89f999d190800000000000000
+      internalID: -7937143571174015179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BathExtra
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 211
+        width: 50
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d2727879e6595d90800000000000000
+      internalID: -7108554976079482156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bathtub
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 267
+        width: 55
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b71d6daa4b20a56e0800000000000000
+      internalID: -1848161722098593413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bed
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 466
+        width: 70
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7b12d87a099138a0800000000000000
+      internalID: -6327107731223078017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bedside
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 309
+        width: 59
+        height: 47
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9924f2615f630d6b0800000000000000
+      internalID: -5273654737383767399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Carpet
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 426
+        width: 69
+        height: 39
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f80bb4fb1558cf2c0800000000000000
+      internalID: -4396492550072192881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chair
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 215
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc0850cf018d05310800000000000000
+      internalID: 1391849852316778699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closet
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 247
+        width: 53
+        height: 61
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68dae3b62bb5517d0800000000000000
+      internalID: -2948349559182545530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloorDecor
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 258
+        width: 38
+        height: 50
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 428aa76e2f4e867f0800000000000000
+      internalID: -618993216863426524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: KitDevice
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 382
+        width: 66
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab767ef1c2f321d70800000000000000
+      internalID: 9012335263068153786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: KitExtra
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 203
+        width: 50
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 954dbf063f57a3470800000000000000
+      internalID: 8375136145213477977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: KitFurniture
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 266
+        width: 54
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d238658ca8f44f010800000000000000
+      internalID: 1221688856409441069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lavabo
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 153
+        width: 41
+        height: 49
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34da8df4463a2e2c0800000000000000
+      internalID: -4403777834383266493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Partitions
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 338
+        width: 60
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a9735370fab37890800000000000000
+      internalID: -7461414615733012063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Plant
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 172
+        width: 34
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e967cc174811760d0800000000000000
+      internalID: -3429753330676762978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Storage
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 428
+        width: 83
+        height: 84
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec7ccefc76a12a640800000000000000
+      internalID: 5089659562054436814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Table
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 310
+        width: 58
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 990b1d5f669051e30800000000000000
+      internalID: 4473492142677930137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tile
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 474
+        width: 85
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb6fd9c6488705b40800000000000000
+      internalID: 5426970061134755516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Toilet
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 158
+        width: 48
+        height: 50
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9fcfe51f09b01810800000000000000
+      internalID: 1734089330981326749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vanity
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 202
+        width: 53
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67d86cdd13bcbd8e0800000000000000
+      internalID: -1667515821976023690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WallDecor
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 377
+        width: 47
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebe49f4153bddfcb0800000000000000
+      internalID: -4828462204439671106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wallpaper
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 118
+        width: 29
+        height: 53
+      alignment: 9
+      pivot: {x: 0.5, y: 0.054688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 515bd2ded9ff2db80800000000000000
+      internalID: -8371347703574186731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

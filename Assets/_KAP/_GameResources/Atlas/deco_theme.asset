@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b12e63d5121d64c24895d463ea209e32, type: 3}
+  m_Name: deco_theme
+  m_EditorClassIdentifier: 
+  LstSprites:
+  - {fileID: 397098923902761552, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -3010785696586398079, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -7890106917115539761, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -6703844270564737358, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -8968883753992419445, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -8532804514061824468, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -8986490003017200446, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -7736428579167400599, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -216457323372237657, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: 1924945257945719136, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: 5610784628723226471, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -8598210076079288439, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: 4054735157393811440, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -3015156894381106130, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -5369014126284790993, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: 9101506309860342879, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -8127129769024606, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: 2669449809191880317, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  - {fileID: -6140405186718539048, guid: d591b9e180bac4ece8ea3e0a4cfea5de, type: 3}
+  LstPrefabs: []
+  LstTexts: []

@@ -1,0 +1,31 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# https://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:bcdd70469b1c78724ec920f75bfacfb9:8f5f4fcc1efd62e0b978c8aa6c3628c6:86d36fa07ad34e6baf8df58a2c32b244$
+#
+:format=40300
+:texture=roomtypeicons.png
+:size=512x1024
+:pivotpoints=enabled
+:borders=disabled
+:alphahandling=ClearTransparentPixels
+
+Bat;305;389;136;138; 0.5;0.5; 0;0;0;0
+Bathtube;337;528;150;145; 0.5;0.5; 0;0;0;0
+Bed;0;603;168;110; 0.5;0.5; 0;0;0;0
+Bench;201;912;200;112; 0.5;0.5; 0;0;0;0
+Bookshelf;0;357;148;140; 0.5;0.5; 0;0;0;0
+Chandelier;0;894;200;130; 0.5;0.5; 0;0;0;0
+Cover;183;679;170;94; 0.5;0.5; 0;0;0;0
+Desk;354;674;157;99; 0.5;0.5; 0;0;0;0
+Door;201;774;185;137; 0.5;0.5; 0;0;0;0
+Fence;0;796;184;97; 0.5;0.5; 0;0;0;0
+Lavabo;149;259;134;167; 0.5;0.5; 0;0;0;0
+Plant;387;774;112;137; 0.5;0.5; 0;0;0;0
+Salon;154;427;150;122; 0.5;0.5; 0;0;0;0
+Stove;0;498;153;104; 0.5;0.5; 0;0;0;0
+Swing;169;550;167;128; 0.5;0.5; 0;0;0;0
+Table;0;714;182;81; 0.5;0.5; 0;0;0;0

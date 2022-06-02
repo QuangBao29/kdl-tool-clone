@@ -1,0 +1,354 @@
+version: 2
+importPivots: 1
+tpsheetFileNames:
+- Assets/_KAP/_GameResources/Textures/commonicon/common.tpsheet
+- Assets/_KAP/_GameResources/Textures/CommonIcons/common.tpsheet
+- Assets/_KAP/_GameResources/Textures/CommonIcons/deco_theme.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99000.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99001.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99001_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99001_2.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99002.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99002_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99002_2.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99003.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99003_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99003_2.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99004.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99005.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99006.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99006_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99007.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99007_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99007_2.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99008.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99009.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99009_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99009_2.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99010.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99011.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99011_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99012.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99012_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99014.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99014_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99015.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99016.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99017.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99017_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99018.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99018_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99019.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99019_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99019_2.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99900.tpsheet
+- Assets/_KAP/_GameResources/Textures/Decos/99900_1.tpsheet
+- Assets/_KAP/_GameResources/Textures/roomtheme/roomtheme.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520010.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520011.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520014.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520015.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520016.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520017.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520018.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520019.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520020.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520021.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520022.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520023.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520024.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520025.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520026.tpsheet
+- Assets/_KAP/_GameResources/Textures/roomtype/roomtype.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomTypes/roomtypeicons.tpsheet
+- Assets/_KAP/_GameResources/Textures/Shop/shop.tpsheet
+- Assets/_KAP/_GameResources/Textures/Themes/520010.tpsheet
+- Assets/_KAP/_GameResources/Textures/Themes/520011.tpsheet
+- Assets/_KAP/_GameResources/Textures/Themes/520014.tpsheet
+- Assets/_KAP/Textures/CommonIcon/common.tpsheet
+- Assets/_KHH/Textures/MapLevels/1001/items.tpsheet
+- Assets/3rdParty/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99000.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99001.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99001_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99001_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99001_3.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99002.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99002_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99002_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99003.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99003_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99003_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99004.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99004_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99004_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99005.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99005_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99006.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99006_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99006_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99007.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99007_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99007_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99008.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99008_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99009.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99009_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99009_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99010.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99011.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99011_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99011_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99011_3.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99012.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99012_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99012_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99014.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99014_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99015.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99015_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99016.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99016_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99017.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99017_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99018.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99018_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99019.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99019_1.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99019_2.tpsheet
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99999.tpsheet
+textureFileNames:
+- Assets/_KAP/_GameResources/Textures/commonicon/common.png
+- Assets/_KAP/_GameResources/Textures/CommonIcons/common.png
+- Assets/_KAP/_GameResources/Textures/CommonIcons/deco_theme.png
+- Assets/_KAP/_GameResources/Textures/Decos/99000.png
+- Assets/_KAP/_GameResources/Textures/Decos/99001.png
+- Assets/_KAP/_GameResources/Textures/Decos/99001_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99001_2.png
+- Assets/_KAP/_GameResources/Textures/Decos/99002.png
+- Assets/_KAP/_GameResources/Textures/Decos/99002_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99002_2.png
+- Assets/_KAP/_GameResources/Textures/Decos/99003.png
+- Assets/_KAP/_GameResources/Textures/Decos/99003_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99003_2.png
+- Assets/_KAP/_GameResources/Textures/Decos/99004.png
+- Assets/_KAP/_GameResources/Textures/Decos/99005.png
+- Assets/_KAP/_GameResources/Textures/Decos/99006.png
+- Assets/_KAP/_GameResources/Textures/Decos/99006_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99007.png
+- Assets/_KAP/_GameResources/Textures/Decos/99007_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99007_2.png
+- Assets/_KAP/_GameResources/Textures/Decos/99008.png
+- Assets/_KAP/_GameResources/Textures/Decos/99009.png
+- Assets/_KAP/_GameResources/Textures/Decos/99009_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99009_2.png
+- Assets/_KAP/_GameResources/Textures/Decos/99010.png
+- Assets/_KAP/_GameResources/Textures/Decos/99011.png
+- Assets/_KAP/_GameResources/Textures/Decos/99011_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99012.png
+- Assets/_KAP/_GameResources/Textures/Decos/99012_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99014.png
+- Assets/_KAP/_GameResources/Textures/Decos/99014_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99015.png
+- Assets/_KAP/_GameResources/Textures/Decos/99016.png
+- Assets/_KAP/_GameResources/Textures/Decos/99017.png
+- Assets/_KAP/_GameResources/Textures/Decos/99017_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99018.png
+- Assets/_KAP/_GameResources/Textures/Decos/99018_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99019.png
+- Assets/_KAP/_GameResources/Textures/Decos/99019_1.png
+- Assets/_KAP/_GameResources/Textures/Decos/99019_2.png
+- Assets/_KAP/_GameResources/Textures/Decos/99900.png
+- Assets/_KAP/_GameResources/Textures/Decos/99900_1.png
+- Assets/_KAP/_GameResources/Textures/roomtheme/roomtheme.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520010.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520011.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520014.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520015.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520016.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520017.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520018.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520019.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520020.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520021.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520022.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520023.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520024.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520025.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520026.png
+- Assets/_KAP/_GameResources/Textures/roomtype/roomtype.png
+- Assets/_KAP/_GameResources/Textures/RoomTypes/roomtypeicons.png
+- Assets/_KAP/_GameResources/Textures/Shop/shop.png
+- Assets/_KAP/_GameResources/Textures/Themes/520010.png
+- Assets/_KAP/_GameResources/Textures/Themes/520011.png
+- Assets/_KAP/_GameResources/Textures/Themes/520014.png
+- Assets/_KAP/Textures/CommonIcon/common.png
+- Assets/_KHH/Textures/MapLevels/1001/items.png
+- Assets/3rdParty/codeandweb.com/Example/SpriteSheet/sprites.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99000.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99001.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99001_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99001_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99001_3.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99002.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99002_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99002_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99003.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99003_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99003_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99004.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99004_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99004_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99005.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99005_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99006.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99006_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99006_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99007.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99007_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99007_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99008.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99008_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99009.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99009_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99009_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99010.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99011.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99011_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99011_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99011_3.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99012.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99012_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99012_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99014.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99014_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99015.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99015_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99016.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99016_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99017.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99017_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99018.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99018_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99019.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99019_1.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99019_2.png
+- Assets/Assets/_KAP/_GameResources/Textures/Decos/99999.png
+normalmapFileNames:
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- Assets/3rdParty/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+enableDebugOutput: 0
