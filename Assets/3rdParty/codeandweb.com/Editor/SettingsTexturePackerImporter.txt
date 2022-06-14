@@ -59,12 +59,14 @@ tpsheetFileNames:
 - Assets/_KAP/_GameResources/Textures/RoomThemes/520024.tpsheet
 - Assets/_KAP/_GameResources/Textures/RoomThemes/520025.tpsheet
 - Assets/_KAP/_GameResources/Textures/RoomThemes/520026.tpsheet
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520027.tpsheet
 - Assets/_KAP/_GameResources/Textures/roomtype/roomtype.tpsheet
 - Assets/_KAP/_GameResources/Textures/RoomTypes/roomtypeicons.tpsheet
 - Assets/_KAP/_GameResources/Textures/Shop/shop.tpsheet
 - Assets/_KAP/_GameResources/Textures/Themes/520010.tpsheet
 - Assets/_KAP/_GameResources/Textures/Themes/520011.tpsheet
 - Assets/_KAP/_GameResources/Textures/Themes/520014.tpsheet
+- Assets/_KAP/_GameResources/Textures/Themes/520027.tpsheet
 - Assets/_KAP/Textures/CommonIcon/common.tpsheet
 - Assets/_KHH/Textures/MapLevels/1001/items.tpsheet
 - Assets/3rdParty/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
@@ -176,12 +178,14 @@ textureFileNames:
 - Assets/_KAP/_GameResources/Textures/RoomThemes/520024.png
 - Assets/_KAP/_GameResources/Textures/RoomThemes/520025.png
 - Assets/_KAP/_GameResources/Textures/RoomThemes/520026.png
+- Assets/_KAP/_GameResources/Textures/RoomThemes/520027.png
 - Assets/_KAP/_GameResources/Textures/roomtype/roomtype.png
 - Assets/_KAP/_GameResources/Textures/RoomTypes/roomtypeicons.png
 - Assets/_KAP/_GameResources/Textures/Shop/shop.png
 - Assets/_KAP/_GameResources/Textures/Themes/520010.png
 - Assets/_KAP/_GameResources/Textures/Themes/520011.png
 - Assets/_KAP/_GameResources/Textures/Themes/520014.png
+- Assets/_KAP/_GameResources/Textures/Themes/520027.png
 - Assets/_KAP/Textures/CommonIcon/common.png
 - Assets/_KHH/Textures/MapLevels/1001/items.png
 - Assets/3rdParty/codeandweb.com/Example/SpriteSheet/sprites.png
@@ -235,6 +239,8 @@ textureFileNames:
 - Assets/Assets/_KAP/_GameResources/Textures/Decos/99019_2.png
 - Assets/Assets/_KAP/_GameResources/Textures/Decos/99999.png
 normalmapFileNames:
+- 
+- 
 - 
 - 
 - 

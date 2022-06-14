@@ -1,7 +1,9 @@
 /Library/
+/Logs/
 /Temp/
 /obj/
 /.vs/
 *.csproj
 *.sln
 /.idea/
+.vsconfig

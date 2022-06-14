@@ -12,7 +12,7 @@ public class ImportSettings : AssetPostprocessor
 		ModelImporter importer = assetImporter as ModelImporter;
 		
 		importer.globalScale  = 1f;
-		importer.importMaterials = false;
+		importer.materialImportMode = ModelImporterMaterialImportMode.None;
 		importer.generateAnimations = ModelImporterGenerateAnimations.None;
 		importer.importAnimation = false;
 	}

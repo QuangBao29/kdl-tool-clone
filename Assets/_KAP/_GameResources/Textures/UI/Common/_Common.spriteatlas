@@ -52,10 +52,13 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 1
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 2158bcc4924cd4c5bb56ecd5641df7d2, type: 3}
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 3c8e82108551841bfbdd8f3f808265e0, type: 3}
@@ -247,5 +250,6 @@ SpriteAtlas:
   - icon_shop
   - icon_camera
   - bg_green
+  m_RenderDataMap: {}
   m_Tag: _Common
   m_IsVariant: 0
