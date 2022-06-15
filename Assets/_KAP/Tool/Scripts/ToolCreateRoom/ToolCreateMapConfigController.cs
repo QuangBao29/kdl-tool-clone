@@ -40,7 +40,9 @@ namespace KAP.ToolCreateMap
 
         private void Awake()
         {
+            //declare txtDeco to contain data loaded from path in local computer in string type
             var txtDeco = FileSaving.Load(Application.dataPath + _configDecoFilePath);
+            //using _configDeco to load ConfigDeco from txtDeco
             _configDeco.LoadFromString(txtDeco);
 
             var txtDecoTheme = FileSaving.Load(Application.dataPath + _configDecoThemeFilePath);
@@ -54,6 +56,7 @@ namespace KAP.ToolCreateMap
 
             var txtRoom = FileSaving.Load(Application.dataPath + _configRoomFilePath);
             var _configRoom = new ConfigRoom();
+            //save data from txtRoom to _configRoom in Records (attribute of ConfigRoom)
             _configRoom.LoadFromString(txtRoom);
             _lstConfigRoomRecords.AddRange(_configRoom.Records);
             ListConfigRoomRecords = _lstConfigRoomRecords.AsReadOnly();
@@ -82,18 +85,22 @@ namespace KAP.ToolCreateMap
 
         public void SaveConfigRoomCsv()
         {
+            //get List variables: Id, Name, TypeId,...
             List<string> lstVariables = ConfigRoomRecord.GetLstVariables();
             string txt = "";
+            //save to txt in string type
             for (var i = 0; i < lstVariables.Count - 1; i++)
             {
                 txt += lstVariables[i] + "\t";
             }
             txt += lstVariables[lstVariables.Count - 1] + "\n";
 
+            //encode data from list configRoom to txt
             foreach (var record in _lstConfigRoomRecords)
             {
                 txt += record.GetTextRecord();
             }
+            //save txt to file .csv
             FileSaving.Save(Application.dataPath + _configRoomFilePath, txt);
         }
 
