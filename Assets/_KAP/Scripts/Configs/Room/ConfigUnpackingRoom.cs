@@ -2,52 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Kawaii.ConfigSystem;
+using Kawaii.IsoTools.DecoSystem;
 
-namespace KAP.config
+namespace KAP.Config
 {
     public class ConfigUnpackingRoomRecord
     {
-        public int RoomId;
-        public int RoomSizeX;
-        public int RoomSizeY;
-        public string AllBubblePosition;
+        public string Id;
+        public string SizeX;
+        public string SizeY;
+        public string ListBubblePosX;
+        public string ListBubblePosY;
+        public string ListBubblePosZ;
         public string AllUnpackingDeco;
 
-        private List<int> _bubblePosition;
-        private List<int> _lstUnpackingDeco;
-        public List<int> GetBubblePostion()
-        {
-            if (_bubblePosition == null)
-            {
-                _bubblePosition = SGUtils.ParseStringToListInt(AllBubblePosition, ';');
-            }
-            return _bubblePosition;
-        }
+        //private List<int> _lstBubblePosition;
+        private List<string> _lstUnpackingDeco;
 
-        public List<int> GetLstUnpackingDeco()
-        {
-            if (_lstUnpackingDeco == null)
-            {
-                _lstUnpackingDeco = SGUtils.ParseStringToListInt(AllUnpackingDeco, ';');
-            }
-            return _lstUnpackingDeco;
-        }
+        //public List<int> GetListBubblePostion()
+        //{
+        //    if (_lstBubblePosition == null)
+        //    {
+        //        _lstBubblePosition = SGUtils.ParseStringToListInt(AllBubblePosition, ';');
+        //    }
+        //    return _lstBubblePosition;
+        //}
+
+        //public List<int> GetLstUnpackingDeco()
+        //{
+        //    if (_lstUnpackingDeco == null)
+        //    {
+        //        _lstUnpackingDeco = SGUtils.ParseStringToListInt(AllUnpackingDeco, ';');
+        //    }
+        //    return _lstUnpackingDeco;
+        //}
 
         public List<string> GetLstVariables()
         {
-            return new List<string> { "RoomId"
+            return new List<string> { "Id"
                                     , "RoomSizeX"
                                     , "RoomSizeY"
-                                    , "AllBubblePosition"
+                                    , "ListBubblePosX"
+                                    , "ListBubblePosY"
+                                    , "ListBubblePosZ"
                                     , "AllUnpackingDeco"
             };
         }
         public string GetTextRecord()
         {
-            return RoomId
-                + "\t" + RoomSizeX
-                + "\t" + RoomSizeY
-                + "\t" + AllBubblePosition
+            return Id
+                + "\t" + SizeX
+                + "\t" + SizeY
+                + "\t" + ListBubblePosX
+                + "\t" + ListBubblePosY
+                + "\t" + ListBubblePosZ
                 + "\t" + AllUnpackingDeco
                 + "\n";
         }
@@ -57,12 +65,12 @@ namespace KAP.config
     {
         protected override void RebuildIndex()
         {
-            RebuildIndexByField<int>("RoomId");
+            RebuildIndexByField<string>("Id");
         }
 
-        public ConfigUnpackingRoomRecord GetById(int id)
+        public ConfigUnpackingRoomRecord GetById(string id)
         {
-            return GetRecordByIndex<int>("Id", id);
+            return GetRecordByIndex<string>("Id", id);
         }
     }
 }
