@@ -19,6 +19,8 @@ namespace KAP.ToolCreateMap
         [SerializeField]
         private string _configRoomFilePath = "/_KAP/_GameResources/Configs/Room/ConfigRoom.csv";
         [SerializeField]
+        private string _configUnpackingRoomPath = "/_KAP/_GameResources/Configs/Room/ConfigUnpackingRoom.csv";
+        [SerializeField]
         private string _configWonderFilePath = "/_KAP/_GameResources/Configs/Wonder/ConfigWonder.csv";
         [SerializeField]
         private string _configHiveShop = "/_KAP/_GameResources/Configs/Hive/ConfigHiveShop.csv";
@@ -31,6 +33,8 @@ namespace KAP.ToolCreateMap
 
         private readonly List<ConfigRoomRecord> _lstConfigRoomRecords = new List<ConfigRoomRecord>();
         public ReadOnlyCollection<ConfigRoomRecord> ListConfigRoomRecords;
+        private readonly List<ConfigUnpackingRoomRecord> _lstConfigUnpackingRoomRecords = new List<ConfigUnpackingRoomRecord>();
+        public ReadOnlyCollection<ConfigUnpackingRoomRecord> ListConfigUnpackingRoomRecords;
         private readonly List<ConfigWonderRecord> _lstConfigWonderRecords = new List<ConfigWonderRecord>();
         public ReadOnlyCollection<ConfigWonderRecord> ListConfigWonderRecords;
         private readonly List<ConfigHiveShopRecord> _lstConfigHiveShopRecords = new List<ConfigHiveShopRecord>();
@@ -56,10 +60,15 @@ namespace KAP.ToolCreateMap
 
             var txtRoom = FileSaving.Load(Application.dataPath + _configRoomFilePath);
             var _configRoom = new ConfigRoom();
-            //save data from txtRoom to _configRoom in Records (attribute of ConfigRoom)
             _configRoom.LoadFromString(txtRoom);
             _lstConfigRoomRecords.AddRange(_configRoom.Records);
             ListConfigRoomRecords = _lstConfigRoomRecords.AsReadOnly();
+
+            var txtUnpackingRoom = FileSaving.Load(Application.dataPath + _configUnpackingRoomPath);
+            var _configUnpackingRoom = new ConfigUnpackingRoom();
+            _configUnpackingRoom.LoadFromString(txtUnpackingRoom);
+            _lstConfigUnpackingRoomRecords.AddRange(_configUnpackingRoom.Records);
+            ListConfigUnpackingRoomRecords = _lstConfigUnpackingRoomRecords.AsReadOnly();
 
             var txtWonder = FileSaving.Load(Application.dataPath + _configWonderFilePath);
             var _configWonder = new ConfigWonder();
