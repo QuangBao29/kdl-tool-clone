@@ -40,6 +40,8 @@ namespace KAP.ToolCreateMap
             if (cur == null)
                 return;
             var info = (DecoInfo)cur.deco.Info;
+            if (info == null) return;
+
             var decoRecord = _configController.ConfigDeco.GetDecoById(info.Id);
             if (decoRecord == null)
                 return;

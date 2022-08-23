@@ -354,7 +354,7 @@ namespace Kawaii.ConfigSystem
             object dic = null;
             if (_rebuildIndexDic.TryGetValue(fieldName, out dic))
             {
-                IndexField<TIndex> indexField = (IndexField<TIndex>)dic;    //???indexField receive data by dictionary type from dic
+                IndexField<TIndex> indexField = (IndexField<TIndex>)dic;
                 List<TDataRecord> resultList = null;
                 if (indexField.TryGetValue(compareValue, out resultList))   //get value with Id compareValue (int) to resultList: ConfigRoomRecord
                     if (resultList.Count > 0)

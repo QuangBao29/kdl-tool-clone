@@ -41,6 +41,7 @@ namespace KAP.ToolCreateMap
         [SerializeField] private AreaManager _areaManager = null;
         [SerializeField] private ToolCreateMapImportDeco _importDecoController = null;
         [SerializeField] private ToolScreenShotRemoveBG _toolScreenShot = null;
+        [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
 
         [Space]
         [SerializeField] private Transform _transGridRoom = null;
@@ -50,11 +51,15 @@ namespace KAP.ToolCreateMap
         [SerializeField] private InputField _inputMapId = null;
         [SerializeField] private Text _txtCurEditMode = null;
 
+        [Space]
+        [SerializeField] private ToolCreateMapExportBubbleData _toolExportData = null;
 
         private List<ToolCreateMapListRoomItem> _lstRoomItems = null;
         
 
         private Dictionary<EditMode, EditModeData> _dctEditModeData = new Dictionary<EditMode, EditModeData>();
+        private Dictionary<EditMode, EditModeData> _dctEditModeDataPostion = new Dictionary<EditMode, EditModeData>();
+        private Dictionary<EditMode, EditModeData> _dctEditModeDataBubble = new Dictionary<EditMode, EditModeData>();
 
         private void Awake()
         {
@@ -80,11 +85,19 @@ namespace KAP.ToolCreateMap
             string _exportRoomChallengePath = "/_KAP/_GameResources/Maps/RoomChallenge";
             string _screenshotRoomChallengePath = "_KAP/_GameResources/Textures/RoomChallenge";
 
-            _dctEditModeData.Add(EditMode.Room, new EditModeData(EditMode.Room, _importRoomPath, _exportRoomPath, _screenshotRoomPath, Color.black, KAPDefine.DefaultRoomId));
-            _dctEditModeData.Add(EditMode.Theme, new EditModeData(EditMode.Theme, _importThemePath, _exportThemePath, _screenshotThemePath, Color.red, KAPDefine.DefaultRoomThemeId));
-            _dctEditModeData.Add(EditMode.Wonder, new EditModeData(EditMode.Wonder, _importWonderPath, _exportWonderPath, _screenshotWonderPath, Color.blue, KAPDefine.DefaultWonderId));
-            _dctEditModeData.Add(EditMode.RoomChallenge, new EditModeData(EditMode.RoomChallenge, _importRoomChallengePath, _exportRoomChallengePath, _screenshotRoomChallengePath ,Color.yellow, KAPDefine.DefaultRoomChallengeID));
+            string _importRoomHomePath = "Assets/_KDL/_GameResources/Maps/RoomHome/";
+            string _importRoomPlayPath = "Assets/_KDL/_GameResources/Maps/RoomPlay/";
+            string _exportRoomHomePath = "/_KDL/_GameResources/Maps/RoomHome/";
+            string _exportRoomPlayPath = "/_KDL/_GameResources/Maps/RoomPlay/";
+            string _screenshotRoomHomePath = "_KDL/_GameResources/Textures/RoomHome/";
+            string _screenshotRoomPlayPath = "_KDL/_GameResources/Textures/RoomPlay/";
 
+            //_dctEditModeData.Add(EditMode.Room, new EditModeData(EditMode.Room, _importRoomPath, _exportRoomPath, _screenshotRoomPath, Color.black, KAPDefine.DefaultRoomId));
+            //_dctEditModeData.Add(EditMode.Theme, new EditModeData(EditMode.Theme, _importThemePath, _exportThemePath, _screenshotThemePath, Color.red, KAPDefine.DefaultRoomThemeId));
+            //_dctEditModeData.Add(EditMode.Wonder, new EditModeData(EditMode.Wonder, _importWonderPath, _exportWonderPath, _screenshotWonderPath, Color.blue, KAPDefine.DefaultWonderId));
+            //_dctEditModeData.Add(EditMode.RoomChallenge, new EditModeData(EditMode.RoomChallenge, _importRoomChallengePath, _exportRoomChallengePath, _screenshotRoomChallengePath ,Color.yellow, KAPDefine.DefaultRoomChallengeID));
+            _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importRoomHomePath, _exportRoomHomePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultRoomId));
+            _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPlayPath, _exportRoomPlayPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomThemeId));
         }
 
         private void OnTogglEditThemeChange(EditMode editMode)
@@ -152,6 +165,8 @@ namespace KAP.ToolCreateMap
         {
             _importDecoController.CreateARoom(_areaManager.ListRooms.Count, Vector3.zero, Vector3.one);
             Setup();
+            _toolBubbleSetting.UpdateListNumOfBubbleInARoom();
+            _toolBubbleSetting.DebugForCheck();
         }
 
         public void RemoveARoom(DecoRoot room)
@@ -288,6 +303,31 @@ namespace KAP.ToolCreateMap
            
         }
 
+        public void OnButtonExportDecoKDLClick()
+        {
+            if (string.IsNullOrEmpty(_inputMapId.text))
+                return;
+
+            string mess = "";
+            var targetEditMode = _dctEditModeData[ToolEditMode.Instance.CurrentEditMode];
+            mess = string.Format("export {0}: {1}", targetEditMode.Mode, _inputMapId.text);
+
+            UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
+            {
+                if (result == UIMessageBox.MessageBoxAction.Accept)
+                {
+                    var data = _toolExportData.Export(null);
+                    string path = GetExportPath();
+                    Debug.Log("path: " + path);
+                    Debug.Log("data: " + JsonWriter.Serialize(data));
+                    FileSaving.Save(path, JsonWriter.Serialize(data));
+                    Debug.LogError("Export new success");
+                }
+
+                return true;
+            });
+
+        }
 
         #endregion
     }

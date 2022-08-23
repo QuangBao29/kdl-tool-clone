@@ -5,7 +5,7 @@ using Kawaii.ConfigSystem;
 
 namespace KAP.Config
 {
-    public class ConfigBubbleRecord
+    public class ConfigBubbleHomeRecord
     {
         public string BubbleId;
         public string BubbleDecoIds;
@@ -20,15 +20,22 @@ namespace KAP.Config
             }
             return _lstBubbleDecoId;
         }
+
+        public static List<string> GetLstVariables()
+        {
+            return new List<string> { "BubbleId"
+                                    , "BubbleDecoIds"
+            };
+        }
     }
 
-    public class ConfigBubble : ConfigDataTable<ConfigBubbleRecord>
+    public class ConfigBubbleHome : ConfigDataTable<ConfigBubbleHomeRecord>
     {
         protected override void RebuildIndex()
         {
             RebuildIndexByField<string>("BubbleId");
         }
-        public ConfigBubbleRecord GetById(string id)
+        public ConfigBubbleHomeRecord GetById(string id)
         {
             return GetRecordByIndex<string>("BubbleId", id);
         }

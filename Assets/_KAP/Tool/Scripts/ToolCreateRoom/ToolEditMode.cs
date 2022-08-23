@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Imba.Utils;
+using KAP.ToolCreateMap;
 
 namespace KAP.Tools
 {
@@ -11,17 +12,25 @@ namespace KAP.Tools
         Theme = 1,
         Wonder = 2,
         RoomChallenge,
+        Home = 3,
+        Play = 4
     }
-
+    //public enum EditModeKDL
+    //{
+    //    Home = 0,
+    //    Play = 1,
+    //}
     public class ToolEditMode : ManualSingletonMono<ToolEditMode>
     {
         public event Action<EditMode> OnChangeEditMode;
         [SerializeField] private Dropdown _ddEditMode = null;
+        [SerializeField] private GameObject _panelUnpack = null;
+        [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
 
         public override void Awake()
         {
             base.Awake();
-            CurrentEditMode = EditMode.Room;
+            CurrentEditMode = EditMode.Home;
         }
 
         private EditMode _currentEditMode;
@@ -29,7 +38,7 @@ namespace KAP.Tools
         {
             get
             {
-                return (EditMode)_ddEditMode.value;
+                return KDLUtils.ParseEnum<EditMode>(_ddEditMode.captionText.text);
             }
             set
             {
@@ -40,7 +49,16 @@ namespace KAP.Tools
 
         public void OnDDSelectMode()
         {
-            CurrentEditMode = (EditMode)_ddEditMode.value;
+            CurrentEditMode = KDLUtils.ParseEnum<EditMode>(_ddEditMode.captionText.text);
+            if (CurrentEditMode == EditMode.Play)
+                _panelUnpack.SetActive(true);
+            else _panelUnpack.SetActive(false);
+            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                foreach (var item in root.Value)
+                    item.UnActiveImgCheck();
+            }
+            
         }
     }
 }

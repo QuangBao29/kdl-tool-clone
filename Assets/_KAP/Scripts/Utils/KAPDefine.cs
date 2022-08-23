@@ -161,18 +161,21 @@ namespace KAP
         public int Color;
         public bool IsStatic;
         public string ShadowColor;
+        public bool IsBubble;
 
         public string ExportToJson(object param)
         {
             var data = new Dictionary<string, object>();
-
             if (Id > 0)
                 data["Id"] = Id;
             if (Color > 0)
                 data["Color"] = Color;
             if (IsStatic)
                 data["IsStatic"] = IsStatic;
-            if(!string.IsNullOrEmpty(ShadowColor))
+            if (IsBubble)
+                data["IsBubble"] = IsBubble;
+
+            if (!string.IsNullOrEmpty(ShadowColor))
             {
                 data["ShadowColor"] = ShadowColor;
             }

@@ -146,6 +146,7 @@ namespace Kawaii.IsoTools.DecoSystem
                     var moveData = GetValidPieceInAArea(area, deco, false);
                     if (moveData == null)
                         continue;
+
                     if (nearest == null)
                     {
                         nearest = moveData;

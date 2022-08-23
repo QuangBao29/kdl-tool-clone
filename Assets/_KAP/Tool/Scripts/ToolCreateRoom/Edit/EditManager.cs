@@ -11,7 +11,7 @@ namespace KAP
         public string EditingTag;
         public DecoEditTool editTool;
         public DecoEditDemo Current { get; protected set; }
-
+        [SerializeField] private GameObject _panelBubbleDecoSetting = null;
         public UnityEvent OnChangeCurrentEvent;
 
         public bool SetCurrent(DecoEditDemo decoEdit)
@@ -28,9 +28,11 @@ namespace KAP
             if (Current != null)
             {
                 editTool.Show();
+                _panelBubbleDecoSetting.SetActive(true);
             }
             else
             {
+                _panelBubbleDecoSetting.SetActive(false);
                 editTool.gameObject.SetActive(false);
             }
             OnChangeCurrentEvent?.Invoke();

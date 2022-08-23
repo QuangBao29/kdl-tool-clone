@@ -17,7 +17,7 @@ namespace KAP.Config
         public string AllUnpackingDeco;
 
         //private List<int> _lstBubblePosition;
-        private List<string> _lstUnpackingDeco;
+        private List<int> _lstUnpackingDeco;
 
         //public List<int> GetListBubblePostion()
         //{
@@ -28,14 +28,14 @@ namespace KAP.Config
         //    return _lstBubblePosition;
         //}
 
-        //public List<int> GetLstUnpackingDeco()
-        //{
-        //    if (_lstUnpackingDeco == null)
-        //    {
-        //        _lstUnpackingDeco = SGUtils.ParseStringToListInt(AllUnpackingDeco, ';');
-        //    }
-        //    return _lstUnpackingDeco;
-        //}
+        public List<int> GetLstUnpackingDeco()
+        {
+            if (_lstUnpackingDeco == null)
+            {
+                _lstUnpackingDeco = SGUtils.ParseStringToListInt(AllUnpackingDeco, ';');
+            }
+            return _lstUnpackingDeco;
+        }
 
         public List<string> GetLstVariables()
         {

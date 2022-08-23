@@ -33,7 +33,7 @@ namespace KAP.Config
         public int TypeId;
         public int ThemeId;
         public string ShadowHexColor;
-        public string AllThemes; //json
+        public string AllThemes;
         public DifficultyLevelType DifficultyLevel;
         public int Energy;
         public int TimeoutInSec;

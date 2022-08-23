@@ -6,6 +6,7 @@ using Kawaii.IsoTools;
 using KAP.ToolCreateMap;
 using Kawaii.IsoTools.DecoSystem;
 using UnityEngine.UI;
+using KAP.Tools;
 using System.Threading.Tasks;
 
 namespace KAP
@@ -26,6 +27,8 @@ namespace KAP
         private List<GameObject> _lstObjOffWhenMove = new List<GameObject>();
 
         [SerializeField] private InputField _inputfielGroup = null;
+        [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
+        [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
 
         private void Awake()
         {
@@ -114,6 +117,102 @@ namespace KAP
                         }
                         swapDecoEdit.EndMove();
                         break;
+                }
+                var newRoomIdx = current.deco.Root.ParseInfo<DecoInfo>().Id;
+                int newBubbleIndex;
+                Debug.LogError("newRoomIdx: " + newRoomIdx);
+                var currentBubble = current.gameObject.GetComponent<Bubble>();
+                if (currentBubble != null)
+                {
+                    var preRoomIndex = currentBubble.RoomIndex;
+                    var preBubbleIndex = currentBubble.BubbleIndex;
+                    var preBubbleId = currentBubble.BubbleId;
+                    Debug.LogError("roomidx bubbleIdx bubbleId: " + preRoomIndex + " " + preBubbleIndex + " " + preBubbleId);
+                    foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                    {
+                        if (root.Key.BubbleId == preBubbleId)
+                        {
+                            if (root.Key.BubbleDeco != null && root.Key.BubbleDeco != currentBubble)
+                            {
+                                Debug.LogError("khac null");
+                                var temp = root.Key.BubbleDeco;
+                                temp.Remove();
+                                root.Key.BubbleDeco = null;
+                            }
+                            root.Key.BubbleDeco = currentBubble;
+                            break;
+                        }
+                    }
+                    if (newRoomIdx != preRoomIndex && ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                    {
+                        _toolBubbleSetting.LstNumBubbleInRoom[preRoomIndex]--;
+                        newBubbleIndex = _toolBubbleSetting.LstNumBubbleInRoom[newRoomIdx]++;
+                        Debug.LogError("newBubbleIndex: " + newBubbleIndex);
+                        Debug.LogError("num bubble in room after: " + _toolBubbleSetting.LstNumBubbleInRoom[newRoomIdx]);
+                        //update currentBubble info
+                        currentBubble.BubbleIndex = newBubbleIndex;
+                        currentBubble.RoomIndex = newRoomIdx;
+                        currentBubble.BubbleId = currentBubble.RoomIndex + "_" + currentBubble.BubbleIndex;
+                        Debug.LogError("currentBubble.BubbleId: " + currentBubble.BubbleId);
+                        currentBubble.Prefab.UpDateInfo(newRoomIdx, currentBubble.Position, newBubbleIndex);
+                        currentBubble.Prefab.UpdateName();
+                        currentBubble.Prefab.Prefab.UpdateInfo(currentBubble.Position, newRoomIdx, newBubbleIndex);
+                        foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                        {
+                            if (root.Key.BubbleId == preBubbleId)
+                            {
+                                root.Key.UpDateInfo(newRoomIdx, currentBubble.Position, newBubbleIndex);
+                                root.Key.gameObject.name = "Bubble: " + root.Key.BubbleId;
+                                foreach (var value in root.Value)
+                                {
+                                    value.BubbleIndex = root.Key.BubbleIndex;
+                                    value.RoomIndex = root.Key.RoomIndex;
+                                    value.BubbleId = root.Key.BubbleId;
+                                }
+                                break;
+                            }
+                        }
+                        var lstBubbleItem = _toolBubbleSetting.GetLstBubble();
+                        for (var i = 0; i < lstBubbleItem.Count; i++)
+                        {
+                            if (lstBubbleItem[i].RoomIndex == preRoomIndex)
+                            {
+                                lstBubbleItem[i].UpdateIndexAfterDeleteBubble(preBubbleIndex);
+                            }
+                        }
+                        foreach (var pair in _toolBubbleDecoSetting.DctRootDecoItems)
+                        {
+                            if (pair.Key.RoomIndex == preRoomIndex)
+                            {
+                                var newIdx = pair.Key.BubbleIndex > preBubbleIndex ? (pair.Key.BubbleIndex - 1) : pair.Key.BubbleIndex;
+                                pair.Key.UpDateInfo(pair.Key.RoomIndex, pair.Key.BubblePosition, newIdx);
+                                pair.Key.gameObject.name = "Bubble: " + pair.Key.BubbleId;
+                                foreach (var clone in pair.Value)
+                                {
+                                    clone.BubbleIndex = pair.Key.BubbleIndex;
+                                    clone.BubbleId = pair.Key.BubbleId;
+                                }
+                                if (pair.Key.BubbleDeco != null)
+                                {
+                                    pair.Key.BubbleDeco.BubbleIndex = pair.Key.BubbleIndex;
+                                    pair.Key.BubbleDeco.BubbleId = pair.Key.BubbleId;
+                                }
+                            }
+                        }
+                    }
+                    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play || (newRoomIdx == preRoomIndex && ToolEditMode.Instance.CurrentEditMode == EditMode.Home))
+                    {
+                        currentBubble.Prefab.BubblePosition = currentBubble.Position;
+                        currentBubble.Prefab.Prefab.BubblePosition = currentBubble.Position;
+                        foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                        {
+                            if (root.Key.BubbleId == preBubbleId)
+                            {
+                                root.Key.BubblePosition = currentBubble.Position;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -77,6 +77,10 @@ namespace KAP.ToolCreateMap
 
             gameObject.SetActive(true);
             var info = (DecoInfo)cur.deco.Info;
+            if (info == null)
+            {
+                return;
+            }
             _toggleIsStatic.isOn = info.IsStatic;
             if (info.IsStatic)
             {

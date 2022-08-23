@@ -20,6 +20,8 @@ namespace KAP.ToolCreateMap
         private Toggle _toggleEnableDebug = null;
         [SerializeField]
         private InputField _inputRoomId = null;
+        [SerializeField]
+        private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
 
         [Space]
         [SerializeField]
@@ -79,6 +81,7 @@ namespace KAP.ToolCreateMap
         public void OnButtonXClick()
         {
             _parentController.RemoveARoom(_room);
+            _toolBubbleSetting.RemoveAllBubbleInARoom(_index);
         }
 
         public void OnButtonClearClick()

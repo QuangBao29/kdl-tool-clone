@@ -5,6 +5,7 @@ using OneP.InfinityScrollView;
 using UnityEngine.UI;
 using Kawaii.IsoTools;
 using KAP.Config;
+using DigitalRubyShared;
 
 namespace KAP.ToolCreateMap
 {
@@ -15,6 +16,7 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapListDecos _uiParent = null;
         [SerializeField] private Image _imgIcon = null;
         [SerializeField] private Text _lblName = null;
+        [SerializeField] private GameObject _panelBubbleDecoSetting = null;
 
         private ConfigDecoRecord record;
 
@@ -34,13 +36,14 @@ namespace KAP.ToolCreateMap
 
         public void OnItemClick()
         {
+            _panelBubbleDecoSetting.gameObject.SetActive(true);
             var current = _editManager.Current;
             if (current != null && current.EditStatus != KHHEditStatus.Valid)
                 return;
             if (record != null)
             {
                 var deco = _importDecoController.CreateDeco(record.Id, 0);
-                deco.Info = new DecoInfo { Id = record.Id };
+                deco.Info = new DecoInfo { Id = record.Id , IsBubble = false};
                 deco.Position = IsoWorld.WorldToIso(Camera.main.transform.position, 0);
                 var decoEdit = deco.GetComponent<DecoEditDemo>();
                 if (_editManager.SetCurrent(decoEdit))
