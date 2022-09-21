@@ -45,7 +45,28 @@ namespace KAP.ToolCreateMap
             _lstBubbleItems.Add(item);
             DebugForCheck();
         }
-
+        public void OnImportAddBubble(int RoomIndex, int index, Vector3 BubblePosition)
+        {
+            UpdateListNumOfBubbleInARoom();
+            ToolCreateMapBubbleItem item = SGUtils.InstantiateObject<ToolCreateMapBubbleItem>(_prefabBubbleItem, _transGrid);
+            item.Index = index;
+            item.RoomIndex = RoomIndex;
+            item.UpdateBubbleId();
+            Debug.LogError("item.BubbleId: " + item.BubbleId);
+            item.BubblePosition = BubblePosition;
+            item.gameObject.SetActive(true);
+            _lstBubbleItems.Add(item);
+            if (item.RoomIndex >= _lstNumBubbleInRoom.Count)
+            {
+                _lstNumBubbleInRoom[0]++;
+                Debug.LogError("playyyyyy");
+            }
+            else
+            {
+                _lstNumBubbleInRoom[item.RoomIndex]++;
+                Debug.LogError("homeeeeee");
+            }
+        }
         public void UpdateListNumOfBubbleInARoom()
         {
             if (_lstNumBubbleInRoom.Count < _areaManager.ListRooms.Count)
@@ -62,67 +83,6 @@ namespace KAP.ToolCreateMap
                 Debug.LogError("num of bubble in room: " + _lstNumBubbleInRoom[i]);
             }
         }
-        public void GetNewIndexBubbleInRoom()
-        {
-
-        }
-
-        public void OnDeleteBubbleClick()
-        {
-            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                if (root.Key.BubbleId == CurrentBubble.BubbleId)
-                {
-                    if (root.Key.BubbleDeco != null)
-                    {
-                        var temp = root.Key.BubbleDeco;
-                        temp.Remove();
-                        root.Key.BubbleDeco = null;
-                    }
-                    _toolBubbleDecoSetting.DctRootDecoItems.Remove(root.Key);
-                    Destroy(root.Key.gameObject);
-                    break;
-                }
-            }
-            _lstBubbleItems.Remove(CurrentBubble);
-            var bubble = CurrentBubble;
-            CurrentBubble = null;
-            Destroy(bubble.gameObject);
-
-            var count = _lstBubbleItems.Count;
-            for (var i = 0; i < count; i++)
-            {
-                if (_lstBubbleItems[i].RoomIndex == bubble.RoomIndex)
-                    _lstBubbleItems[i].UpdateIndexAfterDeleteBubble(bubble.Index);
-            }
-            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                _lstNumBubbleInRoom[bubble.RoomIndex]--;
-            else _lstNumBubbleInRoom[0]--;
-            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                if (root.Key.RoomIndex == bubble.RoomIndex)
-                {
-                    if (root.Key.BubbleIndex > bubble.BubbleIndex)
-                    {
-                        root.Key.BubbleIndex -= 1;
-                        root.Key.SetupBubbleId();
-                        root.Key.gameObject.name = "Bubble: " + root.Key.BubbleId;
-                        foreach (var value in root.Value)
-                        {
-                            value.BubbleIndex = root.Key.BubbleIndex;
-                            value.BubbleId = root.Key.BubbleId;
-                        }
-                        if (root.Key.BubbleDeco != null)
-                        {
-                            root.Key.BubbleDeco.BubbleIndex = root.Key.BubbleIndex;
-                            root.Key.BubbleDeco.BubbleId = root.Key.BubbleId;
-                        }
-                    }
-                }
-            }
-            DebugForCheck();
-        }
-
         public void ResetColorAllBubbleItems()
         {
             foreach (var item in _lstBubbleItems)
@@ -210,7 +170,61 @@ namespace KAP.ToolCreateMap
         #endregion
 
         #region Remove Bubble
-        //delete and remove all bubble in a room
+        public void OnDeleteBubbleClick()
+        {
+            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                if (root.Key.BubbleId == CurrentBubble.BubbleId)
+                {
+                    if (root.Key.BubbleDeco != null)
+                    {
+                        var temp = root.Key.BubbleDeco;
+                        temp.Remove();
+                        root.Key.BubbleDeco = null;
+                    }
+                    _toolBubbleDecoSetting.DctRootDecoItems.Remove(root.Key);
+                    Destroy(root.Key.gameObject);
+                    break;
+                }
+            }
+            _lstBubbleItems.Remove(CurrentBubble);
+            var bubble = CurrentBubble;
+            CurrentBubble = null;
+            Destroy(bubble.gameObject);
+
+            var count = _lstBubbleItems.Count;
+            for (var i = 0; i < count; i++)
+            {
+                if (_lstBubbleItems[i].RoomIndex == bubble.RoomIndex)
+                    _lstBubbleItems[i].UpdateIndexAfterDeleteBubble(bubble.Index);
+            }
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                _lstNumBubbleInRoom[bubble.RoomIndex]--;
+            else _lstNumBubbleInRoom[0]--;
+            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                if (root.Key.RoomIndex == bubble.RoomIndex)
+                {
+                    if (root.Key.BubbleIndex > bubble.BubbleIndex)
+                    {
+                        root.Key.BubbleIndex -= 1;
+                        root.Key.SetupBubbleId();
+                        root.Key.gameObject.name = "Bubble: " + root.Key.BubbleId;
+                        foreach (var value in root.Value)
+                        {
+                            value.BubbleIndex = root.Key.BubbleIndex;
+                            value.BubbleId = root.Key.BubbleId;
+                        }
+                        if (root.Key.BubbleDeco != null)
+                        {
+                            root.Key.BubbleDeco.BubbleIndex = root.Key.BubbleIndex;
+                            root.Key.BubbleDeco.BubbleId = root.Key.BubbleId;
+                        }
+                    }
+                }
+            }
+            DebugForCheck();
+        }
         public void RemoveAllBubbleInARoom(int roomIndex)
         {
             List<ToolCreateMapBubbleItem> listTemp = new List<ToolCreateMapBubbleItem>();

@@ -8402,19 +8402,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 503449531}
-        m_TargetAssemblyTypeName: KAP.ToolCreateMap.ToolCreateMapConfigController,
-          KAP
-        m_MethodName: OnButtonImportBubbleCsv
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &683510330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11265,6 +11252,7 @@ MonoBehaviour:
   _importDecoController: {fileID: 184224762}
   _toolScreenShot: {fileID: 1752511465}
   _toolBubbleSetting: {fileID: 809963052}
+  _configController: {fileID: 503449531}
   _transGridRoom: {fileID: 1149197179}
   _prefabRoomItem: {fileID: 1244086487}
   _inputMapId: {fileID: 355543022}

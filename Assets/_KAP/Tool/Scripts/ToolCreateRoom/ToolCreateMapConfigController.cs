@@ -401,66 +401,79 @@ namespace KAP.ToolCreateMap
                 {
                     Debug.LogError("record.RoomId: " + record.RoomId);
                     var listBubblePosition = record.GetLstBubblePositionVector3();
-                    for (var i = 0; i < listBubblePosition.Count; i++)
-                        _toolBubbleSetting.OnAddBubbleClick();
-                    var lstBubbleItem = _toolBubbleSetting.GetLstBubble();
+                    Debug.LogError("Count: " + listBubblePosition.Count);
+                    //add info to BubbleItem
                     for (var i = 0; i < listBubblePosition.Count; i++)
                     {
-                        int temp;
-                        if (!int.TryParse(record.RoomId, out temp))
-                        {
-                            Debug.LogError("cannot parse roomId");
-                            return;
-                        }
-                        else
-                        {
-                            lstBubbleItem[i].BubbleId = temp + "_" + i;
-                            Debug.LogError("lstBubbleItem[i].BubbleId: " + lstBubbleItem[i].BubbleId);
-                        }
-                        lstBubbleItem[i].RoomIndex = temp;
-                        lstBubbleItem[i].BubblePosition = listBubblePosition[i];
-                        Debug.LogError("lstBubbleItem[i].RoomIndex: " + lstBubbleItem[i].RoomIndex);
-                        Debug.LogError("lstBubbleItem[i].BubblePosition: " + lstBubbleItem[i].BubblePosition);
+                        Debug.LogError("roomId + i: " + int.Parse(record.RoomId) + " " + i);
+                        _toolBubbleSetting.OnImportAddBubble(int.Parse(record.RoomId), i, listBubblePosition[i]);
                     }
-                    foreach (var item in lstBubbleItem)
+                }
+                //add Deco&Color to BubbleItem
+                var lstBubbleItem = _toolBubbleSetting.GetLstBubble();
+                foreach (var item in lstBubbleItem)
+                {
+                    foreach (var rec in _lstConfigBubbleHomeRecords)
                     {
-                        foreach (var rec in _lstConfigBubbleHomeRecords)
+                        if (rec.BubbleId == item.BubbleId)
                         {
-                            if (rec.BubbleId == item.BubbleId)
-                            {
-                                item.DctDecoIdColor = rec.GetDctBubbleIdColor();
-                                break;
-                            }
+                            item.DctDecoIdColor = rec.GetDctBubbleIdColor();
+                            break;
                         }
-                        foreach (var pair in item.DctDecoIdColor)
+                    }
+                    foreach (var pair in item.DctDecoIdColor)
+                    {
+                        foreach (var color in pair.Value)
                         {
-                            foreach (var color in pair.Value)
-                            {
-                                _toolBubbleDecoSetting.ImportDecoItems(pair.Key, color, item.Index);
-                                Debug.LogError("color " + color + " pair.Key " + pair.Key + " item.Index " + item.Index);
-                            }
-                                
+                            _toolBubbleDecoSetting.ImportDecoItems(pair.Key, color, item);
+                            Debug.LogError("color " + color + " pair.Key " + pair.Key + " item.Index " + item.Index);
                         }
                     }
                 }
             }
             else
             {
-                //foreach (var record in _lstConfigBubblePlayPositionRecords)
-                //{
-                //    if (record.RoomId == _inputMapId.text)
-                //    {
-                //        //_importBubblePlayPositionRecord = record;
-                //        break;
-                //    }
-                //    //lay so bubble trong room, tao ra luong bubble tuong ung.
-                //    //sau do
-                //}
-
-                //foreach (var record in _lstConfigBubblePlayRecords)
-                //{
-                    
-                //}
+                Debug.LogError("editmode = play");
+                //import cho room play phai xem xem dang inputId room nao de lay record cua roomId do.
+                foreach (var record in _lstConfigBubblePlayPositionRecords)
+                {
+                    if (record.RoomId == _inputMapId.text)
+                    {
+                        var listBubblePosition = record.GetLstBubblePositionVector3();
+                        var listUnpacking = record.GetLstUnpackingDeco();
+                        Debug.LogError("Count: " + listBubblePosition.Count);
+                        //add info to BubbleItem
+                        for (var i = 0; i < listBubblePosition.Count; i++)
+                        {
+                            Debug.LogError("roomId + i: " + int.Parse(record.RoomId) + " " + i);
+                            _toolBubbleSetting.OnImportAddBubble(int.Parse(record.RoomId), i, listBubblePosition[i]);
+                        }
+                        _toolUnpackingSetting.LstUnpackDeco = listUnpacking;
+                        _toolUnpackingSetting.ImportUnpackingDeco();
+                        break;
+                    }
+                }
+                //add Deco&Color to BubbleItem
+                var lstBubbleItem = _toolBubbleSetting.GetLstBubble();
+                foreach (var item in lstBubbleItem)
+                {
+                    foreach (var rec in _lstConfigBubblePlayRecords)
+                    {
+                        if (rec.BubbleId == item.BubbleId)
+                        {
+                            item.DctDecoIdColor = rec.GetDctBubbleIdColor();
+                            break;
+                        }
+                    }
+                    foreach (var pair in item.DctDecoIdColor)
+                    {
+                        foreach (var color in pair.Value)
+                        {
+                            _toolBubbleDecoSetting.ImportDecoItems(pair.Key, color, item);
+                            Debug.LogError("color " + color + " pair.Key " + pair.Key + " item.Index " + item.Index);
+                        }
+                    }
+                }
             }
             
         }

@@ -42,6 +42,7 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapImportDeco _importDecoController = null;
         [SerializeField] private ToolScreenShotRemoveBG _toolScreenShot = null;
         [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
+        [SerializeField] private ToolCreateMapConfigController _configController = null;
 
         [Space]
         [SerializeField] private Transform _transGridRoom = null;
@@ -240,6 +241,8 @@ namespace KAP.ToolCreateMap
                 _importDecoController.Import(lstRooms);
             }
             Setup();
+
+            _configController.OnButtonImportBubbleCsv();
         }
 
         #endregion

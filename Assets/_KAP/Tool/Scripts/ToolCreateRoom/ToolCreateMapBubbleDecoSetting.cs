@@ -132,7 +132,6 @@ namespace KAP.ToolCreateMap
             rootDecoItem.RoomIndex = _toolBubbleSetting.CurrentBubble.RoomIndex;
             rootDecoItem.BubbleIndex = _toolBubbleSetting.CurrentBubble.Index;
             rootDecoItem.SetupBubbleId();
-            Debug.LogError("BubbleId: " + rootDecoItem.BubbleId);
             rootDecoItem.gameObject.name = "Bubble: " + rootDecoItem.BubbleId;
             DctRootDecoItems.Add(rootDecoItem, new List<ToolCreateMapBubbleDecoItems>());
             rootDecoItem.gameObject.SetActive(true);
@@ -149,7 +148,7 @@ namespace KAP.ToolCreateMap
             DctRootDecoItems[rootDecoItem].Add(decoItem);
         }
 
-        public void ImportDecoItems(int id, int colorId, int bubbleIndex)
+        public void ImportDecoItems(int id, int colorId, ToolCreateMapBubbleItem bubbleItem)
         {
             var colorPath = colorId > 0 ? "_" + colorId : "";
             string idPath = id.ToString() + colorPath;
@@ -164,28 +163,36 @@ namespace KAP.ToolCreateMap
 
             foreach (var root in DctRootDecoItems)
             {
-                if (root.Key.BubbleIndex == bubbleIndex)
+                if (root.Key.BubbleId == bubbleItem.BubbleId)
                 {
                     ToolCreateMapBubbleDecoItems deco = SGUtils.InstantiateObject<ToolCreateMapBubbleDecoItems>(_prefabDecoItems, root.Key.transform);
-                    deco.transform.GetChild(0).GetComponent<Image>().sprite = FLSprite;
-                    deco.BubbleIndex = bubbleIndex;
+                    deco.Prefab = bubbleItem;
+                    deco.Image.sprite = FLSprite;
+                    deco.RoomIndex = bubbleItem.RoomIndex;
+                    deco.BubbleIndex = bubbleItem.Index;
+                    deco.SetupBubbleId();
                     deco.Info = new DecoInfo { Id = id, Color = colorId, IsBubble = true };
                     deco.gameObject.SetActive(true);
-                    deco.transform.GetChild(1).GetComponent<Text>().text = idPath;
+                    deco.Name.text = idPath;
                     DctRootDecoItems[root.Key].Add(deco);
                     return;
                 }
             }
 
             var rootDecoItem = SGUtils.InstantiateObject<ToolCreateMapBubbleDecoItems>(_prefabRootDeco, _content);
-            rootDecoItem.BubbleIndex = bubbleIndex;
+            rootDecoItem.BubbleIndex = bubbleItem.Index;
+            rootDecoItem.RoomIndex = bubbleItem.RoomIndex;
+            rootDecoItem.SetupBubbleId();
             rootDecoItem.gameObject.name = "Bubble: " + rootDecoItem.BubbleIndex;
             DctRootDecoItems.Add(rootDecoItem, new List<ToolCreateMapBubbleDecoItems>());
-            rootDecoItem.gameObject.SetActive(true);
+            rootDecoItem.gameObject.SetActive(false);
 
             ToolCreateMapBubbleDecoItems decoItem = SGUtils.InstantiateObject<ToolCreateMapBubbleDecoItems>(_prefabDecoItems, rootDecoItem.transform);
+            decoItem.Prefab = bubbleItem;
             decoItem.Image.sprite = FLSprite;
-            decoItem.BubbleIndex = bubbleIndex;
+            decoItem.BubbleIndex = bubbleItem.Index;
+            decoItem.RoomIndex = bubbleItem.RoomIndex;
+            decoItem.SetupBubbleId();
             decoItem.Info = new DecoInfo { Id = id, Color = colorId, IsBubble = true };
             decoItem.gameObject.SetActive(true);
             decoItem.Name.text = idPath;
