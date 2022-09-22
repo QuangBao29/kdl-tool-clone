@@ -19,6 +19,9 @@ namespace KAP.ToolCreateMap
         [SerializeField] private Text _name = null;
         [SerializeField] private Color _color;
         [SerializeField] private Color _defaultColor;
+        [SerializeField] private Image _swapImg = null;
+        [SerializeField] private Color _selectedSwapBtnColor;
+        [SerializeField] private Color _defaultSwapBtnColor;
 
         private int _index;
         private Vector3 _bubblePosition;
@@ -37,6 +40,7 @@ namespace KAP.ToolCreateMap
         {
             _toolBubbleSetting.ResetColorAllBubbleItems();
             _img.color = _color;
+            _swapImg.color = _defaultSwapBtnColor;
             _toolBubbleSetting.CurrentBubble = this;
             foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
             {
@@ -44,9 +48,31 @@ namespace KAP.ToolCreateMap
                 else root.Key.gameObject.SetActive(true);
             }
         }
+        public void OnClickSwapBtn()
+        {
+            if (_swapImg.color == _defaultSwapBtnColor)
+            {
+                _swapImg.color = _selectedSwapBtnColor;
+                _toolBubbleSetting.ListSwapBubble.Add(this);
+                if (_toolBubbleSetting.ListSwapBubble.Count == 2)
+                {
+                    _toolBubbleSetting.SwapBubbleInSameRoom();
+                }
+            }
+            else
+            {
+                _swapImg.color = _defaultSwapBtnColor;
+                _toolBubbleSetting.ListSwapBubble.Remove(this);
+            }
+            
+        }
         public void ResetColor()
         {
             _img.color = _defaultColor;
+        }
+        public void ResetColorImgSwap()
+        {
+            _swapImg.color = _defaultSwapBtnColor;
         }
         public void UpdateBubbleId()
         {

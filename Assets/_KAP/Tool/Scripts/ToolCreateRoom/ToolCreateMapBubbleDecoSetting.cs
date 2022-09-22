@@ -123,6 +123,7 @@ namespace KAP.ToolCreateMap
                     deco.Info = new DecoInfo { Id = id, Color = colorId, IsBubble = true };
                     deco.gameObject.SetActive(true);
                     deco.Name.text = idPath;
+                    deco.gameObject.name = idPath;
                     DctRootDecoItems[root.Key].Add(deco);
                     return;
                 }
@@ -145,6 +146,7 @@ namespace KAP.ToolCreateMap
             decoItem.Info = new DecoInfo { Id = id, Color = colorId, IsBubble = true };
             decoItem.gameObject.SetActive(true);
             decoItem.Name.text = idPath;
+            decoItem.gameObject.name = idPath;
             DctRootDecoItems[rootDecoItem].Add(decoItem);
         }
 
@@ -174,6 +176,7 @@ namespace KAP.ToolCreateMap
                     deco.Info = new DecoInfo { Id = id, Color = colorId, IsBubble = true };
                     deco.gameObject.SetActive(true);
                     deco.Name.text = idPath;
+                    deco.gameObject.name = idPath;
                     DctRootDecoItems[root.Key].Add(deco);
                     return;
                 }
@@ -183,7 +186,7 @@ namespace KAP.ToolCreateMap
             rootDecoItem.BubbleIndex = bubbleItem.Index;
             rootDecoItem.RoomIndex = bubbleItem.RoomIndex;
             rootDecoItem.SetupBubbleId();
-            rootDecoItem.gameObject.name = "Bubble: " + rootDecoItem.BubbleIndex;
+            rootDecoItem.gameObject.name = "Bubble: " + rootDecoItem.BubbleId;
             DctRootDecoItems.Add(rootDecoItem, new List<ToolCreateMapBubbleDecoItems>());
             rootDecoItem.gameObject.SetActive(false);
 
@@ -196,8 +199,33 @@ namespace KAP.ToolCreateMap
             decoItem.Info = new DecoInfo { Id = id, Color = colorId, IsBubble = true };
             decoItem.gameObject.SetActive(true);
             decoItem.Name.text = idPath;
+            decoItem.gameObject.name = idPath;
             DctRootDecoItems[rootDecoItem].Add(decoItem);
         }
-    }
 
+        public void AddRootClone(int RoomIndex, int BubbleIndex)
+        {
+            var rootDecoItem = SGUtils.InstantiateObject<ToolCreateMapBubbleDecoItems>(_prefabRootDeco, _content);
+            rootDecoItem.RoomIndex = RoomIndex;
+            rootDecoItem.BubbleIndex = BubbleIndex;
+            rootDecoItem.SetupBubbleId();
+            rootDecoItem.gameObject.name = "Bubble: " + rootDecoItem.BubbleId;
+            DctRootDecoItems.Add(rootDecoItem, new List<ToolCreateMapBubbleDecoItems>());
+            rootDecoItem.gameObject.SetActive(true);
+        }
+
+        public void ClearAll()
+        {
+            foreach (var root in DctRootDecoItems)
+            {
+                foreach (var deco in root.Value)
+                {
+                    root.Value.Remove(deco);
+                    Debug.LogError("neu remove dc thi chay cai nay");
+                    Destroy(deco.gameObject);
+                }
+                DctRootDecoItems.Remove(root.Key);
+            }
+        }
+    }
 }

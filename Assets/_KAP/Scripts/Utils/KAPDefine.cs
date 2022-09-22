@@ -54,7 +54,6 @@ namespace KAP
             scene_room = 1,
             scene_theme = 2,
         }
-
         public const string FormatMoney = "###,###,##0";
 
         // ======================================================
@@ -162,6 +161,7 @@ namespace KAP
         public bool IsStatic;
         public string ShadowColor;
         public bool IsBubble;
+        public bool IsUnpacking;
 
         public string ExportToJson(object param)
         {

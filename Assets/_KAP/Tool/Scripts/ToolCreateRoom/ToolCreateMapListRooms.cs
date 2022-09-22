@@ -241,7 +241,7 @@ namespace KAP.ToolCreateMap
                 _importDecoController.Import(lstRooms);
             }
             Setup();
-
+            _toolBubbleSetting.ClearBubbles();
             _configController.OnButtonImportBubbleCsv();
         }
 

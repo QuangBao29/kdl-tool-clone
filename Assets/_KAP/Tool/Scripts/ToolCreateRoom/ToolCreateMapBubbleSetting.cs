@@ -17,19 +17,22 @@ namespace KAP.ToolCreateMap
         [SerializeField] private GameObject _bubbleContent = null;
         [SerializeField] private InputField _inputMapId = null;
         [SerializeField] private AreaManager _areaManager = null;
+        [SerializeField] private GameObject _panelListBubble = null;
 
         [Header("Deco Item")]
         [SerializeField] private Transform _transGrid = null;
         [SerializeField] private ToolCreateMapBubbleItem _prefabBubbleItem = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
+        [SerializeField] private ToolCreateMapUnpackingSetting _toolUnpackingSetting = null;
         [SerializeField] private ToolCreateMapConfigController _configController = null;
 
         private List<ToolCreateMapBubbleItem> _lstBubbleItems = new List<ToolCreateMapBubbleItem>();
         private List<int> _lstNumBubbleInRoom = new List<int>();
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
+        
 
         [HideInInspector] public ToolCreateMapBubbleItem CurrentBubble = null;
-
+        [HideInInspector] public List<ToolCreateMapBubbleItem> ListSwapBubble = new List<ToolCreateMapBubbleItem>();
         public List<int> LstNumBubbleInRoom
         {
             get => _lstNumBubbleInRoom;
@@ -43,6 +46,7 @@ namespace KAP.ToolCreateMap
             item.Setup(_lstNumBubbleInRoom[_areaManager.ListRooms.Count - 1]);
             item.gameObject.SetActive(true);
             _lstBubbleItems.Add(item);
+            _toolBubbleDecoSetting.AddRootClone(item.RoomIndex, item.Index);
             DebugForCheck();
         }
         public void OnImportAddBubble(int RoomIndex, int index, Vector3 BubblePosition)
@@ -59,7 +63,6 @@ namespace KAP.ToolCreateMap
             if (item.RoomIndex >= _lstNumBubbleInRoom.Count)
             {
                 _lstNumBubbleInRoom[0]++;
-                Debug.LogError("playyyyyy");
             }
             else
             {
@@ -245,6 +248,157 @@ namespace KAP.ToolCreateMap
                 OnDeleteBubbleClick();
             }
             //xoa cac bubbleItem tren man hinh
+        }
+
+        public void ClearAll()
+        {
+            var listTemp = _lstBubbleItems;
+            if (_lstBubbleItems.Count > 0)
+            {
+                foreach (var bubble in _lstBubbleItems)
+                {
+                    foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                    {
+                        if (root.Key.BubbleId == bubble.BubbleId)
+                        {
+                            if (root.Key.BubbleDeco != null)
+                            {
+                                var temp = root.Key.BubbleDeco;
+                                temp.Remove();
+                                root.Key.BubbleDeco = null;
+                            }
+                            _toolBubbleDecoSetting.DctRootDecoItems.Remove(root.Key);
+                            Destroy(root.Key.gameObject);
+                            break;
+                        }
+                    }
+                }
+                foreach (var bubble in listTemp)
+                {
+                    Destroy(bubble.gameObject);
+                }
+                _lstBubbleItems.Clear();
+            }
+        }
+        public void ClearBubbles()
+        {
+            _lstNumBubbleInRoom.Clear();
+            ClearAll();
+            _toolUnpackingSetting.ClearAll();
+        }
+        #endregion
+
+        #region Utils
+        public void ShowPanelListBubble()
+        {
+            _panelListBubble.SetActive(true);
+        }
+
+        public void HidePanelListBubble()
+        {
+            _panelListBubble.SetActive(false);
+        }
+
+        public void SwapBubbleInSameRoom()
+        {
+            var tempIndex_0 = ListSwapBubble[0].Index;
+            var tempBubbleId_0 = ListSwapBubble[0].BubbleId;
+            var tempIndex_1 = ListSwapBubble[1].Index;
+            var tempBubbleId_1 = ListSwapBubble[1].BubbleId;
+            ListSwapBubble[0].Index = tempIndex_1;
+            ListSwapBubble[0].UpdateBubbleId();
+            ListSwapBubble[1].Index = tempIndex_0;
+            ListSwapBubble[1].UpdateBubbleId();
+            int index0 = 0;
+            int index1 = 0;
+            foreach (var pair in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                if (pair.Key.BubbleId == tempBubbleId_0)
+                {
+                    pair.Key.BubbleIndex = tempIndex_1;
+                    pair.Key.BubbleId = tempBubbleId_1;
+                    pair.Key.gameObject.name = "Bubble: " + pair.Key.BubbleId;
+                    foreach (var value in pair.Value)
+                    {
+                        value.BubbleIndex = pair.Key.BubbleIndex;
+                        value.BubbleId = pair.Key.BubbleId;
+                    }
+                    if (pair.Key.BubbleDeco != null)
+                    {
+                        pair.Key.BubbleDeco.BubbleIndex = pair.Key.BubbleIndex;
+                        pair.Key.BubbleDeco.BubbleId = pair.Key.BubbleId;
+                    }
+                    break;
+                }
+                index0++;
+            }
+            foreach (var pair in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                if (pair.Key.BubbleId == tempBubbleId_1 && index1 != index0)
+                {
+                    pair.Key.BubbleIndex = tempIndex_0;
+                    pair.Key.BubbleId = tempBubbleId_0;
+                    pair.Key.gameObject.name = "Bubble: " + pair.Key.BubbleId;
+                    foreach (var value in pair.Value)
+                    {
+                        value.BubbleIndex = pair.Key.BubbleIndex;
+                        value.BubbleId = pair.Key.BubbleId;
+                    }
+                    if (pair.Key.BubbleDeco != null)
+                    {
+                        pair.Key.BubbleDeco.BubbleIndex = pair.Key.BubbleIndex;
+                        pair.Key.BubbleDeco.BubbleId = pair.Key.BubbleId;
+                    }
+                    break;
+                }
+                index1++;
+            }
+
+            foreach (var item in ListSwapBubble)
+            {
+                item.ResetColorImgSwap();
+            }
+            ListSwapBubble.Clear();
+            SortListBubble();
+        }
+
+        public void SortListBubble()
+        {
+            List<ToolCreateMapBubbleItem> sortedList = new List<ToolCreateMapBubbleItem>();
+            List<int> lstRoomIndex = new List<int>();
+            foreach (var item in _lstBubbleItems)
+            {
+                if (!lstRoomIndex.Contains(item.RoomIndex))
+                    lstRoomIndex.Add(item.RoomIndex);
+            }
+            lstRoomIndex.Sort();
+            
+            foreach (var roomIndex in lstRoomIndex)
+            {
+                List<int> lstBubbleIndex = new List<int>();
+                foreach (var item in _lstBubbleItems)
+                {
+                    if (item.RoomIndex == roomIndex)
+                    {
+                        lstBubbleIndex.Add(item.Index);
+                    }
+                }
+                lstBubbleIndex.Sort();
+                foreach (var index in lstBubbleIndex)
+                {
+                    foreach (var item in _lstBubbleItems)
+                    {
+                        if (item.Index == index && item.RoomIndex == roomIndex)
+                            sortedList.Add(item);
+                    }
+                }
+            }
+            _lstBubbleItems = sortedList;
+            var sortedArray = _lstBubbleItems.ToArray();
+            for (var i = 0; i < sortedArray.Length; i++)
+            {
+                sortedArray[i].transform.SetSiblingIndex(i);
+            }
         }
         #endregion
     }

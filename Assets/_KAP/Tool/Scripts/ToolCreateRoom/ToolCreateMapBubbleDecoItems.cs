@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using KAP;
+using KAP.Tools;
 using KAP.Config;
 using Kawaii.IsoTools.DecoSystem;
 using Kawaii.IsoTools;
@@ -14,6 +14,7 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
         [SerializeField] private ToolCreateMapUnpackingSetting _toolUnpackingSetting = null;
+        [SerializeField] private ToolCreateMapImportDeco _importDecoController = null;
         [SerializeField] private EditManager _editManager = null;
         [SerializeField] private GameObject _imgCheck = null;
         public Image Image = null;
@@ -26,11 +27,17 @@ namespace KAP.ToolCreateMap
 
         private ToolCreateMapBubbleItem _prefab = null;
         private Bubble _bubble = null;
+        private Deco _deco = null;
 
         public Bubble BubbleDeco
         {
             set => _bubble = value;
             get => _bubble;
+        }
+        public Deco Deco
+        {
+            set => _deco = value;
+            get => _deco;
         }
         public ToolCreateMapBubbleItem Prefab
         {
@@ -158,7 +165,85 @@ namespace KAP.ToolCreateMap
             }
             SetActiveImgCheck();
         }
+        
+        public void OnImportSpawnDeco(ToolCreateMapBubbleDecoItems root, Vector3 position)
+        {
+            var decoInfo = this.ParseInfo<DecoInfo>();
+            var bubble = _toolBubbleSetting.CreateDecoBubble(decoInfo.Id, decoInfo.Color);
+            bubble.Info = new DecoInfo { Id = decoInfo.Id, Color = decoInfo.Color, IsBubble = true };
+            bubble.BubbleIndex = _bubbleIndex;
+            bubble.RoomIndex = _roomIdx;
+            bubble.BubbleId = bubble.RoomIndex + "_" + bubble.BubbleIndex;
+            bubble.Prefab = this;
+            bubble.Position = position;
+            OnOkCLick(bubble);
+            if (root.BubbleDeco != null)
+            {
+                var temp = root.BubbleDeco;
+                temp.Remove();
+                root.BubbleDeco = null;
+            }
+            root.BubbleDeco = bubble;
+            foreach (var item in _toolBubbleDecoSetting.DctRootDecoItems[root])
+            {
+                item.UnActiveImgCheck();
+            }
+            SetActiveImgCheck();
+        }
+        public void OnOkCLick(Bubble bubble)
+        {
+            var current = bubble.GetComponent<DecoEditDemo>();
+            if (_editManager.SetCurrent(current))
+            {
+                current.StartMove();
+                current.EndMove();
+                _editManager.editTool.SetValid(current.EditStatus);
+            }
+            
+            switch (current.EditStatus)
+            {
+                case KHHEditStatus.Valid:
+                    _editManager.SetCurrent(null);
+                    break;
+                case KHHEditStatus.CanSwap:
+                    _editManager.SetCurrent(null);
+                    var swapDeco = current.ListOverlaps[0];
+                    var swapDecoEdit = swapDeco.GetComponent<DecoEditDemo>();
+                    swapDecoEdit.StartMove();
+                    _editManager.SetCurrent(swapDecoEdit);
 
+                    current.EndMove();
+                    if (current.EditStatus != KHHEditStatus.Valid)
+                    {
+                        _editManager.SetCurrent(null);
+                        _editManager.SetCurrent(current);
+                    }
+
+                    //for tile & wallpaper
+                    var colliderLayer = swapDecoEdit.deco.gameObject.layer;
+                    if (colliderLayer == (int)DemoColliderLayer.Tile || colliderLayer == (int)DemoColliderLayer.Wallpaper)
+                    {
+                        var lstAreaPieces = swapDecoEdit.deco.LstAreaPieces;
+                        foreach (var piece in lstAreaPieces)
+                        {
+                            piece.Lock();
+                            var cloneList = new List<Deco>(piece.LstChilds);
+                            foreach (var deco in cloneList)
+                            {
+                                deco.Apply(null, null);
+                                var moveData = _areaManager.Move(deco);
+                                if (moveData != null)
+                                {
+                                    deco.Apply(moveData.piece, moveData.overlapPieces);
+                                }
+                            }
+                            piece.Unlock();
+                        }
+                    }
+                    swapDecoEdit.EndMove();
+                    break;
+            }
+        }
         public void UnActiveImgCheck()
         {
             _imgCheck.SetActive(false);
@@ -171,7 +256,36 @@ namespace KAP.ToolCreateMap
         #endregion
 
         #region Deco Unpacking
-
+        public void OnClickSpawnUnpackingDeco()
+        {
+            var decoInfo = this.ParseInfo<DecoInfo>();
+            var deco = _importDecoController.CreateDeco(decoInfo.Id, decoInfo.Color);
+            deco.Info = new DecoInfo { Id = decoInfo.Id, Color = decoInfo.Color, IsUnpacking = true, IsBubble = false };
+            deco.Position = IsoWorld.WorldToIso(Camera.main.transform.position, 0);
+            var decoEdit = deco.GetComponent<DecoEditDemo>();
+            if (_editManager.Current != null)
+            {
+                var current = _editManager.Current;
+                _editManager.SetCurrent(null);
+                current.deco.Remove();
+            }
+            if (_editManager.SetCurrent(decoEdit))
+            {
+                decoEdit.StartMove();
+                decoEdit.EndMove();
+                _editManager.editTool.SetValid(decoEdit.EditStatus);
+            }
+            this.Deco = deco;
+            //foreach (var item in _toolUnpackingSetting.LstDecoItem)
+            //{
+            //    if (decoInfo.IsUnpacking)
+            //    {
+            //        Debug.LogError("unpacking nha");
+            //        item.UnActiveImgCheck();
+            //    }
+            //}
+            SetActiveImgCheck();
+        }
         public void OnButtonRemoveDecoUnpackClick()
         {
             var decoInfo = this.ParseInfo<DecoInfo>();
@@ -192,7 +306,6 @@ namespace KAP.ToolCreateMap
                     }                   
                 }
                 _toolUnpackingSetting.LstUnpackDeco.Remove(decoId);
-                Debug.LogError("Id removed: " + decoId + " count unpacking: " + _toolUnpackingSetting.LstUnpackDeco.Count);
             }
         }
         #endregion

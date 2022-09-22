@@ -29,6 +29,7 @@ namespace KAP
         [SerializeField] private InputField _inputfielGroup = null;
         [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
+        [SerializeField] private ToolCreateMapUnpackingSetting _toolUnpackingSetting  = null;
 
         private void Awake()
         {
@@ -77,6 +78,13 @@ namespace KAP
                 switch (current.EditStatus)
                 {
                     case KHHEditStatus.Valid:
+                        if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Unpacking)
+                        {
+                            var info = current.deco.ParseInfo<DecoInfo>();
+                            var decoId = info.Id + "_" + info.Color;
+                            if (info.IsUnpacking && !_toolUnpackingSetting.LstUnpackDeco.Contains(decoId))
+                                _toolUnpackingSetting.ButtonAddDecoToListUnpack();
+                        }
                         _editManager.SetCurrent(null);
                         break;
                     case KHHEditStatus.CanSwap:
@@ -118,6 +126,7 @@ namespace KAP
                         swapDecoEdit.EndMove();
                         break;
                 }
+                
                 var newRoomIdx = current.deco.Root.ParseInfo<DecoInfo>().Id;
                 int newBubbleIndex;
                 Debug.LogError("newRoomIdx: " + newRoomIdx);
@@ -127,6 +136,58 @@ namespace KAP
                     var preRoomIndex = currentBubble.RoomIndex;
                     var preBubbleIndex = currentBubble.BubbleIndex;
                     var preBubbleId = currentBubble.BubbleId;
+
+                    #region Phase Bubble
+                    /* if (preBubbleId == null)
+                    {
+                        //Debug.LogError("preBubbleId null");
+                        //newBubbleIndex = _toolBubbleSetting.LstNumBubbleInRoom[newRoomIdx]++;
+                        //Debug.LogError("newBubbleIndex: " + newBubbleIndex);
+                        //Debug.LogError("num bubble in room after: " + _toolBubbleSetting.LstNumBubbleInRoom[newRoomIdx]);
+                        //currentBubble.BubbleIndex = newBubbleIndex;
+                        //currentBubble.RoomIndex = newRoomIdx;
+                        //currentBubble.BubbleId = currentBubble.RoomIndex + "_" + currentBubble.BubbleIndex;
+
+                        //sau khi update dc info cua bubble thi tiep theo se luu info vao trong cau truc du lieu.
+                        //tao 1 bubbleItem tiep theo cho room duoc dat, voi info moi, tao root clone moi, va add currentBubble vao (nho danh dau check)
+
+                        //if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Bubble)
+                        //{
+                        //    //tao BubbleItem moi o day (tao root clone trong ham tao bubbleItem)
+                        //    _toolBubbleSetting.OnAddBubbleClick();
+                        //    //
+                        //    _toolBubbleDecoSetting.CreateDecoItems(info.Id, info.Color);
+                        //    foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                        //    {
+                        //        if (root.Key.BubbleId == currentBubble.BubbleId)
+                        //        {
+                        //            if (root.Key.BubbleDeco != null && root.Key.BubbleDeco != currentBubble)
+                        //            {
+                        //                Debug.LogError("root.Key.BubbleDeco != null");
+                        //                var temp = root.Key.BubbleDeco;
+                        //                temp.Remove();
+                        //                root.Key.BubbleDeco = null;
+                        //            }
+                        //            root.Key.BubbleDeco = currentBubble;
+                        //            break;
+                        //        }
+                        //    }
+                        //}
+                        //if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                        //{
+                            
+                        //}
+                        //else
+                        //{
+                            
+                        //}
+                    }
+                    else
+                    {
+                        
+                    } */
+                    #endregion 
+
                     Debug.LogError("roomidx bubbleIdx bubbleId: " + preRoomIndex + " " + preBubbleIndex + " " + preBubbleId);
                     foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
                     {
