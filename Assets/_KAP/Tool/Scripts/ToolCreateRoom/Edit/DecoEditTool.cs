@@ -56,6 +56,27 @@ namespace KAP
                     if (_editManager.Current != null)
                     {
                         var current = _editManager.Current;
+                        var info = (DecoInfo)current.deco.Info;
+                        if (info.IsUnpacking)
+                        {
+                            foreach (var item in _toolUnpackingSetting.LstDecoItem)
+                            {
+                                if (item.Deco == current.deco)
+                                {
+                                    item.UnActiveImgCheck();
+                                    break;
+                                }
+                            }
+                        }
+                        else if (info.IsBubble)
+                        {
+                            var currentBubble = current.gameObject.GetComponent<Bubble>();
+                            if (currentBubble != null)
+                            {
+                                if (currentBubble.Prefab != null)
+                                currentBubble.Prefab.UnActiveImgCheck();
+                            }
+                        }
                         _editManager.SetCurrent(null);
                         current.deco.Remove();
                     }
@@ -274,6 +295,7 @@ namespace KAP
                             }
                         }
                     }
+                    _toolBubbleSetting.SortListBubble();
                 }
             }
         }

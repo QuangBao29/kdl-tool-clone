@@ -96,11 +96,11 @@ namespace KAP.ToolCreateMap
             var decoInfo = this.ParseInfo<DecoInfo>();
             var id = decoInfo.Id;
             var colorId = decoInfo.Color;
+            Debug.LogError("current BubbleId: " + _toolBubbleSetting.CurrentBubble.BubbleId);
 
             _toolBubbleSetting.CurrentBubble.DctDecoIdColor[id].Remove(colorId);
             if (_toolBubbleSetting.CurrentBubble.DctDecoIdColor[id].Count == 0)
                 _toolBubbleSetting.CurrentBubble.DctDecoIdColor.Remove(id);
-            Debug.LogError("removed from DctDecoIdColor");
 
             foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
             {
@@ -111,6 +111,32 @@ namespace KAP.ToolCreateMap
                         var decoinfo = deco.ParseInfo<DecoInfo>();
                         if (decoinfo.Id == id && decoinfo.Color == colorId)
                         {
+                            if (root.Key.BubbleDeco != null)
+                            {
+                                var info = (DecoInfo)root.Key.BubbleDeco.Info;
+                                if (info.Id == id && info.Color == colorId)
+                                {
+                                    var temp = root.Key.BubbleDeco;
+                                    temp.Remove();
+                                    root.Key.BubbleDeco = null;
+                                }
+                            }
+                            else
+                            {
+                                var current = _editManager.Current;
+                                if (current != null)
+                                {
+                                    var currentBubble = current.gameObject.GetComponent<Bubble>();
+                                    if (currentBubble != null)
+                                    {
+                                        if (currentBubble.Prefab == this)
+                                        {
+                                            _editManager.SetCurrent(null);
+                                            current.deco.Remove();
+                                        }
+                                    }
+                                }
+                            }
                             root.Value.Remove(deco);
                             Destroy(deco.gameObject);
                             break;
@@ -266,6 +292,14 @@ namespace KAP.ToolCreateMap
             if (_editManager.Current != null)
             {
                 var current = _editManager.Current;
+                foreach (var item in _toolUnpackingSetting.LstDecoItem)
+                {
+                    if (item.Deco == current.deco)
+                    {
+                        item.UnActiveImgCheck();
+                        break;
+                    }
+                }
                 _editManager.SetCurrent(null);
                 current.deco.Remove();
             }
@@ -301,6 +335,16 @@ namespace KAP.ToolCreateMap
                     if (decoId == IdItem)
                     {
                         Destroy(item.gameObject);
+                        var current = _editManager.Current;
+                        if (item.Deco != null)
+                        {
+                            if (current != null && item.Deco == current.deco)
+                            {
+                                _editManager.SetCurrent(null);
+                                item.Deco.Remove();
+                            }
+                            else item.Deco.Remove();
+                        }
                         _toolUnpackingSetting.LstDecoItem.Remove(item);
                         break;
                     }                   
