@@ -27,7 +27,6 @@ namespace KAP.Tools
         public event Action<EditMode> OnChangeEditMode;
         [SerializeField] private Dropdown _ddEditMode = null;
         [SerializeField] private Dropdown _ddPhaseMode = null;
-        [SerializeField] private GameObject _panelUnpack = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
         [SerializeField] private ToolCreateMapPhaseController _toolPhaseController = null;
 
@@ -36,6 +35,7 @@ namespace KAP.Tools
             base.Awake();
             CurrentEditMode = EditMode.Home;
             CurrentPhaseMode = PhaseMode.All;
+            _toolPhaseController.OnChangeModeUI();
         }
 
         private EditMode _currentEditMode;
@@ -66,20 +66,12 @@ namespace KAP.Tools
         public void OnDDSelectMode()
         {
             CurrentEditMode = KDLUtils.ParseEnum<EditMode>(_ddEditMode.captionText.text);
-            if (CurrentEditMode == EditMode.Play)
-                _panelUnpack.SetActive(true);
-            else _panelUnpack.SetActive(false);
-            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                foreach (var item in root.Value)
-                    item.UnActiveImgCheck();
-            }
-            
+            _toolPhaseController.OnChangeModeUI();
         }
         public void OnDDSelectPhaseMode()
         {
             CurrentPhaseMode = KDLUtils.ParseEnum<PhaseMode>(_ddPhaseMode.captionText.text);
-            _toolPhaseController.OnChangePhaseUI(CurrentPhaseMode);
+            _toolPhaseController.OnChangePhaseUI();
         }
     }
 }

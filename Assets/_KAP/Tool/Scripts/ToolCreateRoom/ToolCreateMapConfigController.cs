@@ -450,7 +450,6 @@ namespace KAP.ToolCreateMap
                         if (pair.Key.BubbleId == item.BubbleId)
                         {
                             pair.Value[0].OnImportSpawnDeco(pair.Key, item.BubblePosition);
-                            Debug.LogError("chay dc nha");
                             break;
                         }
                     }

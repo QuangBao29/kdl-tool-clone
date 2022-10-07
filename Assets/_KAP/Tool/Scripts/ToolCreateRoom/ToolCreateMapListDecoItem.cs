@@ -58,7 +58,35 @@ namespace KAP.ToolCreateMap
                     }
                 }
             }
-            else    //staticDeco vs All
+            else if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Bubble)
+            {
+                if (_toolBubbleSetting.CurrentBubble == null)
+                {
+                    Debug.LogError("Select a Current Bubble!");
+                    return;
+                }
+                var current = _editManager.Current;
+                if (current != null && current.EditStatus != KHHEditStatus.Valid)
+                    return;
+                if (record != null)
+                {
+                    var bubble = _toolBubbleSetting.CreateDecoBubble(record.Id, 0);
+                    bubble.Info = new DecoInfo { Id = record.Id, Color = 0, IsBubble = true };
+                    bubble.BubbleIndex = _toolBubbleSetting.CurrentBubble.Index;
+                    bubble.RoomIndex = _toolBubbleSetting.CurrentBubble.RoomIndex;
+                    bubble.BubbleId = bubble.RoomIndex + "_" + bubble.BubbleIndex;
+                    bubble.Prefab = null;
+                    bubble.Position = IsoWorld.WorldToIso(Camera.main.transform.position, 0);
+                    var decoEdit = bubble.GetComponent<DecoEditDemo>();
+                    if (_editManager.SetCurrent(decoEdit))
+                    {
+                        decoEdit.StartMove();
+                        decoEdit.EndMove();
+                        _editManager.editTool.SetValid(decoEdit.EditStatus);
+                    }
+                }
+            }
+            else
             {
                 var current = _editManager.Current;
                 if (current != null && current.EditStatus != KHHEditStatus.Valid)

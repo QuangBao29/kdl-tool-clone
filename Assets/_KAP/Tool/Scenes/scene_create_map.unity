@@ -6440,7 +6440,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ddEditMode: {fileID: 662291417}
   _ddPhaseMode: {fileID: 2139008536}
-  _panelUnpack: {fileID: 1245211483}
   _toolBubbleDecoSetting: {fileID: 575354278}
   _toolPhaseController: {fileID: 1811921234}
 --- !u!114 &503449531
@@ -14727,7 +14726,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1245211484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20833,6 +20832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1c02a29037baef4d8a884e204ada0d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _areaManager: {fileID: 184224760}
   _configController: {fileID: 503449531}
   _prefabDecoItems: {fileID: 605688179}
   _editManager: {fileID: 2035016587}
@@ -22520,7 +22520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _toolBubbleSetting: {fileID: 809963052}
-  _toolBubbleDecoSetting: {fileID: 0}
+  _toolBubbleDecoSetting: {fileID: 575354278}
   _toolUnpackingSetting: {fileID: 1691333323}
 --- !u!1 &1812410240
 GameObject:

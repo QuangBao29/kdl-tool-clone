@@ -97,13 +97,13 @@ namespace KAP.ToolCreateMap
             }
         }
 
-        public void CreateDecoItems(int id, int colorId)
+        public ToolCreateMapBubbleDecoItems CreateDecoItems(int id, int colorId)
         {
             var colorPath = colorId > 0 ? "_" + colorId : "";
             string idPath = id.ToString() + colorPath;
             var config = _configController.ConfigDeco.GetDecoById(id);
             if (config == null)
-                return;
+                return null;
 
             KawaiiAtlas atlas = null;
             atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + config.ThemeId + ".asset",
@@ -125,7 +125,7 @@ namespace KAP.ToolCreateMap
                     deco.Name.text = idPath;
                     deco.gameObject.name = idPath;
                     DctRootDecoItems[root.Key].Add(deco);
-                    return;
+                    return deco;
                 }
             }
 
@@ -148,6 +148,7 @@ namespace KAP.ToolCreateMap
             decoItem.Name.text = idPath;
             decoItem.gameObject.name = idPath;
             DctRootDecoItems[rootDecoItem].Add(decoItem);
+            return decoItem;
         }
 
         public void ImportDecoItems(int id, int colorId, ToolCreateMapBubbleItem bubbleItem)

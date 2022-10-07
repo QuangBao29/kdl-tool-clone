@@ -106,45 +106,61 @@ namespace KAP
                             if (info.IsUnpacking && !_toolUnpackingSetting.LstUnpackDeco.Contains(decoId))
                                 _toolUnpackingSetting.ButtonAddDecoToListUnpack();
                         }
+                        else if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Bubble)
+                        {
+                            var currentbubble = current.gameObject.GetComponent<Bubble>();
+                            if (currentbubble != null && currentbubble.Prefab == null)
+                            {
+                                Debug.LogError("cos component bubble va prefab null");
+                                var bubbleInfo = (DecoInfo)current.deco.Info;
+                                if (_toolBubbleSetting.CurrentBubble.DctDecoIdColor.ContainsKey(bubbleInfo.Id) &&
+                                        _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Contains(bubbleInfo.Color))
+                                {
+                                    Debug.LogError("this deco is already in Bubble! o tren");
+                                    return;
+                                }
+                            }
+                            
+                        }
                         _editManager.SetCurrent(null);
                         break;
                     case KHHEditStatus.CanSwap:
-                        _editManager.SetCurrent(null);
-                        var swapDeco = current.ListOverlaps[0];
-                        var swapDecoEdit = swapDeco.GetComponent<DecoEditDemo>();
-                        swapDecoEdit.StartMove();
-                        _editManager.SetCurrent(swapDecoEdit);
+                        //_editManager.SetCurrent(null);
+                        //var swapDeco = current.ListOverlaps[0];
+                        //var swapDecoEdit = swapDeco.GetComponent<DecoEditDemo>();
+                        //swapDecoEdit.StartMove();
+                        //_editManager.SetCurrent(swapDecoEdit);
 
-                        current.EndMove();
-                        if (current.EditStatus != KHHEditStatus.Valid)
-                        {
-                            _editManager.SetCurrent(null);
-                            _editManager.SetCurrent(current);
-                        }
+                        //current.EndMove();
+                        //if (current.EditStatus != KHHEditStatus.Valid)
+                        //{
+                        //    _editManager.SetCurrent(null);
+                        //    _editManager.SetCurrent(current);
+                        //}
 
-                        //for tile & wallpaper
+                        ////for tile & wallpaper
 
-                        var colliderLayer = swapDecoEdit.deco.gameObject.layer;
-                        if (colliderLayer == (int)DemoColliderLayer.Tile || colliderLayer == (int)DemoColliderLayer.Wallpaper)
-                        {
-                            var lstAreaPieces = swapDecoEdit.deco.LstAreaPieces;
-                            foreach (var piece in lstAreaPieces)
-                            {
-                                piece.Lock();
-                                var cloneList = new List<Deco>(piece.LstChilds);
-                                foreach (var deco in cloneList)
-                                {
-                                    deco.Apply(null, null);
-                                    var moveData = _areaManager.Move(deco);
-                                    if (moveData != null)
-                                    {
-                                        deco.Apply(moveData.piece, moveData.overlapPieces);
-                                    }
-                                }
-                                piece.Unlock();
-                            }
-                        }
-                        swapDecoEdit.EndMove();
+                        //var colliderLayer = swapDecoEdit.deco.gameObject.layer;
+                        //if (colliderLayer == (int)DemoColliderLayer.Tile || colliderLayer == (int)DemoColliderLayer.Wallpaper)
+                        //{
+                        //    var lstAreaPieces = swapDecoEdit.deco.LstAreaPieces;
+                        //    foreach (var piece in lstAreaPieces)
+                        //    {
+                        //        piece.Lock();
+                        //        var cloneList = new List<Deco>(piece.LstChilds);
+                        //        foreach (var deco in cloneList)
+                        //        {
+                        //            deco.Apply(null, null);
+                        //            var moveData = _areaManager.Move(deco);
+                        //            if (moveData != null)
+                        //            {
+                        //                deco.Apply(moveData.piece, moveData.overlapPieces);
+                        //            }
+                        //        }
+                        //        piece.Unlock();
+                        //    }
+                        //}
+                        //swapDecoEdit.EndMove();
                         break;
                 }
                 
@@ -158,55 +174,56 @@ namespace KAP
                     var preBubbleIndex = currentBubble.BubbleIndex;
                     var preBubbleId = currentBubble.BubbleId;
 
-                    #region Phase Bubble
-                    /* if (preBubbleId == null)
+                    #region PHASE BUBBLE
+                    if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Bubble)
                     {
-                        //Debug.LogError("preBubbleId null");
-                        //newBubbleIndex = _toolBubbleSetting.LstNumBubbleInRoom[newRoomIdx]++;
-                        //Debug.LogError("newBubbleIndex: " + newBubbleIndex);
-                        //Debug.LogError("num bubble in room after: " + _toolBubbleSetting.LstNumBubbleInRoom[newRoomIdx]);
-                        //currentBubble.BubbleIndex = newBubbleIndex;
-                        //currentBubble.RoomIndex = newRoomIdx;
-                        //currentBubble.BubbleId = currentBubble.RoomIndex + "_" + currentBubble.BubbleIndex;
-
-                        //sau khi update dc info cua bubble thi tiep theo se luu info vao trong cau truc du lieu.
-                        //tao 1 bubbleItem tiep theo cho room duoc dat, voi info moi, tao root clone moi, va add currentBubble vao (nho danh dau check)
-
-                        //if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Bubble)
-                        //{
-                        //    //tao BubbleItem moi o day (tao root clone trong ham tao bubbleItem)
-                        //    _toolBubbleSetting.OnAddBubbleClick();
-                        //    //
-                        //    _toolBubbleDecoSetting.CreateDecoItems(info.Id, info.Color);
-                        //    foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-                        //    {
-                        //        if (root.Key.BubbleId == currentBubble.BubbleId)
-                        //        {
-                        //            if (root.Key.BubbleDeco != null && root.Key.BubbleDeco != currentBubble)
-                        //            {
-                        //                Debug.LogError("root.Key.BubbleDeco != null");
-                        //                var temp = root.Key.BubbleDeco;
-                        //                temp.Remove();
-                        //                root.Key.BubbleDeco = null;
-                        //            }
-                        //            root.Key.BubbleDeco = currentBubble;
-                        //            break;
-                        //        }
-                        //    }
-                        //}
-                        //if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                        //{
-                            
-                        //}
-                        //else
-                        //{
-                            
-                        //}
+                        var bubbleInfo = (DecoInfo)current.deco.Info;
+                        if (bubbleInfo.IsBubble && currentBubble.Prefab == null)
+                        {
+                            Debug.LogError("Is Bubble va Prefab null");
+                            if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor.ContainsKey(bubbleInfo.Id))
+                            {
+                                _toolBubbleSetting.CurrentBubble.DctDecoIdColor.Add(bubbleInfo.Id, new List<int>());
+                                _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Add(bubbleInfo.Color);
+                                currentBubble.Prefab = _toolBubbleDecoSetting.CreateDecoItems(bubbleInfo.Id, bubbleInfo.Color);
+                                foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                                {
+                                    if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
+                                    {
+                                        foreach (var item in root.Value)
+                                        {
+                                            item.UnActiveImgCheck();
+                                        }
+                                        break;
+                                    }
+                                }
+                                currentBubble.Prefab.SetActiveImgCheck();
+                            }
+                            else if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Contains(bubbleInfo.Color))
+                            {
+                                _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Add(bubbleInfo.Color);
+                                currentBubble.Prefab = _toolBubbleDecoSetting.CreateDecoItems(bubbleInfo.Id, bubbleInfo.Color);
+                                foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                                {
+                                    if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
+                                    {
+                                        foreach (var item in root.Value)
+                                        {
+                                            item.UnActiveImgCheck();
+                                        }
+                                        break;
+                                    }
+                                }
+                                currentBubble.Prefab.SetActiveImgCheck();
+                            }
+                            else
+                            {
+                                Debug.LogError("this deco is already in Bubble!");
+                                return;
+                            }
+                        }
                     }
-                    else
-                    {
-                        
-                    } */
+                    
                     #endregion 
 
                     Debug.LogError("roomidx bubbleIdx bubbleId: " + preRoomIndex + " " + preBubbleIndex + " " + preBubbleId);

@@ -62,6 +62,9 @@ namespace KAP.ToolCreateMap
         private Dictionary<EditMode, EditModeData> _dctEditModeDataPostion = new Dictionary<EditMode, EditModeData>();
         private Dictionary<EditMode, EditModeData> _dctEditModeDataBubble = new Dictionary<EditMode, EditModeData>();
 
+        private string _exportJsonDecoUnpackingPath = "/_KDL/_GameResources/Maps/RoomPlayUnpacking/";
+        private string _importJsonDecoUnpackingPath = "Assets/_KDL/_GameResources/Maps/RoomPlayUnpacking/";
+
         private void Awake()
         {
             InitEditModeData();
@@ -194,6 +197,11 @@ namespace KAP.ToolCreateMap
             string mapName = _inputMapId.text + ".json";
             return Path.Combine(targetEditMode.ImportPath, mapName);
         }
+        public string GetImportPathUnpacking()
+        {
+            string mapName = _inputMapId.text + ".json";
+            return Path.Combine(_importJsonDecoUnpackingPath, mapName);
+        }
 
         public void OnButtonImportClick()
         {
@@ -233,7 +241,11 @@ namespace KAP.ToolCreateMap
             if (string.IsNullOrEmpty(_inputMapId.text))
                 return;
             _areaManager.ClearAllRooms();
-            string path = GetImportPath();
+            string path = "";
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                path = GetImportPath();
+            else
+                path = GetImportPathUnpacking();
             var json = FileSaving.Load(path);
             if (!string.IsNullOrEmpty(json))
             {
@@ -244,7 +256,6 @@ namespace KAP.ToolCreateMap
             _toolBubbleSetting.ClearBubbles();
             _configController.OnButtonImportBubbleCsv();
         }
-
         #endregion
         // ================================================================
         #region Export 
@@ -255,6 +266,11 @@ namespace KAP.ToolCreateMap
 
             string mapName = string.Format("{0}.json", _inputMapId.text);
             return Application.dataPath + Path.Combine(targetEditMode.ExportPath, mapName);
+        }
+        public string GetExportPathforUnpacking()
+        {
+            string mapName = string.Format("{0}.json", _inputMapId.text);
+            return Application.dataPath + Path.Combine(_exportJsonDecoUnpackingPath, mapName);
         }
 
         public void OnButtonExportClick()
@@ -325,6 +341,13 @@ namespace KAP.ToolCreateMap
                     Debug.Log("data: " + JsonWriter.Serialize(data));
                     FileSaving.Save(path, JsonWriter.Serialize(data));
                     Debug.LogError("Export new success");
+
+                    var data_2 = _toolExportData.Export(null, true);
+                    string path_2 = GetExportPathforUnpacking();
+                    Debug.Log("path_2: " + path_2);
+                    Debug.Log("data_2: " + JsonWriter.Serialize(data_2));
+                    FileSaving.Save(path_2, JsonWriter.Serialize(data_2));
+                    Debug.LogError("Export new success 2");
                 }
 
                 return true;

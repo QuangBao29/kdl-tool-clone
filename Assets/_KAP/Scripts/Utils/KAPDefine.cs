@@ -174,6 +174,8 @@ namespace KAP
                 data["IsStatic"] = IsStatic;
             if (IsBubble)
                 data["IsBubble"] = IsBubble;
+            if (IsUnpacking)
+                data["IsUnpacking"] = IsUnpacking;
 
             if (!string.IsNullOrEmpty(ShadowColor))
             {

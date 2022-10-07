@@ -60,6 +60,9 @@ namespace KAP.ToolCreateMap
             item.BubblePosition = BubblePosition;
             item.gameObject.SetActive(true);
             _lstBubbleItems.Add(item);
+            Debug.LogError("num of room: " + _areaManager.ListRooms.Count);
+            Debug.LogError("_lstNumBubbleInRoom.Count: " + _lstNumBubbleInRoom.Count);
+            Debug.LogError("item.RoomIndex: " + item.RoomIndex);
             if (item.RoomIndex >= _lstNumBubbleInRoom.Count)
             {
                 _lstNumBubbleInRoom[0]++;
