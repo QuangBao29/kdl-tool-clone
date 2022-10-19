@@ -287,11 +287,18 @@ namespace KAP.ToolCreateMap
             }
             txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n";
 
-            foreach (var bubble in _toolBubbleSetting.GetLstBubble())
+            var listBubble = _toolBubbleSetting.GetLstBubble();
+            for (var i = 0; i < listBubble.Count; i++)
             {
-                string bubbleDecoIds = ConvertBubbleDecoIdToString(bubble);
-                txt += bubble.BubbleId + "\t" + bubbleDecoIds + "\n";
+                string bubbleDecoIds = ConvertBubbleDecoIdToString(listBubble[i]);
+                txt += listBubble[i].BubbleId + "\t" + bubbleDecoIds + "\t" + i + "\n";
             }
+
+            //foreach (var bubble in _toolBubbleSetting.GetLstBubble())
+            //{
+            //    string bubbleDecoIds = ConvertBubbleDecoIdToString(bubble);
+            //    txt += bubble.BubbleId + "\t" + bubbleDecoIds + "\n";
+            //}
 
             foreach (var pair in dctBubbleHomePosition)
             {
