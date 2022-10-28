@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Text.RegularExpressions;
 namespace KAP.ToolCreateMap
 {
     public class KDLUtils
@@ -43,6 +44,10 @@ namespace KAP.ToolCreateMap
                 var defaultValue = (T)((object)0);
                 return defaultValue;
             }
+        }
+        public static string RemoveHiddenFromString(string input)
+        {
+            return Regex.Replace(input, @"\p{C}+", string.Empty);
         }
 
         #endregion

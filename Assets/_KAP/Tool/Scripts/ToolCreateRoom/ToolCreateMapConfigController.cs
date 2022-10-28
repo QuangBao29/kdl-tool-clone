@@ -420,12 +420,12 @@ namespace KAP.ToolCreateMap
                 foreach (var record in _lstConfigBubbleHomePositionRecords)
                 {
                     List<Vector3> listBubblePosition = record.GetLstBubblePositionVector3();
+                    var idxList = FindIndexInListRoom(int.Parse(record.RoomId));
                     for ( var i = 0; i < listBubblePosition.Count; i++)
                     {
                         Vector3 temp = listBubblePosition[i];
-                        //listBubblePosition[i] -= listBubblePosition[i] - _areaManager.ListRooms[int.Parse(record.RoomId)].Position;
-                        temp.x += _areaManager.ListRooms[int.Parse(record.RoomId)].Position.x;
-                        temp.y += _areaManager.ListRooms[int.Parse(record.RoomId)].Position.y;
+                        temp.x += _areaManager.ListRooms[idxList].Position.x;
+                        temp.y += _areaManager.ListRooms[idxList].Position.y;
                         listBubblePosition[i] = temp;
                         Debug.LogError(listBubblePosition[i]);
                     }
@@ -569,13 +569,23 @@ namespace KAP.ToolCreateMap
             {
                 var bubble = _toolBubbleSetting.GetLstBubble()[i];
                 int idx = bubble.RoomIndex;
-                if (!dctBubblePosition.ContainsKey(bubble.RoomIndex))
-                    dctBubblePosition.Add(bubble.RoomIndex, GetStringBubblePosition(bubble.BubblePosition, _areaManager.ListRooms[idx].Position));
-                else dctBubblePosition[bubble.RoomIndex] += GetStringBubblePosition(bubble.BubblePosition, _areaManager.ListRooms[idx].Position);
+                var idxList = FindIndexInListRoom(idx);
+                if (!dctBubblePosition.ContainsKey(idx))
+                    dctBubblePosition.Add(idx, GetStringBubblePosition(bubble.BubblePosition, _areaManager.ListRooms[idxList].Position));
+                else dctBubblePosition[idx] += GetStringBubblePosition(bubble.BubblePosition, _areaManager.ListRooms[idxList].Position);
             }
             return dctBubblePosition;
         }
-
+        public int FindIndexInListRoom(int roomIndex)
+        {
+            for (var i = 0; i < _areaManager.ListRooms.Count; i++)
+            {
+                var info = _areaManager.ListRooms[i].ParseInfo<DecoInfo>();
+                if (info.Id == roomIndex)
+                    return i;
+            }
+            return -1;
+        }
         public string ConvertConfigBubblePlayRecordToStringCsv(List<ConfigBubblePlayRecord> configRecords)
         {
             string txt = "";

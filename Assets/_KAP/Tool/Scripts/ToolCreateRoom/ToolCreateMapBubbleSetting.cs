@@ -238,6 +238,7 @@ namespace KAP.ToolCreateMap
         }
         public void RemoveAllBubbleInARoom(int roomIndex)
         {
+            DebugForCheck();
             List<ToolCreateMapBubbleItem> listTemp = new List<ToolCreateMapBubbleItem>();
             if (!_dctNumBubbleInRoom.ContainsKey(roomIndex))
             {

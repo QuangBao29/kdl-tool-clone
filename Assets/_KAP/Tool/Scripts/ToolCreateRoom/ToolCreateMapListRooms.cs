@@ -136,13 +136,18 @@ namespace KAP.ToolCreateMap
                 {
                     var roomInfo = (DecoInfo)room.Info;
                     int roomId = 0;
-                    if (roomInfo != null && roomInfo.Id > 1000)
+                    if (roomInfo != null && roomInfo.Id > 1000 && ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                     {
                         roomId = roomInfo.Id;
                     }
-                    else
+                    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                     {
                         roomId = KAPDefine.DefaultRoomPlayId;
+                        room.Info = new DecoInfo { Id = roomId };
+                    }
+                    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                    {
+                        roomId = int.Parse(_inputMapId.text);
                         room.Info = new DecoInfo { Id = roomId };
                     }
 
@@ -261,6 +266,7 @@ namespace KAP.ToolCreateMap
             }
             Setup();
             _toolBubbleSetting.ClearBubbles();
+            _toolBubbleSetting.UpdateListNumOfBubbleInARoom();
             _configController.OnButtonImportBubbleCsv();
         }
         #endregion
