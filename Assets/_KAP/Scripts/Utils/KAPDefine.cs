@@ -77,13 +77,14 @@ namespace KAP
         #region ROOM
 
         public const int DefaultRoomId = 100000;
+        public const int DefaultRoomPlayId = 114000;
         public const string RoomMapURL = "Maps/Rooms/";
 
         #endregion
         // ======================================================
         #region THEME ROOM
 
-        public const int DefaultRoomThemeId = 520000;
+        public const int DefaultRoomThemeId = 520010;
         public const string ThemeMapURL = "Maps/Themes/";
 
         #endregion

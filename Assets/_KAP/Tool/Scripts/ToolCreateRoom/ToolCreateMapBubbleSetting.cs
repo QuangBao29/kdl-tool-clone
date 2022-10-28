@@ -7,6 +7,7 @@ using Kawaii.IsoTools;
 using Kawaii.IsoTools.DecoSystem;
 using System.Linq;
 using Kawaii.ResourceManager;
+//using Kawaii.ResourceManager.Editor;
 
 namespace KAP.ToolCreateMap
 {   
@@ -27,23 +28,22 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapConfigController _configController = null;
 
         private List<ToolCreateMapBubbleItem> _lstBubbleItems = new List<ToolCreateMapBubbleItem>();
-        private List<int> _lstNumBubbleInRoom = new List<int>();
+        private Dictionary<int, int> _dctNumBubbleInRoom = new Dictionary<int, int>();
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
         
 
         [HideInInspector] public ToolCreateMapBubbleItem CurrentBubble = null;
         [HideInInspector] public List<ToolCreateMapBubbleItem> ListSwapBubble = new List<ToolCreateMapBubbleItem>();
-        public List<int> LstNumBubbleInRoom
+        public Dictionary<int, int> DctNumBubbleInRoom
         {
-            get => _lstNumBubbleInRoom;
+            get => _dctNumBubbleInRoom;
         }
-
         #region Create Bubble
         public void OnAddBubbleClick()
         {
             UpdateListNumOfBubbleInARoom();
             ToolCreateMapBubbleItem item = SGUtils.InstantiateObject<ToolCreateMapBubbleItem>(_prefabBubbleItem, _transGrid);
-            item.Setup(_lstNumBubbleInRoom[_areaManager.ListRooms.Count - 1]);
+            item.Setup(_dctNumBubbleInRoom.ElementAt(_dctNumBubbleInRoom.Count - 1).Value);
             item.gameObject.SetActive(true);
             _lstBubbleItems.Add(item);
             _toolBubbleDecoSetting.AddRootClone(item.RoomIndex, item.Index);
@@ -61,32 +61,37 @@ namespace KAP.ToolCreateMap
             item.gameObject.SetActive(true);
             _lstBubbleItems.Add(item);
             Debug.LogError("num of room: " + _areaManager.ListRooms.Count);
-            Debug.LogError("_lstNumBubbleInRoom.Count: " + _lstNumBubbleInRoom.Count);
+            Debug.LogError("_dctNumBubbleInRoom.Count: " + _dctNumBubbleInRoom.Count);
             Debug.LogError("item.RoomIndex: " + item.RoomIndex);
-            if (item.RoomIndex >= _lstNumBubbleInRoom.Count)
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
             {
-                _lstNumBubbleInRoom[0]++;
+                _dctNumBubbleInRoom[_dctNumBubbleInRoom.ElementAt(0).Key]++;
             }
             else
             {
-                _lstNumBubbleInRoom[item.RoomIndex]++;
+                _dctNumBubbleInRoom[item.RoomIndex]++;
                 Debug.LogError("homeeeeee");
             }
         }
         public void UpdateListNumOfBubbleInARoom()
         {
-            if (_lstNumBubbleInRoom.Count < _areaManager.ListRooms.Count)
+            if (_dctNumBubbleInRoom.Count < _areaManager.ListRooms.Count)
             {
-                int count = _areaManager.ListRooms.Count - _lstNumBubbleInRoom.Count;
-                for (var i = 0; i < count; i++)
-                    _lstNumBubbleInRoom.Add(0);
+                for (var i = 0; i < _areaManager.ListRooms.Count; i++)
+                {
+                    var info = (DecoInfo)_areaManager.ListRooms[i].Info;
+                    if (!_dctNumBubbleInRoom.ContainsKey(info.Id))
+                    {
+                        _dctNumBubbleInRoom.Add(info.Id, 0);
+                    }
+                }
             }
         }
         public void DebugForCheck()
         {
-            for (var i = 0; i < _lstNumBubbleInRoom.Count; i++)
+            for (var i = 0; i < _dctNumBubbleInRoom.Count; i++)
             {
-                Debug.LogError("num of bubble in room: " + _lstNumBubbleInRoom[i]);
+                Debug.LogError("num of bubble in room: " + _dctNumBubbleInRoom.ElementAt(i));
             }
         }
         public void ResetColorAllBubbleItems()
@@ -128,9 +133,9 @@ namespace KAP.ToolCreateMap
             if (config == null)
                 return null;
             KawaiiAtlas atlas = null;
-            atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + config.ThemeId + ".asset", 
-                config.ThemeId.ToString());
-
+#if UNITY_EDITOR
+            atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + config.ThemeId + ".asset", config.ThemeId.ToString());
+#endif
             var colorPath = colorId > 0 ? "_" + colorId : "";
             var parameters = new DecoParameters
             {
@@ -205,8 +210,8 @@ namespace KAP.ToolCreateMap
                     _lstBubbleItems[i].UpdateIndexAfterDeleteBubble(bubble.Index);
             }
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                _lstNumBubbleInRoom[bubble.RoomIndex]--;
-            else _lstNumBubbleInRoom[0]--;
+                _dctNumBubbleInRoom[bubble.RoomIndex]--;
+            else _dctNumBubbleInRoom[_dctNumBubbleInRoom.ElementAt(0).Key]--;
             foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
             {
                 if (root.Key.RoomIndex == bubble.RoomIndex)
@@ -234,12 +239,12 @@ namespace KAP.ToolCreateMap
         public void RemoveAllBubbleInARoom(int roomIndex)
         {
             List<ToolCreateMapBubbleItem> listTemp = new List<ToolCreateMapBubbleItem>();
-            if (roomIndex >= _lstNumBubbleInRoom.Count)
+            if (!_dctNumBubbleInRoom.ContainsKey(roomIndex))
             {
                 Debug.LogError("roomIndex out of range");
                 return;
             }
-            else _lstNumBubbleInRoom.RemoveAt(roomIndex);
+            else _dctNumBubbleInRoom.Remove(roomIndex);
             foreach (var bubble in _lstBubbleItems)
             {
                 if (bubble.RoomIndex == roomIndex)
@@ -285,7 +290,7 @@ namespace KAP.ToolCreateMap
         }
         public void ClearBubbles()
         {
-            _lstNumBubbleInRoom.Clear();
+            _dctNumBubbleInRoom.Clear();
             ClearAll();
             _toolUnpackingSetting.ClearAll();
         }

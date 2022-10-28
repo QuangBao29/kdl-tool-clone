@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Kawaii.ResourceManager;
 using KAP;
 using Kawaii.IsoTools.DecoSystem;
+using System.Linq;
 
 namespace KAP.ToolCreateMap
 {
@@ -91,17 +92,18 @@ namespace KAP.ToolCreateMap
         {
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                 _index = index;
-            else _index = _toolBubbleSetting.LstNumBubbleInRoom[0];
-            this.RoomIndex = _toolBubbleSetting.GetRoomId(_areaManager.ListRooms.Count - 1);
+            else _index = _toolBubbleSetting.DctNumBubbleInRoom.ElementAt(0).Value;
+            var info = (DecoInfo)_areaManager.ListRooms[_areaManager.ListRooms.Count - 1].Info;
+            this.RoomIndex = info.Id;
             UpdateBubbleId();
-            if (this.RoomIndex >= _toolBubbleSetting.LstNumBubbleInRoom.Count)
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
             {
-                _toolBubbleSetting.LstNumBubbleInRoom[0]++;
+                _toolBubbleSetting.DctNumBubbleInRoom[_toolBubbleSetting.DctNumBubbleInRoom.ElementAt(0).Key]++;
                 Debug.LogError("0++");
             }
             else
             {
-                _toolBubbleSetting.LstNumBubbleInRoom[this.RoomIndex]++;
+                _toolBubbleSetting.DctNumBubbleInRoom[_toolBubbleSetting.DctNumBubbleInRoom.ElementAt(_toolBubbleSetting.DctNumBubbleInRoom.Count - 1).Key]++;
             }
         }
         public void UpdateIndexAfterDeleteBubble(int deletedIndex)

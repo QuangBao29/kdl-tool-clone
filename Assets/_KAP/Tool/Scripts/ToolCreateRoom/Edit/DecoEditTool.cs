@@ -227,10 +227,13 @@ namespace KAP
                     #endregion 
 
                     Debug.LogError("roomidx bubbleIdx bubbleId: " + preRoomIndex + " " + preBubbleIndex + " " + preBubbleId);
+                    Debug.LogError("_areaManager.ListRooms.Count" + _areaManager.ListRooms.Count);
                     foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
                     {
+                        Debug.LogError(_toolBubbleDecoSetting.DctRootDecoItems.Count);
                         if (root.Key.BubbleId == preBubbleId)
                         {
+                            Debug.LogError("root.Key.BubbleId == preBubbleId");
                             if (root.Key.BubbleDeco != null && root.Key.BubbleDeco != currentBubble)
                             {
                                 Debug.LogError("khac null");
@@ -242,12 +245,16 @@ namespace KAP
                             break;
                         }
                     }
+                    Debug.LogError("chuyen tiep");
                     if (newRoomIdx != preRoomIndex && ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                     {
-                        _toolBubbleSetting.LstNumBubbleInRoom[preRoomIndex]--;
-                        newBubbleIndex = _toolBubbleSetting.LstNumBubbleInRoom[newRoomIdx]++;
+                        Debug.LogError("run this shit 1");
+                        _toolBubbleSetting.DctNumBubbleInRoom[preRoomIndex]--;
+                        Debug.LogError("run this shit 2");
+                        newBubbleIndex = _toolBubbleSetting.DctNumBubbleInRoom[newRoomIdx]++;
+                        Debug.LogError("run this shit 3");
                         Debug.LogError("newBubbleIndex: " + newBubbleIndex);
-                        Debug.LogError("num bubble in room after: " + _toolBubbleSetting.LstNumBubbleInRoom[newRoomIdx]);
+                        Debug.LogError("num bubble in room after: " + _toolBubbleSetting.DctNumBubbleInRoom[newRoomIdx]);
                         //update currentBubble info
                         currentBubble.BubbleIndex = newBubbleIndex;
                         currentBubble.RoomIndex = newRoomIdx;

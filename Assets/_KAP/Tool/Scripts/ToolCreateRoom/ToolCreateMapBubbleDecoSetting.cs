@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Kawaii.ResourceManager;
+//using Kawaii.ResourceManager.Editor;
 using Kawaii.IsoTools.DecoSystem;
 
 namespace KAP.ToolCreateMap
@@ -106,10 +107,10 @@ namespace KAP.ToolCreateMap
                 return null;
 
             KawaiiAtlas atlas = null;
-            atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + config.ThemeId + ".asset",
-                config.ThemeId.ToString());
+#if UNITY_EDITOR
+            atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + config.ThemeId + ".asset", config.ThemeId.ToString());
+#endif
             var FLSprite = atlas != null ? atlas.GetSprite(idPath) : null;
-
             foreach (var root in DctRootDecoItems)
             {
                 if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
@@ -160,8 +161,9 @@ namespace KAP.ToolCreateMap
                 return;
 
             KawaiiAtlas atlas = null;
-            atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + config.ThemeId + ".asset",
-                config.ThemeId.ToString());
+#if UNITY_EDITOR
+            atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + config.ThemeId + ".asset", config.ThemeId.ToString());
+#endif
             var FLSprite = atlas != null ? atlas.GetSprite(idPath) : null;
 
             foreach (var root in DctRootDecoItems)

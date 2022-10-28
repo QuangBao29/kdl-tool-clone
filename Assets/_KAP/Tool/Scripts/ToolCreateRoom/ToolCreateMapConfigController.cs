@@ -419,9 +419,16 @@ namespace KAP.ToolCreateMap
                 Debug.LogError("editmode = home");
                 foreach (var record in _lstConfigBubbleHomePositionRecords)
                 {
-                    Debug.LogError("record.RoomId: " + record.RoomId);
-                    var listBubblePosition = record.GetLstBubblePositionVector3();
-                    Debug.LogError("Count: " + listBubblePosition.Count);
+                    List<Vector3> listBubblePosition = record.GetLstBubblePositionVector3();
+                    for ( var i = 0; i < listBubblePosition.Count; i++)
+                    {
+                        Vector3 temp = listBubblePosition[i];
+                        //listBubblePosition[i] -= listBubblePosition[i] - _areaManager.ListRooms[int.Parse(record.RoomId)].Position;
+                        temp.x += _areaManager.ListRooms[int.Parse(record.RoomId)].Position.x;
+                        temp.y += _areaManager.ListRooms[int.Parse(record.RoomId)].Position.y;
+                        listBubblePosition[i] = temp;
+                        Debug.LogError(listBubblePosition[i]);
+                    }
                     //add info to BubbleItem
                     for (var i = 0; i < listBubblePosition.Count; i++)
                     {
@@ -558,11 +565,13 @@ namespace KAP.ToolCreateMap
         public Dictionary<int, string> GetDctBubblePosition()
         {
             Dictionary<int, string> dctBubblePosition = new Dictionary<int, string>();
-            foreach (var bubble in _toolBubbleSetting.GetLstBubble())
+            for (var i = 0; i < _toolBubbleSetting.GetLstBubble().Count; i++)
             {
+                var bubble = _toolBubbleSetting.GetLstBubble()[i];
+                int idx = bubble.RoomIndex;
                 if (!dctBubblePosition.ContainsKey(bubble.RoomIndex))
-                    dctBubblePosition.Add(bubble.RoomIndex, GetStringBubblePosition(bubble.BubblePosition));
-                else dctBubblePosition[bubble.RoomIndex] += GetStringBubblePosition(bubble.BubblePosition);
+                    dctBubblePosition.Add(bubble.RoomIndex, GetStringBubblePosition(bubble.BubblePosition, _areaManager.ListRooms[idx].Position));
+                else dctBubblePosition[bubble.RoomIndex] += GetStringBubblePosition(bubble.BubblePosition, _areaManager.ListRooms[idx].Position);
             }
             return dctBubblePosition;
         }
@@ -587,9 +596,9 @@ namespace KAP.ToolCreateMap
             return txt;
         }
 
-        public string GetStringBubblePosition(Vector3 position)
+        public string GetStringBubblePosition(Vector3 position, Vector3 roomPos)
         {
-            return "[" + position.x + "," + position.y + "," + position.z + "];";
+            return "[" + (position.x - roomPos.x) + "," + (position.y - roomPos.y) + "," + position.z + "];";
         }
 
         public string ConvertBubbleDecoIdToString(ToolCreateMapBubbleItem bubble)
