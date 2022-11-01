@@ -16,10 +16,10 @@ namespace KAP.Tools
         public static void BuildAssetbundleForStreamingAsset()
         {
             CreateConfigHiveShop.Create();
-            ConfigAllThemeInRoom.ConfigAllThemeUseInRoom();
-            ConfigAllThemeInRoomTheme.ConfigAllThemeUseInRoomTheme();
-            ConfigAllThemeInWonder.SetConfigAllThemeUseInWonder();
-            ConfigAllThemeInRoomChallenge.SetConfigAllThemeUseInRoomChallenge();
+            //ConfigAllThemeInRoom.ConfigAllThemeUseInRoom();
+            //ConfigAllThemeInRoomTheme.ConfigAllThemeUseInRoomTheme();
+            //ConfigAllThemeInWonder.SetConfigAllThemeUseInWonder();
+            //ConfigAllThemeInRoomChallenge.SetConfigAllThemeUseInRoomChallenge();
             CreateAtlasHelper.CreateAllAtlas();
             BuildAssetbundle(KawaiiAtlasCloudSettings.AtlasType.StreamingAsset);
         }

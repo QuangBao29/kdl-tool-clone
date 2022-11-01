@@ -228,7 +228,6 @@ namespace KAP.ToolCreateMap
             }
             if (current.deco.IsWallHang)
             {
-                Debug.LogError("deco nay wall hang: " + bubble.BubbleId);
                 _editManager.Current.Rotate(1);
             }
             switch (current.EditStatus)
