@@ -374,12 +374,12 @@ namespace KAP.ToolCreateMap
                         FileSaving.Save(path, JsonWriter.Serialize(data));
                         Debug.LogError("Export new success");
 
-                        var data_2 = _toolExportData.Export(null, true);
-                        string path_2 = GetExportPathforUnpacking();
-                        Debug.Log("path_2: " + path_2);
-                        Debug.Log("data_2: " + JsonWriter.Serialize(data_2));
-                        FileSaving.Save(path_2, JsonWriter.Serialize(data_2));
-                        Debug.LogError("Export new success 2");
+                        //var data_2 = _toolExportData.Export(null, true);
+                        //string path_2 = GetExportPathforUnpacking();
+                        //Debug.Log("path_2: " + path_2);
+                        //Debug.Log("data_2: " + JsonWriter.Serialize(data_2));
+                        //FileSaving.Save(path_2, JsonWriter.Serialize(data_2));
+                        //Debug.LogError("Export new success 2");
                     }
 
                     return true;

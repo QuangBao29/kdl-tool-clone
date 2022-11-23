@@ -45,6 +45,8 @@ namespace KAP.ToolCreateMap
         [SerializeField]
         private ToolCreateMapUnpackingSetting _toolUnpackingSetting = null;
         [SerializeField]
+        private ToolCreateMapTransferKAPToKDL _toolTransfer = null;
+        [SerializeField]
         private AreaManager _areaManager = null;
         [SerializeField] 
         private InputField _inputMapId = null;
@@ -416,7 +418,6 @@ namespace KAP.ToolCreateMap
             LoadFileCsv();
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                Debug.LogError("editmode = home");
                 foreach (var record in _lstConfigBubbleHomePositionRecords)
                 {
                     List<Vector3> listBubblePosition = record.GetLstBubblePositionVector3();
@@ -427,7 +428,6 @@ namespace KAP.ToolCreateMap
                         temp.x += _areaManager.ListRooms[idxList].Position.x;
                         temp.y += _areaManager.ListRooms[idxList].Position.y;
                         listBubblePosition[i] = temp;
-                        Debug.LogError(listBubblePosition[i]);
                     }
                     //add info to BubbleItem
                     for (var i = 0; i < listBubblePosition.Count; i++)
@@ -515,7 +515,6 @@ namespace KAP.ToolCreateMap
                         if (pair.Key.BubbleId == item.BubbleId)
                         {
                             pair.Value[0].OnImportSpawnDeco(pair.Key, item.BubblePosition);
-                            Debug.LogError("chay dc nha");
                             break;
                         }
                     }
@@ -568,6 +567,8 @@ namespace KAP.ToolCreateMap
             for (var i = 0; i < _toolBubbleSetting.GetLstBubble().Count; i++)
             {
                 var bubble = _toolBubbleSetting.GetLstBubble()[i];
+                var info = (DecoInfo)bubble.Info;
+                //Debug.LogError("bubble.Id: " + info.Id);
                 int idx = bubble.RoomIndex;
                 var idxList = FindIndexInListRoom(idx);
                 if (!dctBubblePosition.ContainsKey(idx))
@@ -631,6 +632,115 @@ namespace KAP.ToolCreateMap
             for (var i = 0; i < list.Count; i++)
                 txt += list[i] + ";";
             return txt;
+        }
+
+        public void SaveConfigPlayKAPToKDL()
+        {
+            List<string> lstVariables = ConfigBubblePlayRecord.GetLstVariables();
+            List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
+            string txt = "";
+            string txtPos = "";
+            //Save configPlay
+            if (_lstConfigBubblePlayRecords.Count != 0)
+            {
+                List<ConfigBubblePlayRecord> listRemovedRecord = new List<ConfigBubblePlayRecord>();
+                //delete all old BubbleId in config with same Room Id
+                for (var i = 0; i < _lstConfigBubblePlayRecords.Count; i++)
+                {
+                    var record = _lstConfigBubblePlayRecords[i];
+                    var listRecord = SGUtils.ParseStringToList(record.BubbleId, '_');
+                    if (listRecord[0] == _inputMapId.text)
+                        listRemovedRecord.Add(record);
+                }
+                foreach (var rec in listRemovedRecord)
+                {
+                    _lstConfigBubblePlayRecords.Remove(rec);
+                }
+
+                foreach (var pair in _toolTransfer.GetDctBubbleDecoIds())
+                {
+                    ConfigBubblePlayRecord newRecord = new ConfigBubblePlayRecord();
+                    newRecord.BubbleId = pair.Key;
+                    newRecord.BubbleDecoIds = pair.Value;
+                    _lstConfigBubblePlayRecords.Add(newRecord);
+                }
+                string newtxt = "";
+                for (var i = 0; i < lstVariables.Count - 1; i++)
+                {
+                    newtxt += lstVariables[i] + "\t";
+                }
+                newtxt += lstVariables[lstVariables.Count - 1] + "\n" + ConvertConfigBubblePlayRecordToStringCsv(_lstConfigBubblePlayRecords);
+                FileSaving.Save(Application.dataPath + _configBubblePlayFilePath, newtxt);
+            }
+            else
+            {
+                for (var i = 0; i < lstVariables.Count - 1; i++)
+                {
+                    txt += lstVariables[i] + "\t";
+                }
+                txt += lstVariables[lstVariables.Count - 1] + "\n";
+
+                foreach (var pair in _toolTransfer.GetDctBubbleDecoIds())
+                {
+                    txt += pair.Key + "\t" + pair.Value + "\n";
+                }
+
+                FileSaving.Save(Application.dataPath + _configBubblePlayFilePath, txt);
+            }
+
+            //Save ConfigPlayPosition
+            if (_lstConfigBubblePlayPositionRecords.Count != 0)
+            {
+                List<ConfigBubblePlayPositionRecord> listRemovedRecord = new List<ConfigBubblePlayPositionRecord>();
+                for (var i = 0; i < _lstConfigBubblePlayPositionRecords.Count; i++)
+                {
+                    var record = _lstConfigBubblePlayPositionRecords[i];
+                    if (record.RoomId == _inputMapId.text)
+                        listRemovedRecord.Add(record);
+                }
+                foreach (var rec in listRemovedRecord)
+                {
+                    _lstConfigBubblePlayPositionRecords.Remove(rec);
+                }
+
+                ConfigBubblePlayPositionRecord newRecord = new ConfigBubblePlayPositionRecord();
+                var strPos = "";
+                foreach (var pos in _toolTransfer.GetListPosition())
+                {
+                    strPos += GetStringBubblePosition(pos, Vector3.zero);
+                }
+                Debug.LogError("strPos: " + strPos);
+
+                newRecord.RoomId = _inputMapId.text;
+                newRecord.LstBubblePosition = strPos;
+                newRecord.LstUnpackingDeco = ConvertListToString(_toolTransfer.GetListUnpackingDeco());
+                _lstConfigBubblePlayPositionRecords.Add(newRecord);
+
+                string newtxt = "";
+                for (var i = 0; i < lstVariablesPos.Count - 1; i++)
+                {
+                    newtxt += lstVariablesPos[i] + "\t";
+                }
+                newtxt += lstVariablesPos[lstVariablesPos.Count - 1] + "\n" + ConvertConfigBubblePlayPositionRecordToStringCsv(_lstConfigBubblePlayPositionRecords);
+                FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, newtxt);
+            }
+            else
+            {
+                for (var i = 0; i < lstVariablesPos.Count - 1; i++)
+                {
+                    txtPos += lstVariablesPos[i] + "\t";
+                }
+                txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n";
+
+                var strPos = "";
+                foreach (var pos in _toolTransfer.GetListPosition())
+                {
+                    strPos += GetStringBubblePosition(pos, Vector3.zero);
+                }
+                txtPos += _inputMapId.text + "\t" + strPos + "\t" + ConvertListToString(_toolTransfer.GetListUnpackingDeco());
+                FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
+            }
+            Debug.LogError("Export Bubble Play success");
         }
         #endregion
 

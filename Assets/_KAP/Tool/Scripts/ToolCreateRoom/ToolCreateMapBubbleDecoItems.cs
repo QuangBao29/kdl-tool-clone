@@ -218,7 +218,6 @@ namespace KAP.ToolCreateMap
         }
         public void OnOkCLick(Bubble bubble)
         {
-            Debug.LogError("kiem tra: " + bubble.BubbleId);
             var current = bubble.GetComponent<DecoEditDemo>();
             if (_editManager.SetCurrent(current))
             {
@@ -226,14 +225,13 @@ namespace KAP.ToolCreateMap
                 current.EndMove();
                 _editManager.editTool.SetValid(current.EditStatus);
             }
-            if (current.deco.IsWallHang)
+            if (current.deco.IsWallHang && current.EditStatus != KHHEditStatus.Valid)
             {
                 _editManager.Current.Rotate(1);
             }
             switch (current.EditStatus)
             {
                 case KHHEditStatus.Valid:
-                    Debug.LogError("check valid: " + bubble.BubbleId);
                     _editManager.SetCurrent(null);
                     break;
                 case KHHEditStatus.CanSwap:
