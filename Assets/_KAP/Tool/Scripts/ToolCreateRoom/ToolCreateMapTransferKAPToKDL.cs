@@ -13,41 +13,58 @@ namespace KAP.ToolCreateMap
         private AreaManager _areaManager = null;
         [SerializeField]
         private ToolCreateMapConfigController _configController = null;
+        [SerializeField]
+        private ToolCreateMapListRooms _toolListRooms = null;
+        [SerializeField]
+        private InputField _inputMapId = null;
 
+        [HideInInspector]
         public List<int> LstDecoIDBubble = new List<int>();
         //Data for ConfigPlay
+        [HideInInspector]
         public List<Vector3> LstPosBubble = new List<Vector3>();
+        [HideInInspector]
         public List<string> LstUnpackingDeco = new List<string>();
+        [HideInInspector]
         public Dictionary<string, string> DctBubbleDecoIds = new Dictionary<string, string>();
         //Data for ConfigHome
+        [HideInInspector]
         public Dictionary<int, List<Vector3>> DctBubblePos = new Dictionary<int, List<Vector3>>();    //data for configbubblehomeposition
+        [HideInInspector]
         public Dictionary<string, string> DctBubble = new Dictionary<string, string>();               //data for configbubblehome
+        [HideInInspector]
         public Dictionary<int, int> DctNumOfBubbleInRoom = new Dictionary<int, int>();
 
-        public void OnClickCreateBubbleBtn()
+        private List<int> _lstID = new List<int>();
+        public void OnClickCreateRoomPlay()
         {
-            ClearAllList();
-
-            //1. chay ham chon loc deco to de lam bubble
-            //maybe chon loc theo size: deco ko phai tuong/san (1 chi so >= 6, 1 chi so >= 5, 1 chi so >= 2)
+            _lstID.Clear();
             GetListDecoIDForBubble();
-
-            //2. tao structure chua data save vao config.
-            //3. duyet qua tat ca deco con lai, lay id_color cua chung vao list unpacking.
-            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+            foreach (var rec in _configController.ListConfigRoomRecords)
             {
-                ConvertKAPToKDLHome();
-                _configController.SaveConfigHomeKAPToKDL();
+                if (rec.Id != 101000 && rec.Id != 101001)
+                    _lstID.Add(rec.Id);
             }
-            else
+            Debug.LogError("count of lstID: " + _lstID.Count);
+            for (var i = 0; i < _lstID.Count; i++)
             {
+                ClearAllList();
+                _inputMapId.text = _lstID[i].ToString();
+                _toolListRooms.OnButtonImportNewClick();
                 ConvertKAPToKDLPlay();
                 _configController.SaveConfigPlayKAPToKDL();
             }
         }
-
-        public void GetListDecoIDForBubble()
+        public void OnClickCreateRoomHome()
         {
+            ClearAllList();
+            GetListDecoIDForBubble();
+            ConvertKAPToKDLHome();
+            _configController.SaveConfigHomeKAPToKDL();
+        }
+        private void GetListDecoIDForBubble()
+        {
+            if (LstDecoIDBubble.Count > 0) return;
             var LstConfigDecoRecords = _configController.ListConfigDecoRecords;
             foreach (var rec in LstConfigDecoRecords)
             {
@@ -62,7 +79,7 @@ namespace KAP.ToolCreateMap
             Debug.LogError("Count of List: " + LstDecoIDBubble.Count);
         }
 
-        public void ConvertKAPToKDLHome()
+        private void ConvertKAPToKDLHome()
         {
             foreach (var root in _areaManager.ListRooms)
             {
@@ -123,7 +140,7 @@ namespace KAP.ToolCreateMap
             //}
         }
 
-        public void ConvertKAPToKDLPlay()
+        private void ConvertKAPToKDLPlay()
         {
             foreach (var root in _areaManager.ListRooms)
             {
@@ -135,55 +152,51 @@ namespace KAP.ToolCreateMap
                         if (LstDecoIDBubble.Contains(info.Id))
                         {
                             var listDecoColor = _configController.ConfigDecoColor.GetListDecoColorsByDecoId(info.Id);
-                            string bubbleDecoIds = "";
-                            if (listDecoColor.Count >= 3)
+                            if (listDecoColor == null)
                             {
-                                for (var i = 0; i < 3; i++)
-                                {
-                                    bubbleDecoIds += listDecoColor[i].Id + ";";
-                                }
+                                Debug.LogError("cai list color null: " + info.Id);
                             }
                             else
                             {
-                                for (var i = 0; i < listDecoColor.Count; i++)
+                                string bubbleDecoIds = "";
+                                if (listDecoColor.Count >= 3)
                                 {
-                                    bubbleDecoIds += listDecoColor[i].Id + ";";
+                                    for (var i = 0; i < 3; i++)
+                                    {
+                                        bubbleDecoIds += listDecoColor[i].Id + ";";
+                                    }
                                 }
-                            }
+                                else
+                                {
+                                    for (var i = 0; i < listDecoColor.Count; i++)
+                                    {
+                                        bubbleDecoIds += listDecoColor[i].Id + ";";
+                                    }
+                                }
 
-                            DctBubbleDecoIds.Add(infoRoot.Id + "_" + LstPosBubble.Count, bubbleDecoIds);
-                            LstPosBubble.Add(deco.Position);
-                            Debug.LogError("Id: " + info.Id);
+                                DctBubbleDecoIds.Add(infoRoot.Id + "_" + LstPosBubble.Count, bubbleDecoIds);
+                                LstPosBubble.Add(deco.Position);
+                            }
                         }
                         else if (info.Id / 100000 < 22)
                         {
-                            Debug.LogError("id deco unpacking: " + info.Id + "_" + info.Color);
                             LstUnpackingDeco.Add(info.Id + "_" + info.Color);
                         }
                     }
                 });
             }
-
-            foreach (var pair in DctBubbleDecoIds)
-            {
-                Debug.LogError(pair.Key + " " + pair.Value);
-            }
-            foreach (var id in LstUnpackingDeco)
-            {
-                Debug.LogError("kiem tra id unpacking: " + id);
-            }
         }
 
-        public bool CheckIfBothNumGreaterThan4And5(float a, float b)
+        private bool CheckIfBothNumGreaterThan4And5(float a, float b)
         {
             if (a >= 5 && b >= 4 || a >= 4 && b >= 5)
                 return true;
             else return false;
         }
 
-        public void ClearAllList()
+        private void ClearAllList()
         {
-            LstDecoIDBubble.Clear();
+            //_lstID.Clear();
             LstPosBubble.Clear();
             LstUnpackingDeco.Clear();
             DctBubbleDecoIds.Clear();

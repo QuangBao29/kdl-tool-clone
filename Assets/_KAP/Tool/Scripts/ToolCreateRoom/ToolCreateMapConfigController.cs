@@ -641,6 +641,7 @@ namespace KAP.ToolCreateMap
 
         public void SaveConfigHomeKAPToKDL()
         {
+            LoadFileCsv();
             List<string> lstVariables = ConfigBubbleHomeRecord.GetLstVariables();
             List<string> lstVariablesPos = ConfigBubbleHomePositionRecord.GetLstVariables();
             string txt = "";
@@ -683,6 +684,7 @@ namespace KAP.ToolCreateMap
 
         public void SaveConfigPlayKAPToKDL()
         {
+            LoadFileCsv();
             List<string> lstVariables = ConfigBubblePlayRecord.GetLstVariables();
             List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
             string txt = "";
@@ -756,7 +758,6 @@ namespace KAP.ToolCreateMap
                 {
                     strPos += GetStringBubblePosition(pos, Vector3.zero);
                 }
-                Debug.LogError("strPos: " + strPos);
 
                 newRecord.RoomId = _inputMapId.text;
                 newRecord.LstBubblePosition = strPos;

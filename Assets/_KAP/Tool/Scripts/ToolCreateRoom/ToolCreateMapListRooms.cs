@@ -62,9 +62,6 @@ namespace KAP.ToolCreateMap
         private Dictionary<EditMode, EditModeData> _dctEditModeDataPostion = new Dictionary<EditMode, EditModeData>();
         private Dictionary<EditMode, EditModeData> _dctEditModeDataBubble = new Dictionary<EditMode, EditModeData>();
 
-        private string _exportJsonDecoUnpackingPath = "/_KAP/_GameResources/Maps/RoomUnpacking/";
-        private string _importJsonDecoUnpackingPath = "Assets/_KAP/_GameResources/Maps/RoomUnpacking/";
-
         private void Awake()
         {
             InitEditModeData();
@@ -209,11 +206,6 @@ namespace KAP.ToolCreateMap
             string mapName = _inputMapId.text + ".json";
             return Path.Combine(targetEditMode.ImportPath, mapName);
         }
-        public string GetImportPathUnpacking()
-        {
-            string mapName = _inputMapId.text + ".json";
-            return Path.Combine(_importJsonDecoUnpackingPath, mapName);
-        }
 
         public void OnButtonImportClick()
         {
@@ -254,10 +246,7 @@ namespace KAP.ToolCreateMap
                 return;
             _areaManager.ClearAllRooms();
             string path = "";
-            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                path = GetImportPath();
-            else
-                path = GetImportPathUnpacking();
+            path = GetImportPath();
             var json = FileSaving.Load(path);
             if (!string.IsNullOrEmpty(json))
             {
@@ -265,10 +254,9 @@ namespace KAP.ToolCreateMap
                 _importDecoController.Import(lstRooms);
             }
             Setup();
-            //_toolBubbleSetting.ClearBubbles();
-            //_toolBubbleSetting.UpdateListNumOfBubbleInARoom();
-            //_configController.OnButtonImportBubbleCsv();
         }
+
+
         #endregion
         // ================================================================
         #region Export 
@@ -279,11 +267,6 @@ namespace KAP.ToolCreateMap
 
             string mapName = string.Format("{0}.json", _inputMapId.text);
             return Application.dataPath + Path.Combine(targetEditMode.ExportPath, mapName);
-        }
-        public string GetExportPathforUnpacking()
-        {
-            string mapName = string.Format("{0}.json", _inputMapId.text);
-            return Application.dataPath + Path.Combine(_exportJsonDecoUnpackingPath, mapName);
         }
 
         public void OnButtonExportClick()
