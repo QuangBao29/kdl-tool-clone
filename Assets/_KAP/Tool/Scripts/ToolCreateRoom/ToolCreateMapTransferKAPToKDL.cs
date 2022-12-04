@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Kawaii.IsoTools.DecoSystem;
 using KAP.Tools;
+using System.Linq;
+using System.Collections.Specialized;
 
 namespace KAP.ToolCreateMap
 {
@@ -31,7 +33,7 @@ namespace KAP.ToolCreateMap
         [HideInInspector]
         public Dictionary<int, List<Vector3>> DctBubblePos = new Dictionary<int, List<Vector3>>();    //data for configbubblehomeposition
         [HideInInspector]
-        public Dictionary<string, string> DctBubble = new Dictionary<string, string>();               //data for configbubblehome
+        public Dictionary<string, List<string>> DctBubble = new Dictionary<string, List<string>>();               //data for configbubblehome
         [HideInInspector]
         public Dictionary<int, int> DctNumOfBubbleInRoom = new Dictionary<int, int>();
 
@@ -39,7 +41,7 @@ namespace KAP.ToolCreateMap
         public void OnClickCreateRoomPlay()
         {
             _lstID.Clear();
-            GetListDecoIDForBubble();
+            //GetListDecoIDForBubble();
             foreach (var rec in _configController.ListConfigRoomRecords)
             {
                 if (rec.Id != 101000 && rec.Id != 101001)
@@ -58,86 +60,90 @@ namespace KAP.ToolCreateMap
         public void OnClickCreateRoomHome()
         {
             ClearAllList();
-            GetListDecoIDForBubble();
+            //GetListDecoIDForBubble();
             ConvertKAPToKDLHome();
             _configController.SaveConfigHomeKAPToKDL();
         }
-        private void GetListDecoIDForBubble()
-        {
-            if (LstDecoIDBubble.Count > 0) return;
-            var LstConfigDecoRecords = _configController.ListConfigDecoRecords;
-            foreach (var rec in LstConfigDecoRecords)
-            {
-                float x = rec.SizeX;
-                float y = rec.SizeY;
-                float z = rec.SizeZ;
-                if (CheckIfBothNumGreaterThan4And5(x, y) && z >= 2 || CheckIfBothNumGreaterThan4And5(x, z) && y >= 2 || CheckIfBothNumGreaterThan4And5(y, z) && x >= 2)
-                {
-                    LstDecoIDBubble.Add(rec.Id);
-                }
-            }
-            Debug.LogError("Count of List: " + LstDecoIDBubble.Count);
-        }
+        //private void GetListDecoIDForBubble()
+        //{
+        //    if (LstDecoIDBubble.Count > 0) return;
+        //    var LstConfigDecoRecords = _configController.ListConfigDecoRecords;
+        //    foreach (var rec in LstConfigDecoRecords)
+        //    {
+        //        float x = rec.SizeX;
+        //        float y = rec.SizeY;
+        //        float z = rec.SizeZ;
+        //        if (CheckIfBothNumGreaterThan4And5(x, y) && z >= 2 || CheckIfBothNumGreaterThan4And5(x, z) && y >= 2 || CheckIfBothNumGreaterThan4And5(y, z) && x >= 2)
+        //        {
+        //            LstDecoIDBubble.Add(rec.Id);
+        //        }
+        //    }
+        //    Debug.LogError("Count of List: " + LstDecoIDBubble.Count);
+        //}
 
         private void ConvertKAPToKDLHome()
         {
             foreach (var root in _areaManager.ListRooms)
             {
                 var infoRoot = (DecoInfo)root.Info;
-                Debug.LogError("position of root: " + infoRoot.Id + " " + root.Position);
                 if (!DctNumOfBubbleInRoom.ContainsKey(infoRoot.Id))
                     DctNumOfBubbleInRoom.Add(infoRoot.Id, 0);
+                List<Deco> lstDeco = new List<Deco>();
                 root.Foreach((deco) => {
                     var info = (DecoInfo)deco.Info;
                     if (info.Id != infoRoot.Id)
                     {
-                        if (LstDecoIDBubble.Contains(info.Id))
+                        float v = Volume(deco.FLIsoSize);
+                        if (!CheckIfDecoIdInListOrNot(lstDeco, deco) && v >= 40)
                         {
-                            if (DctBubblePos.ContainsKey(infoRoot.Id))
+                            if (lstDeco.Count >= 5)
                             {
-                                DctBubblePos[infoRoot.Id].Add(deco.Position - root.Position);
+                                var t = Sort(lstDeco, deco);
+                                lstDeco.Clear();
+                                lstDeco.AddRange(t);
                             }
                             else
                             {
-                                DctBubblePos.Add(infoRoot.Id, new List<Vector3> { deco.Position - root.Position });
+                                lstDeco.Add(deco);
                             }
-                            DctNumOfBubbleInRoom[infoRoot.Id]++;
-
-                            var listDecoColor = _configController.ConfigDecoColor.GetListDecoColorsByDecoId(info.Id);
-                            string bubbleDecoIds = "";
-                            if (listDecoColor.Count >= 3)
-                            {
-                                for (var i = 0; i < 3; i++)
-                                {
-                                    bubbleDecoIds += listDecoColor[i].Id + ";";
-                                }
-                            }
-                            else
-                            {
-                                for (var i = 0; i < listDecoColor.Count; i++)
-                                {
-                                    bubbleDecoIds += listDecoColor[i].Id + ";";
-                                }
-                            }
-
-                            string BubbleId = "";
-                            BubbleId = infoRoot.Id + "_" + (DctNumOfBubbleInRoom[infoRoot.Id] - 1);
-                            DctBubble.Add(BubbleId, bubbleDecoIds);
                         }
+                        
                     }
                 });
-            }
+                foreach (var deco in lstDeco)
+                {
+                    var Info = (DecoInfo)deco.Info;
+                }
 
-            //Debug.LogError("Count of DctBubble: " + DctBubble.Count);
-            //Debug.LogError("Count of DctNumOfBubbleInRoom: " + DctNumOfBubbleInRoom.Count);
-            //foreach (var bubble in DctBubblePos)
-            //{
-            //    Debug.LogError("DctBubblePos:  key: " + bubble.Key + " value: " + bubble.Value);
-            //}
-            //foreach (var bubble in DctBubble)
-            //{
-            //    Debug.LogError("DctBubble:     key: " + bubble.Key + " value: " + bubble.Value);
-            //}
+                DctNumOfBubbleInRoom[infoRoot.Id] += lstDeco.Count;
+                for (var i = 0; i < lstDeco.Count; i++)
+                {
+                    var deco = lstDeco[i];
+                    var info = (DecoInfo)deco.Info;
+                    if (DctBubblePos.ContainsKey(infoRoot.Id))
+                    {
+                        DctBubblePos[infoRoot.Id].Add(deco.Position - root.Position);
+                    }
+                    else
+                    {
+                        DctBubblePos.Add(infoRoot.Id, new List<Vector3> { deco.Position - root.Position });
+                    }
+
+                    var listDecoColor = _configController.ConfigDecoColor.GetListDecoColorsByDecoId(info.Id);
+                    string bubbleDecoIds = "";
+                    string BubbleId = "";
+                    string price = "";
+                    for (var j = 0; j < listDecoColor.Count; j++)
+                    {
+                        bubbleDecoIds += listDecoColor[j].Id + ";";
+                        if (listDecoColor[j].ColorId == 0)
+                            price += "10;";
+                        else price += "20;";
+                    }
+                    BubbleId = infoRoot.Id + "_" + i;
+                    DctBubble.Add(BubbleId, new List<string> { bubbleDecoIds, price });
+                }
+            }
         }
 
         private void ConvertKAPToKDLPlay()
@@ -194,6 +200,47 @@ namespace KAP.ToolCreateMap
             else return false;
         }
 
+        public List<Deco> Sort(List<Deco> lst, Deco deco)
+        {
+            int i = 0;
+            List<Deco> temp = new List<Deco>();
+            for (i = 0; i < lst.Count; i++)
+            {
+                if (Volume(deco.FLIsoSize) > Volume(lst[i].FLIsoSize))
+                {
+                    lst.Insert(i, deco);
+                    break;
+                }
+            }
+            if (lst.Count > 5)
+            {
+                for (var j = 0; j < 5; j++)
+                {
+                    temp.Add(lst[j]);
+                }
+            }
+            return temp;
+        }
+
+        public bool CheckIfDecoIdInListOrNot(List<Deco> lst, Deco deco)
+        {
+            bool check = false;
+            var info = (DecoInfo)deco.Info;
+            foreach (var d in lst)
+            {
+                var Info = (DecoInfo)d.Info;
+                if (Info.Id == info.Id)
+                {
+                    check = true;
+                    break;
+                }
+            }
+            return check;
+        }
+        public float Volume(Vector3 vec)
+        {
+            return vec.x * vec.y * vec.z;
+        }
         private void ClearAllList()
         {
             //_lstID.Clear();

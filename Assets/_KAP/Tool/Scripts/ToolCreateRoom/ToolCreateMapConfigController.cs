@@ -662,7 +662,8 @@ namespace KAP.ToolCreateMap
 
             for (var i = 0; i < _toolTransfer.DctBubble.Count; i++)
             {
-                txt += _toolTransfer.DctBubble.ElementAt(i).Key + "\t" + _toolTransfer.DctBubble.ElementAt(i).Value + "\t" + i + "\n";
+                txt += _toolTransfer.DctBubble.ElementAt(i).Key + "\t" + _toolTransfer.DctBubble.ElementAt(i).Value[0] 
+                    + "\t" + i + "\t" + _toolTransfer.DctBubble.ElementAt(i).Value[1] + "\n";
             }
             Debug.LogError("txt: " + txt);
             foreach (var bubble in _toolTransfer.DctBubblePos)
