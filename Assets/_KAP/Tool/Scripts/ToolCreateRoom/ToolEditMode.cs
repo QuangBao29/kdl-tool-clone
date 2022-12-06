@@ -13,7 +13,8 @@ namespace KAP.Tools
         Wonder = 2,
         RoomChallenge,
         Home = 3,
-        Play = 4
+        Play = 4,
+        Test = 5
     }
     public enum PhaseMode
     {

@@ -62,6 +62,7 @@ namespace KAP.ToolCreateMap
         private Dictionary<EditMode, EditModeData> _dctEditModeDataPostion = new Dictionary<EditMode, EditModeData>();
         private Dictionary<EditMode, EditModeData> _dctEditModeDataBubble = new Dictionary<EditMode, EditModeData>();
 
+        
         private void Awake()
         {
             InitEditModeData();
@@ -89,12 +90,16 @@ namespace KAP.ToolCreateMap
             string _screenshotRoomHomePath = "_KDL/_GameResources/Textures/RoomHome/";
             string _screenshotRoomPlayPath = "_KDL/_GameResources/Textures/RoomPlay/";
 
+            string _importSeparatedRoomsPath = "Assets/_KAP/_GameResources/Maps/SeparatedRooms/";
+            string _exportSeparatedRoomsPath = "/_KAP/_GameResources/Maps/SeparatedRooms/";
+
             //_dctEditModeData.Add(EditMode.Room, new EditModeData(EditMode.Room, _importRoomPath, _exportRoomPath, _screenshotRoomPath, Color.black, KAPDefine.DefaultRoomId));
             //_dctEditModeData.Add(EditMode.Theme, new EditModeData(EditMode.Theme, _importThemePath, _exportThemePath, _screenshotThemePath, Color.red, KAPDefine.DefaultRoomThemeId));
             //_dctEditModeData.Add(EditMode.Wonder, new EditModeData(EditMode.Wonder, _importWonderPath, _exportWonderPath, _screenshotWonderPath, Color.blue, KAPDefine.DefaultWonderId));
             //_dctEditModeData.Add(EditMode.RoomChallenge, new EditModeData(EditMode.RoomChallenge, _importRoomChallengePath, _exportRoomChallengePath, _screenshotRoomChallengePath ,Color.yellow, KAPDefine.DefaultRoomChallengeID));
             _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultRoomThemeId));
             _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPath, _exportRoomPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomId));
+            _dctEditModeData.Add(EditMode.Test, new EditModeData(EditMode.Test, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
         }
 
         private void OnTogglEditThemeChange(EditMode editMode)
@@ -296,7 +301,6 @@ namespace KAP.ToolCreateMap
         {
             if (string.IsNullOrEmpty(_inputMapId.text))
                 return;
-
             string mess = "";
             var targetEditMode = _dctEditModeData[ToolEditMode.Instance.CurrentEditMode];
             mess = string.Format("export {0}: {1}", targetEditMode.Mode, _inputMapId.text);
@@ -315,62 +319,80 @@ namespace KAP.ToolCreateMap
 
                 return true;
             });
-           
         }
 
-        public void OnButtonExportDecoKDLClick()
+        public void OnExportSeparatedRoomsInTheme()
         {
-            if (string.IsNullOrEmpty(_inputMapId.text))
-                return;
-
-            string mess = "";
-            var targetEditMode = _dctEditModeData[ToolEditMode.Instance.CurrentEditMode];
-            mess = string.Format("export {0}: {1}", targetEditMode.Mode, _inputMapId.text);
-
-            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+            var temp = _inputMapId.text;
+            foreach (var r in _areaManager.ListRooms)
             {
-                UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
-                {
-                    if (result == UIMessageBox.MessageBoxAction.Accept)
-                    {
-                        var data = _toolExportData.Export(null);
-                        string path = GetExportPath();
-                        Debug.Log("path: " + path);
-                        Debug.Log("data: " + JsonWriter.Serialize(data));
-                        FileSaving.Save(path, JsonWriter.Serialize(data));
-                        Debug.LogError("Export new success");
-                    }
+                var info = (DecoInfo)r.Info;
+                _inputMapId.text = info.Id.ToString();
+                string mapName = string.Format("{0}.json", temp + _inputMapId.text);
+                var targetEditMode = _dctEditModeData[EditMode.Test];
+                string path = Application.dataPath + Path.Combine(targetEditMode.ExportPath, mapName);
+                string mess = string.Format("export {0}: {1}", "Separated Rooms", _inputMapId.text);
 
-                    return true;
-                });
+                var data = _toolExportData.Export(null, r);
+                Debug.LogError("path: " + path);
+                Debug.LogError("data: " + JsonWriter.Serialize(data));
+                FileSaving.Save(path, JsonWriter.Serialize(data));
+                Debug.LogError("Export Separated Rooms " + _inputMapId.text + " success");
             }
-            else
-            {
-                UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
-                {
-                    if (result == UIMessageBox.MessageBoxAction.Accept)
-                    {
-                        var data = _toolExportData.Export(null);
-                        string path = GetExportPath();
-                        Debug.Log("path: " + path);
-                        Debug.Log("data: " + JsonWriter.Serialize(data));
-                        FileSaving.Save(path, JsonWriter.Serialize(data));
-                        Debug.LogError("Export new success");
-
-                        //var data_2 = _toolExportData.Export(null, true);
-                        //string path_2 = GetExportPathforUnpacking();
-                        //Debug.Log("path_2: " + path_2);
-                        //Debug.Log("data_2: " + JsonWriter.Serialize(data_2));
-                        //FileSaving.Save(path_2, JsonWriter.Serialize(data_2));
-                        //Debug.LogError("Export new success 2");
-                    }
-
-                    return true;
-                });
-            }
-            
-
+            _inputMapId.text = temp;
         }
+
+        //public void OnButtonExportDecoKDLClick()
+        //{
+        //    if (string.IsNullOrEmpty(_inputMapId.text))
+        //        return;
+
+        //    string mess = "";
+        //    var targetEditMode = _dctEditModeData[ToolEditMode.Instance.CurrentEditMode];
+        //    mess = string.Format("export {0}: {1}", targetEditMode.Mode, _inputMapId.text);
+
+        //    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+        //    {
+        //        UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
+        //        {
+        //            if (result == UIMessageBox.MessageBoxAction.Accept)
+        //            {
+        //                var data = _toolExportData.Export(null);
+        //                string path = GetExportPath();
+        //                Debug.Log("path: " + path);
+        //                Debug.Log("data: " + JsonWriter.Serialize(data));
+        //                FileSaving.Save(path, JsonWriter.Serialize(data));
+        //                Debug.LogError("Export new success");
+        //            }
+
+        //            return true;
+        //        });
+        //    }
+        //    else
+        //    {
+        //        UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
+        //        {
+        //            if (result == UIMessageBox.MessageBoxAction.Accept)
+        //            {
+        //                var data = _toolExportData.Export(null);
+        //                string path = GetExportPath();
+        //                Debug.Log("path: " + path);
+        //                Debug.Log("data: " + JsonWriter.Serialize(data));
+        //                FileSaving.Save(path, JsonWriter.Serialize(data));
+        //                Debug.LogError("Export new success");
+
+        //                //var data_2 = _toolExportData.Export(null, true);
+        //                //string path_2 = GetExportPathforUnpacking();
+        //                //Debug.Log("path_2: " + path_2);
+        //                //Debug.Log("data_2: " + JsonWriter.Serialize(data_2));
+        //                //FileSaving.Save(path_2, JsonWriter.Serialize(data_2));
+        //                //Debug.LogError("Export new success 2");
+        //            }
+
+        //            return true;
+        //        });
+        //    }
+        //}
 
         #endregion
     }
