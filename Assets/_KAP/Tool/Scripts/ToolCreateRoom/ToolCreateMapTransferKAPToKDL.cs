@@ -91,7 +91,7 @@ namespace KAP.ToolCreateMap
                 List<Deco> lstDeco = new List<Deco>();
                 root.Foreach((deco) => {
                     var info = (DecoInfo)deco.Info;
-                    if (info.Id != infoRoot.Id)
+                    if (info.Id != infoRoot.Id && info.Id/100000 < 22)
                     {
                         float v = Volume(deco.FLIsoSize);
                         if (!CheckIfDecoIdInListOrNot(lstDeco, deco) && v >= 40)
@@ -110,10 +110,6 @@ namespace KAP.ToolCreateMap
                         
                     }
                 });
-                foreach (var deco in lstDeco)
-                {
-                    var Info = (DecoInfo)deco.Info;
-                }
 
                 DctNumOfBubbleInRoom[infoRoot.Id] += lstDeco.Count;
                 for (var i = 0; i < lstDeco.Count; i++)
