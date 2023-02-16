@@ -291,7 +291,9 @@ namespace KAP.ToolCreateMap
             string txt = "";
             string txtPos = "";
             Dictionary<int, string> dctBubbleHomePosition = GetDctBubblePosition();
-
+            Dictionary<int, int> dctRoomIndex = new Dictionary<int, int>();
+            
+            //foreach (var root in _areaManager.ListRooms)
             //save to txt in string type
             for (var i = 0; i < lstVariables.Count - 1; i++)
             {
@@ -311,12 +313,6 @@ namespace KAP.ToolCreateMap
                 string bubbleDecoIds = ConvertBubbleDecoIdToString(listBubble[i]);
                 txt += listBubble[i].BubbleId + "\t" + bubbleDecoIds + "\t" + i + "\n";
             }
-
-            //foreach (var bubble in _toolBubbleSetting.GetLstBubble())
-            //{
-            //    string bubbleDecoIds = ConvertBubbleDecoIdToString(bubble);
-            //    txt += bubble.BubbleId + "\t" + bubbleDecoIds + "\n";
-            //}
 
             foreach (var pair in dctBubbleHomePosition)
             {

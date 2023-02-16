@@ -36,7 +36,8 @@ namespace KAP.ToolCreateMap
         private InputField _inputSizeX = null;
         [SerializeField]
         private InputField _inputSizeY = null;
-
+        [SerializeField]
+        public InputField RoomOrder = null;
         private DecoRoot _room;
         private int _index;
 
@@ -133,7 +134,7 @@ namespace KAP.ToolCreateMap
             _room.Apply(null, null);
             _areaManager.SortRoom();
         }
-
+        
         public void OnInputSizeChangeValue()
         {
             if (_room == null)
