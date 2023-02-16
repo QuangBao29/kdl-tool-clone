@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Kawaii.IsoTools.DecoSystem;
-using KAP.Tools;
-using System.Linq;
-using System.Collections.Specialized;
+//using KAP.Tools;
+//using System.Linq;
+//using System.Collections.Specialized;
+using Kawaii.ResourceManager;
+using Pathfinding.Serialization.JsonFx;
 
 namespace KAP.ToolCreateMap
 {
@@ -19,29 +21,32 @@ namespace KAP.ToolCreateMap
         private ToolCreateMapListRooms _toolListRooms = null;
         [SerializeField]
         private InputField _inputMapId = null;
+        [SerializeField]
+        private InputField _inputRoomId = null;
 
-        [HideInInspector]
-        public List<int> LstDecoIDBubble = new List<int>();
+        //[HideInInspector]
+        //public List<int> LstDecoIDBubble = new List<int>();
         //Data for ConfigPlay
         [HideInInspector]
-        public List<Vector3> LstPosBubble = new List<Vector3>();
+        public List<Vector3> LstPosBubble = new List<Vector3>();    //position per room
         [HideInInspector]
         public List<string> LstUnpackingDeco = new List<string>();
         [HideInInspector]
-        public Dictionary<string, string> DctBubbleDecoIds = new Dictionary<string, string>();
+        public Dictionary<string, List<string>> DctBubbleDecoIds = new Dictionary<string, List<string>>();      //bubbleId - list <bubbleDecoIds, worldDirect>
         //Data for ConfigHome
         [HideInInspector]
-        public Dictionary<int, List<Vector3>> DctBubblePos = new Dictionary<int, List<Vector3>>();    //data for configbubblehomeposition
+        public Dictionary<int, List<Vector3>> DctBubblePos = new Dictionary<int, List<Vector3>>();    //roomId - list vector 3 deco pos
         [HideInInspector]
-        public Dictionary<string, List<string>> DctBubble = new Dictionary<string, List<string>>();               //data for configbubblehome
+        public Dictionary<string, List<string>> DctBubble = new Dictionary<string, List<string>>();               //bubbleId - List <bubbleDecoIds, price, direct>
         [HideInInspector]
         public Dictionary<int, int> DctNumOfBubbleInRoom = new Dictionary<int, int>();
+        [HideInInspector]
+        public Dictionary<string, string> DctDecoReward = new Dictionary<string, string>();
 
         private List<int> _lstID = new List<int>();
         public void OnClickCreateRoomPlay()
         {
             _lstID.Clear();
-            //GetListDecoIDForBubble();
             foreach (var rec in _configController.ListConfigRoomRecords)
             {
                 if (rec.Id != 101000 && rec.Id != 101001)
@@ -53,34 +58,24 @@ namespace KAP.ToolCreateMap
                 ClearAllList();
                 _inputMapId.text = _lstID[i].ToString();
                 _toolListRooms.OnButtonImportNewClick();
+                //await new WaitUntil(() => { 1 });
+                //didnt work
                 ConvertKAPToKDLPlay();
                 _configController.SaveConfigPlayKAPToKDL();
             }
         }
+
         public void OnClickCreateRoomHome()
         {
             ClearAllList();
-            //GetListDecoIDForBubble();
             ConvertKAPToKDLHome();
             _configController.SaveConfigHomeKAPToKDL();
         }
-        //private void GetListDecoIDForBubble()
-        //{
-        //    if (LstDecoIDBubble.Count > 0) return;
-        //    var LstConfigDecoRecords = _configController.ListConfigDecoRecords;
-        //    foreach (var rec in LstConfigDecoRecords)
-        //    {
-        //        float x = rec.SizeX;
-        //        float y = rec.SizeY;
-        //        float z = rec.SizeZ;
-        //        if (CheckIfBothNumGreaterThan4And5(x, y) && z >= 2 || CheckIfBothNumGreaterThan4And5(x, z) && y >= 2 || CheckIfBothNumGreaterThan4And5(y, z) && x >= 2)
-        //        {
-        //            LstDecoIDBubble.Add(rec.Id);
-        //        }
-        //    }
-        //    Debug.LogError("Count of List: " + LstDecoIDBubble.Count);
-        //}
-
+        public void OnClickCreateDecoReward()
+        {
+            CreateDecoReward();
+            _configController.SaveConfigDecoRewardCsv();
+        }
         private void ConvertKAPToKDLHome()
         {
             foreach (var root in _areaManager.ListRooms)
@@ -107,7 +102,6 @@ namespace KAP.ToolCreateMap
                                 lstDeco.Add(deco);
                             }
                         }
-                        
                     }
                 });
 
@@ -137,7 +131,7 @@ namespace KAP.ToolCreateMap
                         else price += "20;";
                     }
                     BubbleId = infoRoot.Id + "_" + i;
-                    DctBubble.Add(BubbleId, new List<string> { bubbleDecoIds, price });
+                    DctBubble.Add(BubbleId, new List<string> { bubbleDecoIds, price, deco.WorldDirect.ToString() });
                 }
             }
         }
@@ -146,56 +140,92 @@ namespace KAP.ToolCreateMap
         {
             foreach (var root in _areaManager.ListRooms)
             {
+                Debug.LogError("chay");
                 var infoRoot = (DecoInfo)root.Info;
-                root.Foreach((deco) => {
+                List<Deco> lstDeco = new List<Deco>();
+                root.Foreach((deco) =>
+                {
                     var info = (DecoInfo)deco.Info;
-                    if (info.Id != infoRoot.Id)
+                    if (info.Id != infoRoot.Id && info.Id / 100000 < 22)
                     {
-                        if (LstDecoIDBubble.Contains(info.Id))
+                        float v = Volume(deco.FLIsoSize);
+                        if (v >= 40)
                         {
-                            var listDecoColor = _configController.ConfigDecoColor.GetListDecoColorsByDecoId(info.Id);
-                            if (listDecoColor == null)
+                            if (lstDeco.Count >= 5)
                             {
-                                Debug.LogError("cai list color null: " + info.Id);
+                                var t = Sort(lstDeco, deco);
+                                lstDeco.Clear();
+                                lstDeco.AddRange(t);
                             }
-                            else
-                            {
-                                string bubbleDecoIds = "";
-                                if (listDecoColor.Count >= 3)
-                                {
-                                    for (var i = 0; i < 3; i++)
-                                    {
-                                        bubbleDecoIds += listDecoColor[i].Id + ";";
-                                    }
-                                }
-                                else
-                                {
-                                    for (var i = 0; i < listDecoColor.Count; i++)
-                                    {
-                                        bubbleDecoIds += listDecoColor[i].Id + ";";
-                                    }
-                                }
-
-                                DctBubbleDecoIds.Add(infoRoot.Id + "_" + LstPosBubble.Count, bubbleDecoIds);
-                                LstPosBubble.Add(deco.Position);
-                            }
-                        }
-                        else if (info.Id / 100000 < 22)
-                        {
-                            LstUnpackingDeco.Add(info.Id + "_" + info.Color);
+                            else lstDeco.Add(deco);
                         }
                     }
                 });
+
+                root.Foreach((deco) =>
+                {
+                    var info = (DecoInfo)deco.Info;
+                    if (!lstDeco.Contains(deco))
+                        LstUnpackingDeco.Add(info.Id + "_" + info.Color);
+                });
+                Debug.LogError("num of list unpack " + LstUnpackingDeco.Count);
+
+                foreach (var deco in lstDeco)
+                {
+                    var info = (DecoInfo)deco.Info;
+                    var listDecoColor = _configController.ConfigDecoColor.GetListDecoColorsByDecoId(info.Id);
+                    if (listDecoColor == null)
+                    {
+                        Debug.LogError("cai list color null: " + info.Id);
+                    }
+                    else
+                    {
+                        string bubbleDecoIds = "";
+                        if (listDecoColor.Count >= 3)
+                        {
+                            for (var i = 0; i < 3; i++)
+                                bubbleDecoIds += listDecoColor[i].Id + ";";
+                        }
+                        else
+                        {
+                            for (var i = 0; i < listDecoColor.Count; i++)
+                                bubbleDecoIds += listDecoColor[i].Id + ";";
+                        }
+
+                        DctBubbleDecoIds.Add(infoRoot.Id + "_" + LstPosBubble.Count, new List<string> { bubbleDecoIds, deco.WorldDirect.ToString() });
+                        LstPosBubble.Add(deco.Position);
+                    }
+                }
             }
         }
 
-        private bool CheckIfBothNumGreaterThan4And5(float a, float b)
+        private void CreateDecoReward()
         {
-            if (a >= 5 && b >= 4 || a >= 4 && b >= 5)
-                return true;
-            else return false;
+            var root = _areaManager.ListRooms[0];
+            var infoRoot = (DecoInfo)root.Info;
+            string strDecoIds = "";
+            root.Foreach((deco) =>
+            {
+                var info = (DecoInfo)deco.Info;
+                if (info.Id != infoRoot.Id && info.Id / 100000 < 22)
+                {
+                    var Id = info.Id;
+                    var color = info.Color;
+                    string colorPath = color > 0 ? "_" + color : "";
+                    string decoId = Id + colorPath;
+                    strDecoIds += decoId + ";";
+                }
+            });
+            if (DctDecoReward.ContainsKey(_inputRoomId.text))
+            {
+                Debug.LogError("room nay da co lst deco id");
+            }
+            else
+            {
+                DctDecoReward.Add(_inputRoomId.text, strDecoIds);
+                Debug.LogError(_inputRoomId.text + " da them vao dictionary");
+            }
         }
-
         public List<Deco> Sort(List<Deco> lst, Deco deco)
         {
             int i = 0;

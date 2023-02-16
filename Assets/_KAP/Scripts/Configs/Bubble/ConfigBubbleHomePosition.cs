@@ -9,6 +9,7 @@ namespace KAP.Config
     {
         public string RoomId;
         public string LstBubblePosition;
+        public int Index;
 
         public List<Vector3> GetLstBubblePositionVector3()
         {
@@ -30,6 +31,7 @@ namespace KAP.Config
         {
             return new List<string> { "RoomId"
                                     , "LstBubblePosition"
+                                    , "Index"
             };
         }
     }

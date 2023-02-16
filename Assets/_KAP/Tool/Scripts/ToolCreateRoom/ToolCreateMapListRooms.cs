@@ -303,6 +303,7 @@ namespace KAP.ToolCreateMap
                 return;
             string mess = "";
             var targetEditMode = _dctEditModeData[ToolEditMode.Instance.CurrentEditMode];
+            Debug.LogError("current Mode: " + targetEditMode.Mode);
             mess = string.Format("export {0}: {1}", targetEditMode.Mode, _inputMapId.text);
 
             UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
