@@ -48,6 +48,7 @@ namespace KAP
 
     public class KAPDefine
     {
+        public static int DefaultStar = 5;
         public enum SceneName
         {
             scene_login = 0,

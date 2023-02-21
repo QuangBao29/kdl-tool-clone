@@ -12,6 +12,7 @@ namespace KAP.Config
         public string Index;
         public string Price;
         public string WorldDirect;
+        public int Star;
 
         private List<string> _lstBubbleDecoId;
         private Dictionary<int, List<int>> _dctBubbleIdColor = new Dictionary<int, List<int>>();
@@ -47,6 +48,7 @@ namespace KAP.Config
                                     , "Index"
                                     , "Price"
                                     , "WorldDirect"
+                                    , "Star"
             };
         }
     }

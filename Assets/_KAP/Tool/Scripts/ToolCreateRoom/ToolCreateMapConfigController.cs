@@ -710,7 +710,7 @@ namespace KAP.ToolCreateMap
             for (var i = 0; i < _toolTransfer.DctBubble.Count; i++)
             {
                 txt += _toolTransfer.DctBubble.ElementAt(i).Key + "\t" + _toolTransfer.DctBubble.ElementAt(i).Value[0] + "\t" + i + "\t" 
-                    + _toolTransfer.DctBubble.ElementAt(i).Value[1] + "\t" + _toolTransfer.DctBubble.ElementAt(i).Value[2] + "\n";
+                    + _toolTransfer.DctBubble.ElementAt(i).Value[1] + "\t" + _toolTransfer.DctBubble.ElementAt(i).Value[2] + "\t" + KAPDefine.DefaultStar.ToString() + "\n";
             }
             foreach (var pair in _toolTransfer.DctBubblePos)
             {
