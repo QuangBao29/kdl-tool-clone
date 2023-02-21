@@ -49,6 +49,8 @@ namespace KAP.ToolCreateMap
         [SerializeField]
         private ToolCreateMapTransferKAPToKDL _toolTransfer = null;
         [SerializeField]
+        private ToolCreateMapListRooms _toolLstRooms = null;
+        [SerializeField]
         private AreaManager _areaManager = null;
         [SerializeField] 
         private InputField _inputMapId = null;
@@ -291,7 +293,6 @@ namespace KAP.ToolCreateMap
             string txt = "";
             string txtPos = "";
             Dictionary<int, string> dctBubbleHomePosition = GetDctBubblePosition();
-            Dictionary<int, int> dctRoomIndex = new Dictionary<int, int>();
             
             //foreach (var root in _areaManager.ListRooms)
             //save to txt in string type
@@ -316,7 +317,7 @@ namespace KAP.ToolCreateMap
 
             foreach (var pair in dctBubbleHomePosition)
             {
-                txtPos += pair.Key + "\t" + pair.Value + "\n";
+                txtPos += pair.Key + "\t" + pair.Value  + "\n";
             }
 
             //save txt to file .csv
@@ -544,7 +545,7 @@ namespace KAP.ToolCreateMap
                 _configBubbleHome.LoadFromString(txtBubbleHome);
                 _lstConfigBubbleHomeRecords.Clear();
                 _lstConfigBubbleHomeRecords.AddRange(_configBubbleHome.Records);
-                Debug.LogError("num of listconfigbubhomerec: " + _lstConfigBubbleHomeRecords.Count);
+                //Debug.LogError("num of listconfigbubhomerec: " + _lstConfigBubbleHomeRecords.Count);
                 ListConfigBubbleHomeRecords = _lstConfigBubbleHomeRecords.AsReadOnly();
 
                 var txtBubbleHomePosition = FileSaving.Load(Application.dataPath + _configBubbleHomePositionFilePath);
@@ -681,7 +682,18 @@ namespace KAP.ToolCreateMap
             List<string> lstVariablesPos = ConfigBubbleHomePositionRecord.GetLstVariables();
             string txt = "";
             string txtPos = "";
-
+            Dictionary<int, string> dctRoomOrder = new Dictionary<int, string>();
+            foreach (var room in _toolLstRooms.GetLstRoomItem())
+            {
+                if (dctRoomOrder.ContainsKey(room.GetRoomId()))
+                {
+                    Debug.LogError("loi trung room");
+                }
+                else
+                {
+                    dctRoomOrder.Add(room.GetRoomId(), room.GetRoomOrder());
+                }
+            }
             //save to txt in string type
             for (var i = 0; i < lstVariables.Count - 1; i++)
             {
@@ -700,14 +712,21 @@ namespace KAP.ToolCreateMap
                 txt += _toolTransfer.DctBubble.ElementAt(i).Key + "\t" + _toolTransfer.DctBubble.ElementAt(i).Value[0] + "\t" + i + "\t" 
                     + _toolTransfer.DctBubble.ElementAt(i).Value[1] + "\t" + _toolTransfer.DctBubble.ElementAt(i).Value[2] + "\n";
             }
-            foreach (var bubble in _toolTransfer.DctBubblePos)
+            foreach (var pair in _toolTransfer.DctBubblePos)
             {
-                string pos = "";
-                foreach (var vec in bubble.Value)
+                foreach (var room in dctRoomOrder)
                 {
-                    pos += GetStringBubblePosition(vec, Vector3.zero);
+                    if (room.Key == pair.Key)
+                    {
+                        string pos = "";
+                        foreach (var vec in pair.Value)
+                        {
+                            pos += GetStringBubblePosition(vec, Vector3.zero);
+                        }
+                        txtPos += pair.Key + "\t" + pos + "\t" + room.Value + "\n";
+                        break;
+                    }
                 }
-                txtPos += bubble.Key + "\t" + pos + "\n";
             }
 
             //save txt to file .csv
@@ -732,7 +751,11 @@ namespace KAP.ToolCreateMap
                     var record = _lstConfigBubblePlayRecords[i];
                     var listRecord = SGUtils.ParseStringToList(record.BubbleId, '_');
                     if (listRecord[0] == _inputMapId.text)
+                    {
                         listRemovedRecord.Add(record);
+                        Debug.LogError("remove");
+                    }
+                        
                 }
                 foreach (var rec in listRemovedRecord)
                 {
@@ -743,8 +766,7 @@ namespace KAP.ToolCreateMap
                 {
                     ConfigBubblePlayRecord newRecord = new ConfigBubblePlayRecord();
                     newRecord.BubbleId = pair.Key;
-                    newRecord.BubbleDecoIds = pair.Value[0];
-                    newRecord.WorldDirect = pair.Value[1];
+                    newRecord.BubbleDecoIds = pair.Value;
                     _lstConfigBubblePlayRecords.Add(newRecord);
                 }
                 string newtxt = "";
@@ -765,7 +787,7 @@ namespace KAP.ToolCreateMap
 
                 foreach (var pair in _toolTransfer.DctBubbleDecoIds)
                 {
-                    txt += pair.Key + "\t" + pair.Value[0] + "\t" + pair.Value[1] + "\n";
+                    txt += pair.Key + "\t" + pair.Value + "\n";
                 }
                 FileSaving.Save(Application.dataPath + _configBubblePlayFilePath, txt);
             }

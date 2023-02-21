@@ -20,6 +20,8 @@ namespace KAP.ToolCreateMap
         [SerializeField]
         private ToolCreateMapListRooms _toolListRooms = null;
         [SerializeField]
+        private ToolCreateMapImportDeco _toolImportDeco = null;
+        [SerializeField]
         private InputField _inputMapId = null;
         [SerializeField]
         private InputField _inputRoomId = null;
@@ -32,7 +34,8 @@ namespace KAP.ToolCreateMap
         [HideInInspector]
         public List<string> LstUnpackingDeco = new List<string>();
         [HideInInspector]
-        public Dictionary<string, List<string>> DctBubbleDecoIds = new Dictionary<string, List<string>>();      //bubbleId - list <bubbleDecoIds, worldDirect>
+        public Dictionary<string, string> DctBubbleDecoIds = new Dictionary<string, string>();      //bubbleId - list <bubbleDecoIds, worldDirect>
+
         //Data for ConfigHome
         [HideInInspector]
         public Dictionary<int, List<Vector3>> DctBubblePos = new Dictionary<int, List<Vector3>>();    //roomId - list vector 3 deco pos
@@ -46,23 +49,121 @@ namespace KAP.ToolCreateMap
         private List<int> _lstID = new List<int>();
         public void OnClickCreateRoomPlay()
         {
+            int count = 0;
             _lstID.Clear();
             foreach (var rec in _configController.ListConfigRoomRecords)
             {
                 if (rec.Id != 101000 && rec.Id != 101001)
                     _lstID.Add(rec.Id);
             }
-            Debug.LogError("count of lstID: " + _lstID.Count);
             for (var i = 0; i < _lstID.Count; i++)
             {
                 ClearAllList();
                 _inputMapId.text = _lstID[i].ToString();
-                _toolListRooms.OnButtonImportNewClick();
-                //await new WaitUntil(() => { 1 });
-                //didnt work
-                ConvertKAPToKDLPlay();
+                var path = _toolListRooms.GetImportPath();
+                //Debug.LogError("path: " + path);
+                var json = FileSaving.Load(path);
+                //Debug.LogError("ID: " + _lstID[i] + " json: " + json);
+                if (!string.IsNullOrEmpty(json))
+                {
+                    var lstRooms = JsonReader.Deserialize<Dictionary<string, DecoDataArray[]>>(json);
+                    var lstLevels = new List<int>();
+                    foreach (var iter in lstRooms)
+                    {
+                        int level = 0;
+                        if (int.TryParse(iter.Key, out level))
+                            lstLevels.Add(level);
+                    }
+
+                    SGUtils.BubbleSort<int>(lstLevels, (l1, l2) => { return l1 < l2; });
+                    List<DecoDataArray> lstDeco = new List<DecoDataArray>();
+                    foreach (var level in lstLevels)
+                    {
+                        var lstDecos = lstRooms[level.ToString()];
+                        foreach (var deco in lstDecos)
+                        {
+                            if (deco == null)
+                                return;
+                            DecoInfo info = null;
+                            if (!string.IsNullOrEmpty(deco.Info))
+                                info = JsonReader.Deserialize<DecoInfo>(deco.Info);
+
+                            if (info == null)
+                                continue;
+
+                            if (info.Id != _lstID[i] && info.Id / 100000 < 22)
+                            {
+                                var rec = _configController.ConfigDeco.GetDecoById(info.Id);
+                                if (rec != null)
+                                {
+                                    float v = Volume(new Vector3(rec.SizeX, rec.SizeY, rec.SizeZ));
+                                    if (v >= 40)
+                                    {
+                                        if (lstDeco.Count >= 5)
+                                        {
+                                            var t = SortDecoData(lstDeco, deco);
+                                            lstDeco.Clear();
+                                            lstDeco.AddRange(t);
+                                        }
+                                        else
+                                            lstDeco.Add(deco);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    count += lstDeco.Count;
+
+                    foreach (var level in lstLevels)
+                    {
+                        var lstDecos = lstRooms[level.ToString()];
+                        foreach (var deco in lstDecos)
+                        {
+                            if (deco == null)
+                                return;
+                            DecoInfo info = null;
+                            if (!string.IsNullOrEmpty(deco.Info))
+                                info = JsonReader.Deserialize<DecoInfo>(deco.Info);
+                            if (info == null)
+                                continue;
+                            if (!lstDeco.Contains(deco) && info.Id != _lstID[i] && info.Id / 100000 < 22)
+                                LstUnpackingDeco.Add(info.Id + "_" + info.Color);
+                        }
+                    }
+
+                    foreach (var deco in lstDeco)
+                    {
+                        DecoInfo info = null;
+                        if (!string.IsNullOrEmpty(deco.Info))
+                            info = JsonReader.Deserialize<DecoInfo>(deco.Info);
+                        var listDecoColor = _configController.ConfigDecoColor.GetListDecoColorsByDecoId(info.Id);
+                        if (listDecoColor == null)
+                        {
+                            Debug.LogError("cai list color null: " + info.Id);
+                        }
+                        else
+                        {
+                            string bubbleDecoIds = "";
+                            if (listDecoColor.Count >= 3)
+                            {
+                                for (var k = 0; k < 3; k++)
+                                    bubbleDecoIds += listDecoColor[k].Id + ";";
+                            }
+                            else
+                            {
+                                for (var k = 0; i < listDecoColor.Count; k++)
+                                    bubbleDecoIds += listDecoColor[k].Id + ";";
+                            }
+
+                            DctBubbleDecoIds.Add(_lstID[i] + "_" + LstPosBubble.Count, bubbleDecoIds);
+                            LstPosBubble.Add(deco.Position.ToVector3());
+                        }
+                    }
+                }
+
                 _configController.SaveConfigPlayKAPToKDL();
             }
+            Debug.LogError("Count: " + count);
         }
 
         public void OnClickCreateRoomHome()
@@ -140,7 +241,6 @@ namespace KAP.ToolCreateMap
         {
             foreach (var root in _areaManager.ListRooms)
             {
-                Debug.LogError("chay");
                 var infoRoot = (DecoInfo)root.Info;
                 List<Deco> lstDeco = new List<Deco>();
                 root.Foreach((deco) =>
@@ -192,7 +292,7 @@ namespace KAP.ToolCreateMap
                                 bubbleDecoIds += listDecoColor[i].Id + ";";
                         }
 
-                        DctBubbleDecoIds.Add(infoRoot.Id + "_" + LstPosBubble.Count, new List<string> { bubbleDecoIds, deco.WorldDirect.ToString() });
+                        DctBubbleDecoIds.Add(infoRoot.Id + "_" + LstPosBubble.Count, bubbleDecoIds);
                         LstPosBubble.Add(deco.Position);
                     }
                 }
@@ -233,6 +333,36 @@ namespace KAP.ToolCreateMap
             for (i = 0; i < lst.Count; i++)
             {
                 if (Volume(deco.FLIsoSize) > Volume(lst[i].FLIsoSize))
+                {
+                    lst.Insert(i, deco);
+                    break;
+                }
+            }
+            if (lst.Count > 5)
+            {
+                for (var j = 0; j < 5; j++)
+                {
+                    temp.Add(lst[j]);
+                }
+            }
+            return temp;
+        }
+        public List<DecoDataArray> SortDecoData(List<DecoDataArray> lst, DecoDataArray deco)
+        {
+            int i = 0;
+            DecoInfo info = null;
+            if (!string.IsNullOrEmpty(deco.Info))
+                info = JsonReader.Deserialize<DecoInfo>(deco.Info);
+            List<DecoDataArray> temp = new List<DecoDataArray>();
+            var rec = _configController.ConfigDeco.GetDecoById(info.Id);
+            
+            for (i = 0; i < lst.Count; i++)
+            {
+                DecoInfo info2 = null;
+                if (!string.IsNullOrEmpty(lst[i].Info))
+                    info2 = JsonReader.Deserialize<DecoInfo>(lst[i].Info);
+                var rec2 = _configController.ConfigDeco.GetDecoById(info2.Id);
+                if (Volume(new Vector3(rec.SizeX, rec.SizeY, rec.SizeZ)) > Volume(new Vector3(rec2.SizeX, rec2.SizeY, rec2.SizeZ)))
                 {
                     lst.Insert(i, deco);
                     break;

@@ -1024,13 +1024,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2065037565}
-  m_Father: {fileID: 976342554}
-  m_RootOrder: 11
+  m_Father: {fileID: 1145626890}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 681.6, y: -421.4222}
-  m_SizeDelta: {x: 106.2941, y: 45.9387}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -119, y: -64}
+  m_SizeDelta: {x: 91.083984, y: 41.3833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &72009681
 MonoBehaviour:
@@ -7260,6 +7260,7 @@ MonoBehaviour:
   _toolBubbleDecoSetting: {fileID: 575354278}
   _toolUnpackingSetting: {fileID: 1691333323}
   _toolTransfer: {fileID: 1145626891}
+  _toolLstRooms: {fileID: 976342555}
   _areaManager: {fileID: 184224760}
   _inputMapId: {fileID: 355543022}
 --- !u!1 &519665874
@@ -12894,8 +12895,6 @@ RectTransform:
   - {fileID: 963610374}
   - {fileID: 1916362425}
   - {fileID: 68950970}
-  - {fileID: 1842658634}
-  - {fileID: 72009680}
   m_Father: {fileID: 1632439279}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14552,6 +14551,8 @@ RectTransform:
   - {fileID: 178285180}
   - {fileID: 779417539}
   - {fileID: 223381923}
+  - {fileID: 1842658634}
+  - {fileID: 72009680}
   m_Father: {fileID: 1632439279}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14575,6 +14576,7 @@ MonoBehaviour:
   _areaManager: {fileID: 184224760}
   _configController: {fileID: 503449531}
   _toolListRooms: {fileID: 976342555}
+  _toolImportDeco: {fileID: 184224762}
   _inputMapId: {fileID: 355543022}
   _inputRoomId: {fileID: 68950972}
   LstPosBubble: []
@@ -16263,7 +16265,7 @@ MonoBehaviour:
   _inputPosZ: {fileID: 1764261445}
   _inputSizeX: {fileID: 1178717737}
   _inputSizeY: {fileID: 1818971993}
-  RoomOrder: {fileID: 0}
+  _roomOrder: {fileID: 606402040}
 --- !u!1 &1245211483
 GameObject:
   m_ObjectHideFlags: 0
@@ -25227,13 +25229,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1870860918}
-  m_Father: {fileID: 976342554}
-  m_RootOrder: 10
+  m_Father: {fileID: 1145626890}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 549, y: -419}
-  m_SizeDelta: {x: 112.3495, y: 50.7831}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -245.25, y: -64}
+  m_SizeDelta: {x: 123.869995, y: 52.6953}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1842658635
 MonoBehaviour:

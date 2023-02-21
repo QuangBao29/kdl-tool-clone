@@ -9,7 +9,6 @@ namespace KAP.Config
     {
         public string BubbleId;
         public string BubbleDecoIds;
-        public string WorldDirect;
 
         private List<string> _lstBubbleDecoId;
         private Dictionary<int, List<int>> _dctBubbleIdColor = new Dictionary<int, List<int>>();
@@ -42,7 +41,6 @@ namespace KAP.Config
         {
             return new List<string> { "BubbleId"
                                     , "BubbleDecoIds"
-                                    , "WorldDirect"
             };
         }
     }

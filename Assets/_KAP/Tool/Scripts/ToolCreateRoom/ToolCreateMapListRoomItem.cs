@@ -37,7 +37,7 @@ namespace KAP.ToolCreateMap
         [SerializeField]
         private InputField _inputSizeY = null;
         [SerializeField]
-        public InputField RoomOrder = null;
+        private InputField _roomOrder = null;
         private DecoRoot _room;
         private int _index;
 
@@ -57,6 +57,10 @@ namespace KAP.ToolCreateMap
             _inputSizeY.text = room.Size.y.ToString();
         }
 
+        public string GetRoomOrder()
+        {
+            return _roomOrder.text;
+        }
         public int GetRoomId()
         {
             var roomInfo = (DecoInfo)_room.Info;
