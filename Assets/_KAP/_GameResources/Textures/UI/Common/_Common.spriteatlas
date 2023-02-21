@@ -133,6 +133,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1ffa987b0ddf345839a5e5a8f94cc3bb, type: 3}
   - {fileID: 21300000, guid: 3a142a9bd192c46d9a1017391764d2e2, type: 3}
   - {fileID: 21300000, guid: 65bfc5dbe6e13b747b18adbfd08d5bc7, type: 3}
+  - {fileID: 21300000, guid: c71a185cc8950154fa498eaaac9b2165, type: 3}
   - {fileID: 21300000, guid: aed5317cb368d4e9d902c9691a763aef, type: 3}
   - {fileID: 21300000, guid: e276917c922cfae459a297231baed502, type: 3}
   - {fileID: 21300000, guid: 15f5d37ca111f4d53bce2ab625f6c812, type: 3}
@@ -228,6 +229,7 @@ SpriteAtlas:
   - _rect_1
   - bg_4
   - bg_light_3
+  - icon_bubble
   - btn_6
   - bg_chain
   - arrow_3
