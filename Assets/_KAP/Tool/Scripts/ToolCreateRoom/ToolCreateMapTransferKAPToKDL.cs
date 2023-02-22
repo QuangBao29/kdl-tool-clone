@@ -174,6 +174,7 @@ namespace KAP.ToolCreateMap
         }
         public void OnClickCreateDecoReward()
         {
+            DctDecoReward.Clear();
             CreateDecoReward();
             _configController.SaveConfigDecoRewardCsv();
         }
@@ -323,8 +324,8 @@ namespace KAP.ToolCreateMap
             else
             {
                 DctDecoReward.Add(_inputRoomId.text, strDecoIds);
-                Debug.LogError(_inputRoomId.text + " da them vao dictionary");
             }
+            //Debug.LogError("count: " + DctDecoReward.Count);
         }
         public List<Deco> Sort(List<Deco> lst, Deco deco)
         {

@@ -54,6 +54,8 @@ namespace KAP.ToolCreateMap
         private AreaManager _areaManager = null;
         [SerializeField] 
         private InputField _inputMapId = null;
+        [SerializeField]
+        private InputField _inputRoomIdReward = null;
 
         private readonly ConfigDeco _configDeco = new ConfigDeco();
         private readonly ConfigDecoTheme _configDecoTheme = new ConfigDecoTheme();
@@ -145,11 +147,11 @@ namespace KAP.ToolCreateMap
             _lstConfigBubblePlayPositionRecords.AddRange(_configBubblePlayPosition.Records);
             ListConfigBubblePlayPositionRecords = _lstConfigBubblePlayPositionRecords.AsReadOnly();
 
-            //var txtDecoReward = FileSaving.Load(Application.dataPath + _configDecoRewardFilePath);
-            //var _configDecoReward = new ConfigDecoReward();
-            //_configDecoReward.LoadFromString(txtDecoReward);
-            //_lstConfigDecoRewardRecords.AddRange(_configDecoReward.Records);
-            //ListConfigDecoRewardRecords = _lstConfigDecoRewardRecords.AsReadOnly();
+            var txtDecoReward = FileSaving.Load(Application.dataPath + _configDecoRewardFilePath);
+            var _configDecoReward = new ConfigDecoReward();
+            _configDecoReward.LoadFromString(txtDecoReward);
+            _lstConfigDecoRewardRecords.AddRange(_configDecoReward.Records);
+            ListConfigDecoRewardRecords = _lstConfigDecoRewardRecords.AsReadOnly();
         }
 
 
@@ -562,7 +564,6 @@ namespace KAP.ToolCreateMap
                 _configBubblePlay.LoadFromString(txtBubblePlay);
                 _lstConfigBubblePlayRecords.Clear();
                 _lstConfigBubblePlayRecords.AddRange(_configBubblePlay.Records);
-                Debug.LogError("num of listconfigbubplayrec: " + _lstConfigBubblePlayRecords.Count);
                 ListConfigBubblePlayRecords = _lstConfigBubblePlayRecords.AsReadOnly();
 
                 var txtBubblePlayPosition = FileSaving.Load(Application.dataPath + _configBubblePlayPositionFilePath);
@@ -572,10 +573,18 @@ namespace KAP.ToolCreateMap
                 _lstConfigBubblePlayPositionRecords.AddRange(_configBubblePlayPosition.Records);
                 ListConfigBubblePlayPositionRecords = _lstConfigBubblePlayPositionRecords.AsReadOnly();
             }
+
+            var txtDecoReward = FileSaving.Load(Application.dataPath + _configDecoRewardFilePath);
+            var _configDecoReward = new ConfigDecoReward();
+            _configDecoReward.LoadFromString(txtDecoReward);
+            _lstConfigDecoRewardRecords.Clear();
+            _lstConfigDecoRewardRecords.AddRange(_configDecoReward.Records);
+            ListConfigDecoRewardRecords = _lstConfigDecoRewardRecords.AsReadOnly();
         }
 
         public void SaveConfigDecoRewardCsv()
         {
+            LoadFileCsv();
             var txt = "";
             List<string> lstVariables = ConfigDecoRewardRecord.GetLstVariables();
             for (var i = 0; i < lstVariables.Count - 1; i++)
@@ -583,13 +592,51 @@ namespace KAP.ToolCreateMap
                 txt += lstVariables[i] + "\t";
             }
             txt += lstVariables[lstVariables.Count - 1] + "\n";
-            foreach (var pair in _toolTransfer.DctDecoReward)
+
+            if (_lstConfigDecoRewardRecords.Count != 0)
             {
-                txt += pair.Key + '\t' + pair.Value + '\n';
+                List<ConfigDecoRewardRecord> listRemovedRecord = new List<ConfigDecoRewardRecord>();
+                for (var i = 0; i < _lstConfigDecoRewardRecords.Count; i++)
+                {
+                    var record = _lstConfigDecoRewardRecords[i];
+                    if (record.RoomId == _inputRoomIdReward.text)
+                    {
+                        listRemovedRecord.Add(record);
+                        Debug.LogError("add remove rec " + record.RoomId);
+                    }
+                }
+                foreach (var rec in listRemovedRecord)
+                {
+                    _lstConfigDecoRewardRecords.Remove(rec);
+                }
+
+                foreach (var pair in _toolTransfer.DctDecoReward)
+                {
+                    ConfigDecoRewardRecord newRecord = new ConfigDecoRewardRecord();
+                    newRecord.RoomId = pair.Key;
+                    newRecord.LstDecoIds = pair.Value;
+                    _lstConfigDecoRewardRecords.Add(newRecord);
+                }
+                string newtxt = "";
+                for (var i = 0; i < lstVariables.Count - 1; i++)
+                {
+                    newtxt += lstVariables[i] + "\t";
+                }
+                newtxt += lstVariables[lstVariables.Count - 1] + "\n" + ConvertConfigDecoRewardRecordToStringCsv(_lstConfigDecoRewardRecords);
+                FileSaving.Save(Application.dataPath + _configDecoRewardFilePath, newtxt);
+                Debug.LogError("Export Deco Reward Success");
             }
-            FileSaving.Save(Application.dataPath + _configDecoRewardFilePath, txt);
-            Debug.LogError("Export Deco Reward Success");
+            else
+            {
+                foreach (var pair in _toolTransfer.DctDecoReward)
+                {
+                    txt += pair.Key + '\t' + pair.Value + '\n';
+                }
+                FileSaving.Save(Application.dataPath + _configDecoRewardFilePath, txt);
+                Debug.LogError("Export Deco Reward Success");
+            }
         }
+
         public void ClearDecoReward()
         {
             List<string> lstVariables = ConfigDecoRewardRecord.GetLstVariables();
@@ -634,6 +681,15 @@ namespace KAP.ToolCreateMap
             for (var i = 0; i < configRecords.Count; i++)
             {
                 txt += configRecords[i].BubbleId + "\t" + configRecords[i].BubbleDecoIds + "\n";
+            }
+            return txt;
+        }
+        public string ConvertConfigDecoRewardRecordToStringCsv(List<ConfigDecoRewardRecord> configRecords)
+        {
+            string txt = "";
+            for (var i = 0; i < configRecords.Count; i++)
+            {
+                txt += configRecords[i].RoomId + "\t" + configRecords[i].LstDecoIds + "\n";
             }
             return txt;
         }

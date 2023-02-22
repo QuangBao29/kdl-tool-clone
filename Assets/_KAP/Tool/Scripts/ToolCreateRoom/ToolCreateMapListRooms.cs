@@ -99,7 +99,8 @@ namespace KAP.ToolCreateMap
             //_dctEditModeData.Add(EditMode.RoomChallenge, new EditModeData(EditMode.RoomChallenge, _importRoomChallengePath, _exportRoomChallengePath, _screenshotRoomChallengePath ,Color.yellow, KAPDefine.DefaultRoomChallengeID));
             _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultRoomThemeId));
             _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPath, _exportRoomPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomId));
-            _dctEditModeData.Add(EditMode.Test, new EditModeData(EditMode.Test, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
+            _dctEditModeData.Add(EditMode.SeparatedRoom, new EditModeData(EditMode.SeparatedRoom, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
+            _dctEditModeData.Add(EditMode.DecoReward, new EditModeData(EditMode.DecoReward, "", "", "", Color.yellow, KAPDefine.DefaultRoomPlayKDLID));
         }
 
         private void OnTogglEditThemeChange(EditMode editMode)
@@ -330,7 +331,7 @@ namespace KAP.ToolCreateMap
                 var info = (DecoInfo)r.Info;
                 _inputMapId.text = info.Id.ToString();
                 string mapName = string.Format("{0}.json", temp + _inputMapId.text);
-                var targetEditMode = _dctEditModeData[EditMode.Test];
+                var targetEditMode = _dctEditModeData[EditMode.SeparatedRoom];
                 string path = Application.dataPath + Path.Combine(targetEditMode.ExportPath, mapName);
                 string mess = string.Format("export {0}: {1}", "Separated Rooms", _inputMapId.text);
 
