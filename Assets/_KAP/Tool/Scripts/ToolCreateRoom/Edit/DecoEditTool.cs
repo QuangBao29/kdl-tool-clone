@@ -272,7 +272,7 @@ namespace KAP
                                 foreach (var value in root.Value)
                                 {
                                     value.BubbleIndex = root.Key.BubbleIndex;
-                                    value.RoomIndex = root.Key.RoomIndex;
+                                    value.RoomId = root.Key.RoomId;
                                     value.BubbleId = root.Key.BubbleId;
                                 }
                                 break;
@@ -288,10 +288,10 @@ namespace KAP
                         }
                         foreach (var pair in _toolBubbleDecoSetting.DctRootDecoItems)
                         {
-                            if (pair.Key.RoomIndex == preRoomIndex)
+                            if (pair.Key.RoomId == preRoomIndex)
                             {
                                 var newIdx = pair.Key.BubbleIndex > preBubbleIndex ? (pair.Key.BubbleIndex - 1) : pair.Key.BubbleIndex;
-                                pair.Key.UpDateInfo(pair.Key.RoomIndex, pair.Key.BubblePosition, newIdx);
+                                pair.Key.UpDateInfo(pair.Key.RoomId, pair.Key.BubblePosition, newIdx);
                                 pair.Key.gameObject.name = "Bubble: " + pair.Key.BubbleId;
                                 foreach (var clone in pair.Value)
                                 {

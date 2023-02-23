@@ -214,7 +214,7 @@ namespace KAP.ToolCreateMap
             else _dctNumBubbleInRoom[_dctNumBubbleInRoom.ElementAt(0).Key]--;
             foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
             {
-                if (root.Key.RoomIndex == bubble.RoomIndex)
+                if (root.Key.RoomId == bubble.RoomIndex)
                 {
                     if (root.Key.BubbleIndex > bubble.BubbleIndex)
                     {

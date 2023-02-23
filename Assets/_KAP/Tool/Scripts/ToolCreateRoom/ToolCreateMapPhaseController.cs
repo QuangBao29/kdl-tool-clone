@@ -15,11 +15,11 @@ namespace KAP.ToolCreateMap
         [SerializeField]
         private ToolCreateMapUnpackingSetting _toolUnpackingSetting = null;
 
-        private void Awake()
-        {
-            _toolBubbleSetting.ShowPanelListBubble();
-            _toolUnpackingSetting.ShowPanelUnpacking();
-        }
+        //private void Awake()
+        //{
+        //    //_toolBubbleSetting.ShowPanelListBubble();
+        //    //_toolUnpackingSetting.ShowPanelUnpacking();
+        //}
         public void OnChangePhaseUI()
         {
             switch (ToolEditMode.Instance.CurrentPhaseMode)

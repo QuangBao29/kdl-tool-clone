@@ -25,6 +25,8 @@ namespace KAP.ToolCreateMap
         [SerializeField]
         private Toggle _toggleIsStatic = null;
         [SerializeField]
+        private Toggle _toggleIsBubble = null;
+        [SerializeField]
         private GameObject _objNonStatic = null;
         [SerializeField]
         private Toggle _toggleShadowColor = null;
@@ -82,6 +84,8 @@ namespace KAP.ToolCreateMap
                 return;
             }
             _toggleIsStatic.isOn = info.IsStatic;
+            _toggleIsBubble.isOn = info.IsBubble;
+            return;
             if (info.IsStatic)
             {
                 _objNonStatic.SetActive(false);
@@ -101,7 +105,34 @@ namespace KAP.ToolCreateMap
             _colorPicker.color = SGUtils.HexToColor(info.ShadowColor);
             _rTransBg.SetSize(new Vector2(_bgWight, _fullHeight));
         }
-
+        public void ShowBubbleKDL()
+        {
+            var cur = _editManager.Current;
+            if (cur == null)
+            {
+                HideKDL();
+                return;
+            }
+            gameObject.SetActive(true);
+            var info = (DecoInfo)cur.deco.Info;
+            if (info == null)
+            {
+                return;
+            }
+            _toggleIsBubble.isOn = info.IsBubble;
+        }
+        public void OnToggleBubbleChange()
+        {
+            var cur = _editManager.Current;
+            _toggleIsBubble.isOn = !_toggleIsBubble.isOn;
+            var info = (DecoInfo)cur.deco.Info;
+            info.IsBubble = _toggleIsBubble.isOn;
+            if (info.IsBubble)
+            {
+                //
+            }
+            ShowBubbleKDL();
+        }
         public void Hide()
         {
             gameObject.SetActive(false);
@@ -119,6 +150,10 @@ namespace KAP.ToolCreateMap
                 }
             }
             _curShadow = null;
+        }
+        public void HideKDL()
+        {
+            gameObject.SetActive(false);
         }
 
         public void OnToggleStaticChange()
@@ -145,7 +180,7 @@ namespace KAP.ToolCreateMap
             }
             Show();
         }
-
+        
         public void OnToggleColorChange()
         {
             if (_curShadow == null)
@@ -171,16 +206,16 @@ namespace KAP.ToolCreateMap
 
         private void Update()
         {
-            if (!_toggleShadowColor.isOn)
-                return;
-            if (_curShadow == null)
-                return;
-            var info = (DecoInfo)_curShadow.Deco.Info;
-            if(info.ShadowColor != _colorPicker.hexInput.text)
-            {
-                info.ShadowColor = _colorPicker.hexInput.text;
-                _curShadow.SetColor(_colorPicker.color);
-            }
+            //if (!_toggleShadowColor.isOn)
+            //    return;
+            //if (_curShadow == null)
+            //    return;
+            //var info = (DecoInfo)_curShadow.Deco.Info;
+            //if(info.ShadowColor != _colorPicker.hexInput.text)
+            //{
+            //    info.ShadowColor = _colorPicker.hexInput.text;
+            //    _curShadow.SetColor(_colorPicker.color);
+            //}
         }
 
         public void OnButtonPreviewClick()

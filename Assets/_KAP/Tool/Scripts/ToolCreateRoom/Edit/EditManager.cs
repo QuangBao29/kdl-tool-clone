@@ -28,11 +28,11 @@ namespace KAP
             if (Current != null)
             {
                 editTool.Show();
-                _panelBubbleDecoSetting.SetActive(true);
+                //_panelBubbleDecoSetting.SetActive(true);
             }
             else
             {
-                _panelBubbleDecoSetting.SetActive(false);
+                //_panelBubbleDecoSetting.SetActive(false);
                 editTool.gameObject.SetActive(false);
             }
             OnChangeCurrentEvent?.Invoke();

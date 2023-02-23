@@ -22,7 +22,7 @@ namespace KAP.ToolCreateMap
 
         private int _bubbleIndex;
         private string _bubbleId;
-        private int _roomIdx;
+        private int _roomId;
         private Vector3 _bubblePosition;
 
         private ToolCreateMapBubbleItem _prefab = null;
@@ -60,10 +60,10 @@ namespace KAP.ToolCreateMap
             get => _bubbleId;
             set => _bubbleId = value;
         }
-        public int RoomIndex
+        public int RoomId
         {
-            get => _roomIdx;
-            set => _roomIdx = value;
+            get => _roomId;
+            set => _roomId = value;
         }
         public Vector3 BubblePosition
         {
@@ -73,14 +73,14 @@ namespace KAP.ToolCreateMap
 
         public void SetupBubbleId()
         {
-            _bubbleId = _roomIdx + "_" + _bubbleIndex;
+            _bubbleId = _roomId + "_" + _bubbleIndex;
         }
 
         #region Bubble Deco
 
         public void UpDateInfo(int RoomIndex, Vector3 BubblePosition, int BubbleIndex)
         {
-            _roomIdx = _toolBubbleSetting.GetRoomId(RoomIndex);
+            _roomId = _toolBubbleSetting.GetRoomId(RoomIndex);
             _bubblePosition = BubblePosition;
             _bubbleIndex = BubbleIndex;
             SetupBubbleId();
@@ -153,7 +153,7 @@ namespace KAP.ToolCreateMap
             var bubble = _toolBubbleSetting.CreateDecoBubble(decoInfo.Id, decoInfo.Color);
             bubble.Info = new DecoInfo { Id = decoInfo.Id, Color = decoInfo.Color, IsBubble = true };
             bubble.BubbleIndex = _bubbleIndex;
-            bubble.RoomIndex = _roomIdx;
+            bubble.RoomIndex = _roomId;
             bubble.BubbleId = bubble.RoomIndex + "_" + bubble.BubbleIndex;
             bubble.Prefab = this;
             bubble.Position = IsoWorld.WorldToIso(Camera.main.transform.position, 0);
@@ -198,7 +198,7 @@ namespace KAP.ToolCreateMap
             var bubble = _toolBubbleSetting.CreateDecoBubble(decoInfo.Id, decoInfo.Color);
             bubble.Info = new DecoInfo { Id = decoInfo.Id, Color = decoInfo.Color, IsBubble = true };
             bubble.BubbleIndex = _bubbleIndex;
-            bubble.RoomIndex = _roomIdx;
+            bubble.RoomIndex = _roomId;
             bubble.BubbleId = bubble.RoomIndex + "_" + bubble.BubbleIndex;
             bubble.Prefab = this;
             bubble.Position = position;

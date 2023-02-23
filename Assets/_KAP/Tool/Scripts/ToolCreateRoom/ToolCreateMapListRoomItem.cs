@@ -22,6 +22,8 @@ namespace KAP.ToolCreateMap
         private InputField _inputRoomId = null;
         [SerializeField]
         private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
+        [SerializeField]
+        private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
 
         [Space]
         [SerializeField]
@@ -38,8 +40,22 @@ namespace KAP.ToolCreateMap
         private InputField _inputSizeY = null;
         [SerializeField]
         private InputField _roomOrder = null;
+
+        [Space]
+        [SerializeField]
+        private Image _img = null;
+        [SerializeField]
+        private Color _selectColor = Color.white;
+
         private DecoRoot _room;
         private int _index;
+        private bool _isSelect = false;
+
+        public bool IsSelect
+        {
+            get => _isSelect;
+            set => _isSelect = value;
+        }
 
         public void Setup(DecoRoot room, int index)
         {
@@ -56,7 +72,27 @@ namespace KAP.ToolCreateMap
             _inputSizeX.text = room.Size.x.ToString();
             _inputSizeY.text = room.Size.y.ToString();
         }
-
+        public void OnClickRoomItem()
+        {
+            if (IsSelect)
+            {
+                UnSelectRoomItem();
+                _parentController.SetSelectedItem(null);
+            }
+            else
+            {
+                _parentController.OnUnselectAllItems();
+                _img.color = _selectColor;
+                IsSelect = true;
+                _parentController.SetSelectedItem(this);
+            }
+            _toolBubbleDecoSetting.OnSetupBubbleInRoom();
+        }
+        public void UnSelectRoomItem()
+        {
+            IsSelect = false;
+            _img.color = Color.white;
+        }
         public string GetRoomOrder()
         {
             return _roomOrder.text;
