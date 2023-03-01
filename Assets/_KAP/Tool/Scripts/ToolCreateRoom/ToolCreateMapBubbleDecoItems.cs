@@ -78,6 +78,10 @@ namespace KAP.ToolCreateMap
 
         #region Bubble Deco
 
+        public void OnClickTargetDecoItem()
+        {
+            _editManager.SetCurrent(Deco.GetComponent<DecoEditDemo>());
+        }
         public void UpDateInfo(int RoomIndex, Vector3 BubblePosition, int BubbleIndex)
         {
             _roomId = _toolBubbleSetting.GetRoomId(RoomIndex);
@@ -93,56 +97,19 @@ namespace KAP.ToolCreateMap
         }
         public void OnButtonRemoveItemClick()
         {
-            var decoInfo = this.ParseInfo<DecoInfo>();
-            var id = decoInfo.Id;
-            var colorId = decoInfo.Color;
-            Debug.LogError("current BubbleId: " + _toolBubbleSetting.CurrentBubble.BubbleId);
-
-            _toolBubbleSetting.CurrentBubble.DctDecoIdColor[id].Remove(colorId);
-            if (_toolBubbleSetting.CurrentBubble.DctDecoIdColor[id].Count == 0)
-                _toolBubbleSetting.CurrentBubble.DctDecoIdColor.Remove(id);
-
+            var info = (DecoInfo)Deco.Info;
+            info.IsBubble = false;
+            Deco.Info = info;
+            _editManager.SetCurrent(null);
             foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
             {
-                if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
+                if (root.Key.RoomId == RoomId)
                 {
-                    foreach (var deco in root.Value)
+                    if (root.Value.Contains(this))
                     {
-                        var decoinfo = deco.ParseInfo<DecoInfo>();
-                        if (decoinfo.Id == id && decoinfo.Color == colorId)
-                        {
-                            if (root.Key.BubbleDeco != null)
-                            {
-                                var info = (DecoInfo)root.Key.BubbleDeco.Info;
-                                if (info.Id == id && info.Color == colorId)
-                                {
-                                    var temp = root.Key.BubbleDeco;
-                                    temp.Remove();
-                                    root.Key.BubbleDeco = null;
-                                }
-                            }
-                            else
-                            {
-                                var current = _editManager.Current;
-                                if (current != null)
-                                {
-                                    var currentBubble = current.gameObject.GetComponent<Bubble>();
-                                    if (currentBubble != null)
-                                    {
-                                        if (currentBubble.Prefab == this)
-                                        {
-                                            _editManager.SetCurrent(null);
-                                            current.deco.Remove();
-                                        }
-                                    }
-                                }
-                            }
-                            root.Value.Remove(deco);
-                            Destroy(deco.gameObject);
-                            break;
-                        }
+                        root.Value.Remove(this);
+                        Destroy(this.gameObject);
                     }
-                    break;
                 }
             }
         }

@@ -154,7 +154,7 @@ namespace KAP.ToolCreateMap
                 CreateARoom(info != null?info.Id:_areaManager.ListRooms.Count, data.Position != null ? data.Position.ToVector3() : Vector3.zero, data.Size.ToVector3());
                 return;
             }
-
+            
             var id = info.Id;
             var color = info.Color;
             var deco = CreateDeco(id, color);

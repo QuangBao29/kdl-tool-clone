@@ -153,6 +153,44 @@ namespace KAP.ToolCreateMap
                         roomId = int.Parse(_inputMapId.text);
                         room.Info = new DecoInfo { Id = roomId };
                     }
+                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                    {
+                        var lstRecPos = _configController.ListConfigBubbleHomePositionRecords;
+                        var lstRecHome = _configController.ListConfigBubbleHomeRecords;
+                        foreach (var rec in lstRecPos)
+                        {
+                            if (rec.RoomId == roomId.ToString())
+                            {
+                                var lstPos = rec.GetLstBubblePositionVector3();
+                                List<string> lstRoomDecoId = new List<string>();
+                                foreach (var bubbleRec in lstRecHome)
+                                {
+                                    var rID = SGUtils.ParseStringToListInt(bubbleRec.BubbleId, '_')[0];
+                                    if (roomId == rID)
+                                    {
+                                        var decoid = SGUtils.ParseStringToList(bubbleRec.BubbleDecoIds, ';')[0];
+                                        var id = SGUtils.ParseStringToList(decoid, '_')[0];
+                                        lstRoomDecoId.Add(id);
+                                    }
+                                }
+                                room.Foreach((deco) => {
+                                    var info = (DecoInfo)deco.Info;
+                                    if (lstRoomDecoId.Contains(info.Id.ToString()))
+                                    {
+                                        foreach (var pos in lstPos)
+                                        {
+                                            var isoPos = pos + room.Position;
+                                            if (isoPos == deco.Position)
+                                            {
+                                                deco.Info = new DecoInfo { Id = info.Id, Color = info.Color, IsBubble = true };
+                                            }
+                                        }
+                                    }
+                                });
+                                break;
+                            }
+                        }
+                    }
 
                     Debug.LogError("roomId: " + roomId);
                     room.name = roomId.ToString();

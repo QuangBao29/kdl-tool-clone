@@ -78,6 +78,7 @@ namespace KAP.ToolCreateMap
             {
                 UnSelectRoomItem();
                 _parentController.SetSelectedItem(null);
+                _toolBubbleDecoSetting.OnUnselectedItems(_inputRoomId.text);
             }
             else
             {
