@@ -80,6 +80,7 @@ namespace KAP
         public const int DefaultRoomId = 100000;
         public const int DefaultRoomPlayId = 114000;
         public const int DefaultRoomPlayKDLID = 101005;
+        public const int DefaultMansionID = 520024;
         public const string RoomMapURL = "Maps/Rooms/";
 
         #endregion

@@ -57,13 +57,15 @@ namespace KAP.ToolCreateMap
             set => _isSelect = value;
         }
 
-        public void Setup(DecoRoot room, int index)
+        public void Setup(DecoRoot room, int index, int roomOrder)
         {
             _index = index;
             _room = room;
             var roomInfo = (DecoInfo)room.Info;
             var roomId = roomInfo != null ? roomInfo.Id : 0;
             _inputRoomId.text = (roomId > 1000) ? roomId.ToString() : index.ToString(); // real roomId always > 1000
+
+            _roomOrder.text = roomOrder.ToString();
 
             _inputPosX.text = room.Position.x.ToString();
             _inputPosY.text = room.Position.y.ToString();

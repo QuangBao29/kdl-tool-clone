@@ -61,6 +61,11 @@ namespace KAP.ToolCreateMap
         private readonly ConfigDecoTheme _configDecoTheme = new ConfigDecoTheme();
         private readonly ConfigDecoColor _configDecoColor = new ConfigDecoColor();
         private readonly ConfigDecoArea _configDecoArea = new ConfigDecoArea();
+        private readonly ConfigBubbleHome _configBubbleHome = new ConfigBubbleHome();
+        private readonly ConfigBubbleHomePosition _configBubbleHomePosition = new ConfigBubbleHomePosition();
+        private readonly ConfigBubblePlay _configBubblePlay = new ConfigBubblePlay();
+        private readonly ConfigBubblePlayPosition _configBubblePlayPosition = new ConfigBubblePlayPosition();
+        private readonly ConfigDecoReward _configDecoReward = new ConfigDecoReward();
 
         private readonly List<ConfigRoomRecord> _lstConfigRoomRecords = new List<ConfigRoomRecord>();
         public ReadOnlyCollection<ConfigRoomRecord> ListConfigRoomRecords;
@@ -87,11 +92,18 @@ namespace KAP.ToolCreateMap
         private readonly List<ConfigDecoRewardRecord> _lstConfigDecoRewardRecords = new List<ConfigDecoRewardRecord>();
         public ReadOnlyCollection<ConfigDecoRewardRecord> ListConfigDecoRewardRecords;
 
+        private Dictionary<string, int> dctNumOfBubbleInRoom = new Dictionary<string, int>();       //roomId - num of bubble
+        private Dictionary<string, string> dctRoomIdPosition = new Dictionary<string, string>();    //roomId - position
+        private Dictionary<string, string> dctRoomIdIndex = new Dictionary<string, string>();       //roomId - Index
+        private Dictionary<string, string> dctBubbleIdDecoIds = new Dictionary<string, string>();   //bubbleid - decoids
+        private Dictionary<string, string> dctBubbleIdStar = new Dictionary<string, string>();      //bubbleId - star
+        private Dictionary<string, int> dctBubbleIdDeco = new Dictionary<string, int>();            //bubbleId - decoId
+        private Dictionary<string, string> dctBubbleIdWD = new Dictionary<string, string>();        //BubbleId - world direct
+        private Dictionary<string, string> dctBubbleIdPrice = new Dictionary<string, string>();     //bubbleId - price
+
         private void Awake()
         {
-            //declare txtDeco to contain data loaded from path in local computer in string type
             var txtDeco = FileSaving.Load(Application.dataPath + _configDecoFilePath);
-            //using _configDeco to load ConfigDeco from txtDeco
             _configDeco.LoadFromString(txtDeco);
             _lstConfigDecoRecords.AddRange(_configDeco.Records);
             ListConfigDecoRecords = _lstConfigDecoRecords.AsReadOnly();
@@ -124,31 +136,26 @@ namespace KAP.ToolCreateMap
             ListConfigChallengeRecords = _lstConfigChallengeRecords.AsReadOnly();
 
             var txtBubbleHome = FileSaving.Load(Application.dataPath + _configBubbleHomeFilePath);
-            var _configBubbleHome = new ConfigBubbleHome();
             _configBubbleHome.LoadFromString(txtBubbleHome);
             _lstConfigBubbleHomeRecords.AddRange(_configBubbleHome.Records);
             ListConfigBubbleHomeRecords = _lstConfigBubbleHomeRecords.AsReadOnly();
 
             var txtBubbleHomePosition = FileSaving.Load(Application.dataPath + _configBubbleHomePositionFilePath);
-            var _configBubbleHomePosition = new ConfigBubbleHomePosition();
             _configBubbleHomePosition.LoadFromString(txtBubbleHomePosition);
             _lstConfigBubbleHomePositionRecords.AddRange(_configBubbleHomePosition.Records);
             ListConfigBubbleHomePositionRecords = _lstConfigBubbleHomePositionRecords.AsReadOnly();
 
             var txtBubblePlay = FileSaving.Load(Application.dataPath + _configBubblePlayFilePath);
-            var _configBubblePlay = new ConfigBubblePlay();
             _configBubblePlay.LoadFromString(txtBubblePlay);
             _lstConfigBubblePlayRecords.AddRange(_configBubblePlay.Records);
             ListConfigBubblePlayRecords = _lstConfigBubblePlayRecords.AsReadOnly();
 
             var txtBubblePlayPosition = FileSaving.Load(Application.dataPath + _configBubblePlayPositionFilePath);
-            var _configBubblePlayPosition = new ConfigBubblePlayPosition();
             _configBubblePlayPosition.LoadFromString(txtBubblePlayPosition);
             _lstConfigBubblePlayPositionRecords.AddRange(_configBubblePlayPosition.Records);
             ListConfigBubblePlayPositionRecords = _lstConfigBubblePlayPositionRecords.AsReadOnly();
 
             var txtDecoReward = FileSaving.Load(Application.dataPath + _configDecoRewardFilePath);
-            var _configDecoReward = new ConfigDecoReward();
             _configDecoReward.LoadFromString(txtDecoReward);
             _lstConfigDecoRewardRecords.AddRange(_configDecoReward.Records);
             ListConfigDecoRewardRecords = _lstConfigDecoRewardRecords.AsReadOnly();
@@ -270,6 +277,140 @@ namespace KAP.ToolCreateMap
         #endregion
 
         #region Config KDL
+        public void BuildConfigFromCurrentMansion()
+        {
+            //clear cache data
+            dctNumOfBubbleInRoom.Clear();
+            dctRoomIdPosition.Clear();
+            dctRoomIdIndex.Clear();
+            dctBubbleIdDecoIds.Clear();
+            dctBubbleIdStar.Clear();
+            dctBubbleIdDeco.Clear();
+            dctBubbleIdWD.Clear();
+            dctBubbleIdPrice.Clear();
+
+            List<string> lstVariables = ConfigBubbleHomeRecord.GetLstVariables();
+            List<string> lstVariablesPos = ConfigBubbleHomePositionRecord.GetLstVariables();
+            string txt = "";
+            string txtPos = "";
+            for (var i = 0; i < lstVariables.Count - 1; i++)
+            {
+                txt += lstVariables[i] + "\t";
+            }
+            txt += lstVariables[lstVariables.Count - 1] + "\n";
+
+            for (var i = 0; i < lstVariablesPos.Count - 1; i++)
+            {
+                txtPos += lstVariablesPos[i] + "\t";
+            }
+            txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n";
+
+            //get num of bubble in each room, position
+            foreach (var r in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                if (!dctNumOfBubbleInRoom.ContainsKey(r.Key.RoomId.ToString()))
+                    dctNumOfBubbleInRoom.Add(r.Key.RoomId.ToString(), r.Value.Count);
+
+                if (!dctRoomIdPosition.ContainsKey(r.Key.RoomId.ToString()))
+                {
+                    var strPos = "";
+                    Vector3 pos;
+                    foreach (var root in _areaManager.ListRooms)
+                    {
+                        var rootInfo = (DecoInfo)root.Info;
+                        if (rootInfo.Id == r.Key.RoomId)
+                        {
+                            foreach (var item in r.Value)
+                            {
+                                pos = item.Deco.Position - root.Position;
+                                strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
+                            }
+                            break;
+                        }
+                    }
+                    dctRoomIdPosition.Add(r.Key.RoomId.ToString(), strPos);
+                }
+            }
+
+            //get Indx Room
+            foreach (var room in _toolLstRooms.GetLstRoomItem())
+            {
+                if (!dctRoomIdIndex.ContainsKey(room.GetRoomId().ToString()))
+                {
+                    dctRoomIdIndex.Add(room.GetRoomId().ToString(), room.GetRoomOrder());
+                }
+            }
+
+            //get Bubble star, deco, world direct
+            foreach (var r in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                foreach (var item in r.Value)
+                {
+                    if (!dctBubbleIdStar.ContainsKey(item.BubbleId))
+                    {
+                        dctBubbleIdStar.Add(item.BubbleId, item.GetStar());
+                    }
+                    else Debug.LogError("loi logic 1");
+
+                    if (!dctBubbleIdDeco.ContainsKey(item.BubbleId))
+                    {
+                        var info = (DecoInfo)item.Deco.Info;
+                        dctBubbleIdDeco.Add(item.BubbleId, info.Id);
+                    }
+                    else Debug.LogError("error logic 2");
+
+                    if (!dctBubbleIdWD.ContainsKey(item.BubbleId))
+                    {
+                        dctBubbleIdWD.Add(item.BubbleId, item.Deco.WorldDirect.ToString());
+                    }
+                    else Debug.LogError("error logic 3");
+                }
+            }
+
+            //get bubbleDecoIds, price
+            foreach (var pair in dctBubbleIdDeco)
+            {
+                var listDecoColor = ConfigDecoColor.GetListDecoColorsByDecoId(pair.Value);
+                if (!dctBubbleIdDecoIds.ContainsKey(pair.Key))
+                {
+                    string bubbleDecoIds = "";
+                    for (var j = 0; j < listDecoColor.Count; j++)
+                    {
+                        bubbleDecoIds += listDecoColor[j].Id + ";";
+                    }
+                    dctBubbleIdDecoIds.Add(pair.Key, bubbleDecoIds);
+                }
+
+                if (!dctBubbleIdPrice.ContainsKey(pair.Key))
+                {
+                    var priceStr = "";
+                    for (var j = 0; j < listDecoColor.Count; j++)
+                    {
+                        if (listDecoColor[j].ColorId == 0)
+                            priceStr += "10;";
+                        else priceStr += "20;";
+                    }
+                    dctBubbleIdPrice.Add(pair.Key, priceStr);
+                }
+            }
+
+            //Build ConfigBubbleHome
+            var idx = 0;
+            foreach (var pair in dctBubbleIdDecoIds)
+            {
+                txt += pair.Key + "\t" + pair.Value + "\t" + idx + "\t" + dctBubbleIdPrice[pair.Key] + "\t" + dctBubbleIdWD[pair.Key] + "\t" + dctBubbleIdStar[pair.Key] + "\n";
+                idx++;
+            }
+            //Build ConfigBubbleHomePosition
+            foreach (var pair in dctRoomIdPosition)
+            {
+                txtPos += pair.Key + "\t" + pair.Value + "\t" + dctRoomIdIndex[pair.Key] + "\n";
+            }
+
+            FileSaving.Save(Application.dataPath + _configBubbleHomeFilePath, txt);
+            FileSaving.Save(Application.dataPath + _configBubbleHomePositionFilePath, txtPos);
+            Debug.LogError("Export Bubble Home success");
+        }
         public void SaveBubbleToCsv()
         {
             string mess = "";
@@ -976,6 +1117,26 @@ namespace KAP.ToolCreateMap
             {
                 return _configDecoArea;
             }
+        }
+        public ConfigBubbleHome ConfigBubbleHome
+        {
+            get => _configBubbleHome;
+        }
+        public ConfigBubbleHomePosition ConfigBubbleHomePosition
+        {
+            get => _configBubbleHomePosition;
+        }
+        public ConfigBubblePlay ConfigBubblePlay
+        {
+            get => _configBubblePlay;
+        }
+        public ConfigBubblePlayPosition ConfigBubblePlayPosition
+        {
+            get => _configBubblePlayPosition;
+        }
+        public ConfigDecoReward ConfigDecoReward
+        {
+            get => _configDecoReward;
         }
     }
 

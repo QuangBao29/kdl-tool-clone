@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using KAP.Tools;
 using KAP.Config;
+using Fingers;
 using Kawaii.IsoTools.DecoSystem;
 using Kawaii.IsoTools;
 
@@ -17,8 +18,12 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapImportDeco _importDecoController = null;
         [SerializeField] private EditManager _editManager = null;
         [SerializeField] private GameObject _imgCheck = null;
+        [SerializeField] private InputField _inputStar = null;
+        [SerializeField] private SGPanZoom _sgPanZoom = null;
+        [SerializeField] private Camera _cam = null;
         public Image Image = null;
         public Text Name = null;
+        public float _editCameraZoom = 6.5f;
 
         private int _bubbleIndex;
         private string _bubbleId;
@@ -28,7 +33,7 @@ namespace KAP.ToolCreateMap
         private ToolCreateMapBubbleItem _prefab = null;
         private Bubble _bubble = null;
         private Deco _deco = null;
-
+        private string _star = null;
         public Bubble BubbleDeco
         {
             set => _bubble = value;
@@ -75,12 +80,24 @@ namespace KAP.ToolCreateMap
         {
             _bubbleId = _roomId + "_" + _bubbleIndex;
         }
-
+        public string GetStar()
+        {
+            return _inputStar.text;
+        }
+        public void SetStar(string star)
+        {
+            _inputStar.text = star;
+        }
         #region Bubble Deco
 
         public void OnClickTargetDecoItem()
         {
             _editManager.SetCurrent(Deco.GetComponent<DecoEditDemo>());
+            if (_cam.orthographicSize > _editCameraZoom)
+                _sgPanZoom.ZoomSmooth(_cam.orthographicSize, _editCameraZoom, 0.5f, null);
+            var centerPos = Deco.Root.CenterBottomIsoPosition;
+            var flyWorldPos = IsoWorld.IsoToWorld(centerPos);
+            _sgPanZoom.FlyTo(flyWorldPos, true, 0.5f);
         }
         public void UpDateInfo(int RoomIndex, Vector3 BubblePosition, int BubbleIndex)
         {

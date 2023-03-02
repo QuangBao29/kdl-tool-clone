@@ -60,6 +60,21 @@ namespace KAP.ToolCreateMap
                 }
             }
         }
+        public void OnHideAllItems()
+        {
+            foreach (var root in DctRootDecoItems)
+            {
+                root.Key.gameObject.SetActive(false);
+            }
+        }
+        public void OnClearDctRootDecoItems()
+        {
+            foreach (var item in DctRootDecoItems)
+            {
+                Destroy(item.Key.gameObject);
+            }
+            DctRootDecoItems.Clear();
+        }
         public void AddDecoToCurrentBubble()
         {
             var id = 0;
@@ -230,6 +245,7 @@ namespace KAP.ToolCreateMap
                     item.gameObject.SetActive(true);
                     item.Name.text = idPath;
                     item.gameObject.name = idPath;
+                    item.SetStar(_configController.ConfigBubbleHome.GetById(bubbleId).Star.ToString());
                     DctRootDecoItems[root.Key].Add(item);
                     foreach (var r in _areaManager.ListRooms)
                     {
@@ -242,19 +258,12 @@ namespace KAP.ToolCreateMap
                                 if (info.Id == id)
                                 {
                                     var idx = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
-                                    var lstRecPos = _configController.ListConfigBubbleHomePositionRecords;
-                                    foreach (var rec in lstRecPos)
+                                    var rec = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId.ToString());
+                                    var Pos = rec.GetLstBubblePositionVector3()[idx];
+                                    var realPos = Pos + r.Position;
+                                    if (deco.Position == realPos)
                                     {
-                                        if (rec.RoomId == roomId.ToString())
-                                        {
-                                            var Pos = rec.GetLstBubblePositionVector3()[idx];
-                                            var realPos = Pos + r.Position;
-                                            if (deco.Position == realPos)
-                                            {
-                                                item.Deco = deco;
-                                                break;
-                                            }
-                                        }
+                                        item.Deco = deco;
                                     }
                                 }
                             });
@@ -280,6 +289,7 @@ namespace KAP.ToolCreateMap
                 decoItem.gameObject.SetActive(true);
                 decoItem.Name.text = idPath;
                 decoItem.gameObject.name = idPath;
+                decoItem.SetStar(_configController.ConfigBubbleHome.GetById(bubbleId).Star.ToString());
                 DctRootDecoItems[rootDecoItem].Add(decoItem);
                 foreach (var root in _areaManager.ListRooms)
                 {
@@ -292,19 +302,12 @@ namespace KAP.ToolCreateMap
                             if (info.Id == id)
                             {
                                 var idx = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
-                                var lstRecPos = _configController.ListConfigBubbleHomePositionRecords;
-                                foreach (var rec in lstRecPos)
+                                var rec = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId.ToString());
+                                var Pos = rec.GetLstBubblePositionVector3()[idx];
+                                var realPos = Pos + root.Position;
+                                if (deco.Position == realPos)
                                 {
-                                    if (rec.RoomId == roomId.ToString())
-                                    {
-                                        var Pos = rec.GetLstBubblePositionVector3()[idx];
-                                        var realPos = Pos + root.Position;
-                                        if (deco.Position == realPos)
-                                        {
-                                            decoItem.Deco = deco;
-                                            break;
-                                        }
-                                    }
+                                    decoItem.Deco = deco;
                                 }
                             }
                         });

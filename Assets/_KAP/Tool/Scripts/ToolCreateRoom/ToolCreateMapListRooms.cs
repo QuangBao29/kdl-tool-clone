@@ -43,6 +43,7 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolScreenShotRemoveBG _toolScreenShot = null;
         [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] private ToolCreateMapConfigController _configController = null;
+        [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
 
         [Space]
         [SerializeField] private Transform _transGridRoom = null;
@@ -97,7 +98,7 @@ namespace KAP.ToolCreateMap
             //_dctEditModeData.Add(EditMode.Theme, new EditModeData(EditMode.Theme, _importThemePath, _exportThemePath, _screenshotThemePath, Color.red, KAPDefine.DefaultRoomThemeId));
             //_dctEditModeData.Add(EditMode.Wonder, new EditModeData(EditMode.Wonder, _importWonderPath, _exportWonderPath, _screenshotWonderPath, Color.blue, KAPDefine.DefaultWonderId));
             //_dctEditModeData.Add(EditMode.RoomChallenge, new EditModeData(EditMode.RoomChallenge, _importRoomChallengePath, _exportRoomChallengePath, _screenshotRoomChallengePath ,Color.yellow, KAPDefine.DefaultRoomChallengeID));
-            _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultRoomThemeId));
+            _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultMansionID));
             _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPath, _exportRoomPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.SeparatedRoom, new EditModeData(EditMode.SeparatedRoom, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.DecoReward, new EditModeData(EditMode.DecoReward, "", "", "", Color.black, KAPDefine.DefaultRoomPlayKDLID));
@@ -200,15 +201,21 @@ namespace KAP.ToolCreateMap
                     else
                         item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
 
-
+                    var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
+                    int idx = 0;
+                    if (record != null)
+                        idx = record.Index;
+                    else return;
                     item.gameObject.SetActive(true);
-                    item.Setup(room, i);
+                    item.Setup(room, i, idx);
 
                     //Add Item to List
                     _lstRoomItems.Add(item);
-                    
+                    item.OnClickRoomItem();
                     ++i;
                 }
+                OnUnselectAllItems();
+                _toolBubbleDecoSetting.OnHideAllItems();
             }
 
 
@@ -306,6 +313,7 @@ namespace KAP.ToolCreateMap
             if (string.IsNullOrEmpty(_inputMapId.text))
                 return;
             _areaManager.ClearAllRooms();
+            _toolBubbleDecoSetting.OnClearDctRootDecoItems();
             string path = "";
             path = GetImportPath();
             var json = FileSaving.Load(path);
