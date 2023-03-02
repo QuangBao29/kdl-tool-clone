@@ -277,7 +277,20 @@ namespace KAP.ToolCreateMap
         #endregion
 
         #region Config KDL
-        public void BuildConfigFromCurrentMansion()
+        public void OnClickBuildConfigMansion()
+        {
+            var mess = string.Format("build config dua tren mansion hien tai?");
+
+            UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
+            {
+                if (result == UIMessageBox.MessageBoxAction.Accept)
+                {
+                    BuildConfigFromCurrentMansion();
+                }
+                return true;
+            });
+        }
+        private void BuildConfigFromCurrentMansion()
         {
             //clear cache data
             dctNumOfBubbleInRoom.Clear();
