@@ -92,9 +92,9 @@ namespace KAP.ToolCreateMap
         private readonly List<ConfigDecoRewardRecord> _lstConfigDecoRewardRecords = new List<ConfigDecoRewardRecord>();
         public ReadOnlyCollection<ConfigDecoRewardRecord> ListConfigDecoRewardRecords;
 
-        private Dictionary<string, int> dctNumOfBubbleInRoom = new Dictionary<string, int>();       //roomId - num of bubble
         private Dictionary<string, string> dctRoomIdPosition = new Dictionary<string, string>();    //roomId - position
         private Dictionary<string, string> dctRoomIdIndex = new Dictionary<string, string>();       //roomId - Index
+        private Dictionary<string, string> dctRoomIdUnpackDeco = new Dictionary<string, string>();  //roomId - unpack Deco
         private Dictionary<string, string> dctBubbleIdDecoIds = new Dictionary<string, string>();   //bubbleid - decoids
         private Dictionary<string, string> dctBubbleIdStar = new Dictionary<string, string>();      //bubbleId - star
         private Dictionary<string, int> dctBubbleIdDeco = new Dictionary<string, int>();            //bubbleId - decoId
@@ -279,21 +279,192 @@ namespace KAP.ToolCreateMap
         #region Config KDL
         public void OnClickBuildConfigMansion()
         {
-            var mess = string.Format("build config dua tren mansion hien tai?");
-
-            UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                if (result == UIMessageBox.MessageBoxAction.Accept)
+                var mess = string.Format("build config dua tren mansion hien tai?");
+
+                UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
                 {
-                    BuildConfigFromCurrentMansion();
+                    if (result == UIMessageBox.MessageBoxAction.Accept)
+                    {
+                        BuildConfigFromCurrentMansion();
+                    }
+                    return true;
+                });
+            }
+            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+            {
+                var mess = string.Format("build config cho room play hien tai?");
+
+                UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
+                {
+                    if (result == UIMessageBox.MessageBoxAction.Accept)
+                    {
+                        BuildCurrentRoomPlay();
+                    }
+                    return true;
+                });
+            }
+            
+        }
+        private void BuildCurrentRoomPlay()
+        {
+            //clear cache data
+            dctRoomIdUnpackDeco.Clear();
+            dctRoomIdPosition.Clear();
+            dctRoomIdIndex.Clear();
+            dctBubbleIdDecoIds.Clear();
+            dctBubbleIdStar.Clear();
+            dctBubbleIdDeco.Clear();
+            dctBubbleIdWD.Clear();
+            dctBubbleIdPrice.Clear();
+
+            List<string> lstVariables = ConfigBubblePlayRecord.GetLstVariables();
+            List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
+            string txt = "";
+            string txtPos = "";
+
+            foreach (var r in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                foreach (var item in r.Value)
+                {
+                    if (!dctBubbleIdDeco.ContainsKey(item.BubbleId))
+                    {
+                        var info = (DecoInfo)item.Deco.Info;
+                        dctBubbleIdDeco.Add(item.BubbleId, info.Id);
+                    }
+                    else Debug.LogError("error logic play 1");
                 }
-                return true;
+            }
+
+            //get bubbleDecoIds
+            foreach (var pair in dctBubbleIdDeco)
+            {
+                var listDecoColor = ConfigDecoColor.GetListDecoColorsByDecoId(pair.Value);
+                if (!dctBubbleIdDecoIds.ContainsKey(pair.Key))
+                {
+                    string bubbleDecoIds = "";
+                    int result = listDecoColor.Count >= 3 ? 3 : listDecoColor.Count;
+                    for (var j = 0; j < result; j++)
+                    {
+                        bubbleDecoIds += listDecoColor[j].Id + ";";
+                    }
+                    dctBubbleIdDecoIds.Add(pair.Key, bubbleDecoIds);
+                }
+            }
+
+            foreach (var r in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                if (!dctRoomIdPosition.ContainsKey(r.Key.RoomId.ToString()))
+                {
+                    var strPos = "";
+                    Vector3 pos;
+                    foreach (var root in _areaManager.ListRooms)
+                    {
+                        var rootInfo = (DecoInfo)root.Info;
+                        if (rootInfo.Id == r.Key.RoomId)
+                        {
+                            foreach (var item in r.Value)
+                            {
+                                pos = item.Deco.Position - root.Position;
+                                strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
+                            }
+                            break;
+                        }
+                    }
+                    dctRoomIdPosition.Add(r.Key.RoomId.ToString(), strPos);
+                }
+            }
+
+            //get list unpacking deco
+            List<Deco> listBubble = new List<Deco>();
+            string unpackingDeco = "";
+            foreach (var r in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                foreach (var item in r.Value)
+                {
+                    if (!listBubble.Contains(item.Deco))
+                        listBubble.Add(item.Deco);
+                }
+            }
+            var Root = _areaManager.ListRooms[0];
+            var infoRoot = (DecoInfo)Root.Info;
+            Root.Foreach((deco) =>
+            {
+                if (!listBubble.Contains(deco))
+                {
+                    var info = (DecoInfo)deco.Info;
+                    if (info.Id != infoRoot.Id && info.Id / 100000 < 22)
+                        unpackingDeco += info.Id + "_" + info.Color + ";";
+                }
             });
+            if (!dctRoomIdUnpackDeco.ContainsKey(infoRoot.Id.ToString()))
+                dctRoomIdUnpackDeco.Add(infoRoot.Id.ToString(), unpackingDeco);
+
+            //Build ConfigBubblePlay
+            foreach (var pair in dctBubbleIdDecoIds)
+            {
+                var record = ConfigBubblePlay.GetById(pair.Key);
+                if (record != null)
+                {
+                    foreach (var rec in _lstConfigBubblePlayRecords)
+                    {
+                        if (rec.BubbleId == pair.Key)
+                            rec.BubbleDecoIds = pair.Value;
+                    }
+                }
+                else
+                {
+                    ConfigBubblePlayRecord newConfig = new ConfigBubblePlayRecord();
+                    newConfig.BubbleId = pair.Key;
+                    newConfig.BubbleDecoIds = pair.Value;
+                    _lstConfigBubblePlayRecords.Add(newConfig);
+                }
+            }
+            for (var i = 0; i < lstVariables.Count - 1; i++)
+            {
+                txt += lstVariables[i] + "\t";
+            }
+            txt += lstVariables[lstVariables.Count - 1] + "\n" + ConvertConfigBubblePlayRecordToStringCsv(_lstConfigBubblePlayRecords);
+
+            //Build ConfigBubblePlayPosition
+            foreach (var pair in dctRoomIdPosition)
+            {
+                var record = ConfigBubblePlayPosition.GetByRoomId(pair.Key);
+                if (record != null)
+                {
+                    foreach (var rec in _lstConfigBubblePlayPositionRecords)
+                    {
+                        if (rec.RoomId == pair.Key)
+                        {
+                            rec.LstBubblePosition = pair.Value;
+                            rec.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
+                        }
+                    }
+                }
+                else
+                {
+                    ConfigBubblePlayPositionRecord newConfig = new ConfigBubblePlayPositionRecord();
+                    newConfig.RoomId = pair.Key;
+                    newConfig.LstBubblePosition = pair.Value;
+                    newConfig.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
+                    _lstConfigBubblePlayPositionRecords.Add(newConfig);
+                }
+            }
+            for (var i = 0; i < lstVariablesPos.Count - 1; i++)
+            {
+                txtPos += lstVariablesPos[i] + "\t";
+            }
+            txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n" + ConvertConfigBubblePlayPositionRecordToStringCsv(_lstConfigBubblePlayPositionRecords);
+
+            FileSaving.Save(Application.dataPath + _configBubblePlayFilePath, txt);
+            FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
+            Debug.LogError("Export Bubble Play success");
         }
         private void BuildConfigFromCurrentMansion()
         {
             //clear cache data
-            dctNumOfBubbleInRoom.Clear();
+            //dctNumOfBubbleInRoom.Clear();
             dctRoomIdPosition.Clear();
             dctRoomIdIndex.Clear();
             dctBubbleIdDecoIds.Clear();
@@ -321,8 +492,8 @@ namespace KAP.ToolCreateMap
             //get num of bubble in each room, position
             foreach (var r in _toolBubbleDecoSetting.DctRootDecoItems)
             {
-                if (!dctNumOfBubbleInRoom.ContainsKey(r.Key.RoomId.ToString()))
-                    dctNumOfBubbleInRoom.Add(r.Key.RoomId.ToString(), r.Value.Count);
+                //if (!dctNumOfBubbleInRoom.ContainsKey(r.Key.RoomId.ToString()))
+                //    dctNumOfBubbleInRoom.Add(r.Key.RoomId.ToString(), r.Value.Count);
 
                 if (!dctRoomIdPosition.ContainsKey(r.Key.RoomId.ToString()))
                 {
@@ -363,20 +534,20 @@ namespace KAP.ToolCreateMap
                     {
                         dctBubbleIdStar.Add(item.BubbleId, item.GetStar());
                     }
-                    else Debug.LogError("loi logic 1");
+                    else Debug.LogError("loi logic 1 " + item.BubbleId);
 
                     if (!dctBubbleIdDeco.ContainsKey(item.BubbleId))
                     {
                         var info = (DecoInfo)item.Deco.Info;
                         dctBubbleIdDeco.Add(item.BubbleId, info.Id);
                     }
-                    else Debug.LogError("error logic 2");
+                    else Debug.LogError("error logic 2 " + item.BubbleId);
 
                     if (!dctBubbleIdWD.ContainsKey(item.BubbleId))
                     {
                         dctBubbleIdWD.Add(item.BubbleId, item.Deco.WorldDirect.ToString());
                     }
-                    else Debug.LogError("error logic 3");
+                    else Debug.LogError("error logic 3 " + item.BubbleId);
                 }
             }
 

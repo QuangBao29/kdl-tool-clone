@@ -68,7 +68,7 @@ namespace KAP.Tools
         public void OnDDSelectMode()
         {
             CurrentEditMode = KDLUtils.ParseEnum<EditMode>(_ddEditMode.captionText.text);
-            _toolPhaseController.OnChangeModeUI();
+            //_toolPhaseController.OnChangeModeUI();
         }
         public void OnDDSelectPhaseMode()
         {

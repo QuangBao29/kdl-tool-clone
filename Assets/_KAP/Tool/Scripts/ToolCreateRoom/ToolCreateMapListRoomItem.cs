@@ -125,7 +125,7 @@ namespace KAP.ToolCreateMap
         public void OnButtonXClick()
         {
             _parentController.RemoveARoom(_room);
-            _toolBubbleSetting.RemoveAllBubbleInARoom(_index);
+            //_toolBubbleSetting.RemoveAllBubbleInARoom(_index);
         }
 
         public void OnButtonClearClick()

@@ -192,6 +192,45 @@ namespace KAP.ToolCreateMap
                             }
                         }
                     }
+                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                    {
+                        var lstRecPos = _configController.ListConfigBubblePlayPositionRecords;
+                        var lstRecPlay = _configController.ListConfigBubblePlayRecords;
+                        foreach (var rec in lstRecPos)
+                        {
+                            if (rec.RoomId == roomId.ToString())
+                            {
+                                var lstPos = rec.GetLstBubblePositionVector3();
+                                List<string> lstRoomDecoId = new List<string>();
+                                foreach (var bubbleRec in lstRecPlay)
+                                {
+                                    var rID = SGUtils.ParseStringToListInt(bubbleRec.BubbleId, '_')[0];
+                                    if (roomId == rID)
+                                    {
+                                        var decoid = SGUtils.ParseStringToList(bubbleRec.BubbleDecoIds, ';')[0];
+                                        var id = SGUtils.ParseStringToList(decoid, '_')[0];
+                                        lstRoomDecoId.Add(id);
+                                    }
+                                }
+                                room.Foreach((deco) =>
+                                {
+                                    var info = (DecoInfo)deco.Info;
+                                    if (lstRoomDecoId.Contains(info.Id.ToString()))
+                                    {
+                                        foreach (var pos in lstPos)
+                                        {
+                                            var isoPos = pos + room.Position;
+                                            if (isoPos == deco.Position)
+                                            {
+                                                deco.Info = new DecoInfo { Id = info.Id, Color = info.Color, IsBubble = true };
+                                            }
+                                        }
+                                    }
+                                });
+                                break;
+                            }
+                        }
+                    }
 
                     Debug.LogError("roomId: " + roomId);
                     room.name = roomId.ToString();
@@ -201,13 +240,22 @@ namespace KAP.ToolCreateMap
                     else
                         item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
 
-                    var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
-                    int idx = 0;
-                    if (record != null)
-                        idx = record.Index;
-                    else return;
-                    item.gameObject.SetActive(true);
-                    item.Setup(room, i, idx);
+                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                    {
+                        var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
+                        int idx = 0;
+                        if (record != null)
+                            idx = record.Index;
+                        else return;
+                        item.gameObject.SetActive(true);
+                        item.Setup(room, i, idx);
+                    }
+                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                    {
+                        item.gameObject.SetActive(true);
+                        item.Setup(room, i, 0);
+                    }
+                    
 
                     //Add Item to List
                     _lstRoomItems.Add(item);

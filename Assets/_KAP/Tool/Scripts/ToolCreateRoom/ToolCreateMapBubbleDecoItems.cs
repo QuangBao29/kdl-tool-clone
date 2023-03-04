@@ -126,6 +126,19 @@ namespace KAP.ToolCreateMap
                     {
                         root.Value.Remove(this);
                         Destroy(this.gameObject);
+                        break;
+                    }
+                }
+            }
+            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                if (root.Key.RoomId == RoomId)
+                {
+                    var count = root.Value.Count;
+                    for (var idx = 0; idx < count; idx++)
+                    {
+                        root.Value[idx].BubbleId = root.Key.RoomId + "_" + idx;
+                        Debug.LogError("test: " + root.Value[idx].BubbleId);
                     }
                 }
             }
