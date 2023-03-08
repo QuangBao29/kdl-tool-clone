@@ -175,54 +175,54 @@ namespace KAP
                     var preBubbleId = currentBubble.BubbleId;
 
                     #region PHASE BUBBLE
-                    if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Bubble)
-                    {
-                        var bubbleInfo = (DecoInfo)current.deco.Info;
-                        if (bubbleInfo.IsBubble && currentBubble.Prefab == null)
-                        {
-                            Debug.LogError("Is Bubble va Prefab null");
-                            if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor.ContainsKey(bubbleInfo.Id))
-                            {
-                                _toolBubbleSetting.CurrentBubble.DctDecoIdColor.Add(bubbleInfo.Id, new List<int>());
-                                _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Add(bubbleInfo.Color);
-                                currentBubble.Prefab = _toolBubbleDecoSetting.CreateDecoItems(bubbleInfo.Id, bubbleInfo.Color);
-                                foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-                                {
-                                    if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
-                                    {
-                                        foreach (var item in root.Value)
-                                        {
-                                            item.UnActiveImgCheck();
-                                        }
-                                        break;
-                                    }
-                                }
-                                currentBubble.Prefab.SetActiveImgCheck();
-                            }
-                            else if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Contains(bubbleInfo.Color))
-                            {
-                                _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Add(bubbleInfo.Color);
-                                currentBubble.Prefab = _toolBubbleDecoSetting.CreateDecoItems(bubbleInfo.Id, bubbleInfo.Color);
-                                foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-                                {
-                                    if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
-                                    {
-                                        foreach (var item in root.Value)
-                                        {
-                                            item.UnActiveImgCheck();
-                                        }
-                                        break;
-                                    }
-                                }
-                                currentBubble.Prefab.SetActiveImgCheck();
-                            }
-                            else
-                            {
-                                Debug.LogError("this deco is already in Bubble!");
-                                return;
-                            }
-                        }
-                    }
+                    //if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Bubble)
+                    //{
+                    //    var bubbleInfo = (DecoInfo)current.deco.Info;
+                    //    if (bubbleInfo.IsBubble && currentBubble.Prefab == null)
+                    //    {
+                    //        Debug.LogError("Is Bubble va Prefab null");
+                    //        if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor.ContainsKey(bubbleInfo.Id))
+                    //        {
+                    //            _toolBubbleSetting.CurrentBubble.DctDecoIdColor.Add(bubbleInfo.Id, new List<int>());
+                    //            _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Add(bubbleInfo.Color);
+                    //            currentBubble.Prefab = _toolBubbleDecoSetting.CreateDecoItems(bubbleInfo.Id, bubbleInfo.Color);
+                    //            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                    //            {
+                    //                if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
+                    //                {
+                    //                    foreach (var item in root.Value)
+                    //                    {
+                    //                        item.UnActiveImgCheck();
+                    //                    }
+                    //                    break;
+                    //                }
+                    //            }
+                    //            currentBubble.Prefab.SetActiveImgCheck();
+                    //        }
+                    //        else if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Contains(bubbleInfo.Color))
+                    //        {
+                    //            _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Add(bubbleInfo.Color);
+                    //            currentBubble.Prefab = _toolBubbleDecoSetting.CreateDecoItems(bubbleInfo.Id, bubbleInfo.Color);
+                    //            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                    //            {
+                    //                if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
+                    //                {
+                    //                    foreach (var item in root.Value)
+                    //                    {
+                    //                        item.UnActiveImgCheck();
+                    //                    }
+                    //                    break;
+                    //                }
+                    //            }
+                    //            currentBubble.Prefab.SetActiveImgCheck();
+                    //        }
+                    //        else
+                    //        {
+                    //            Debug.LogError("this deco is already in Bubble!");
+                    //            return;
+                    //        }
+                    //    }
+                    //}
                     
                     #endregion 
 

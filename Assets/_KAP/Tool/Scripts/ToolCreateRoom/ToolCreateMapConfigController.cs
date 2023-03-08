@@ -494,7 +494,7 @@ namespace KAP.ToolCreateMap
             {
                 //if (!dctNumOfBubbleInRoom.ContainsKey(r.Key.RoomId.ToString()))
                 //    dctNumOfBubbleInRoom.Add(r.Key.RoomId.ToString(), r.Value.Count);
-
+                var count = r.Value.Count;
                 if (!dctRoomIdPosition.ContainsKey(r.Key.RoomId.ToString()))
                 {
                     var strPos = "";
@@ -504,10 +504,16 @@ namespace KAP.ToolCreateMap
                         var rootInfo = (DecoInfo)root.Info;
                         if (rootInfo.Id == r.Key.RoomId)
                         {
-                            foreach (var item in r.Value)
+                            for (var i = 0; i < count; i++)
                             {
-                                pos = item.Deco.Position - root.Position;
-                                strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
+                                foreach (var item in r.Value)
+                                {
+                                    if (SGUtils.ParseStringToListInt(item.BubbleId, '_')[1] == i)
+                                    {
+                                        pos = item.Deco.Position - root.Position;
+                                        strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
+                                    }
+                                }
                             }
                             break;
                         }

@@ -19,6 +19,7 @@ namespace KAP.ToolCreateMap
         [SerializeField] private EditManager _editManager = null;
         [SerializeField] private GameObject _imgCheck = null;
         [SerializeField] private InputField _inputStar = null;
+        [SerializeField] private InputField _inputIndex = null;
         [SerializeField] private SGPanZoom _sgPanZoom = null;
         [SerializeField] private Camera _cam = null;
         public Image Image = null;
@@ -33,7 +34,7 @@ namespace KAP.ToolCreateMap
         private ToolCreateMapBubbleItem _prefab = null;
         private Bubble _bubble = null;
         private Deco _deco = null;
-        private string _star = null;
+        
         public Bubble BubbleDeco
         {
             set => _bubble = value;
@@ -88,6 +89,14 @@ namespace KAP.ToolCreateMap
         {
             _inputStar.text = star;
         }
+        public string GetIndex()
+        {
+            return _inputIndex.text;
+        }
+        public void SetIndex(string idx)
+        {
+            _inputIndex.text = idx;
+        }
         #region Bubble Deco
 
         public void OnClickTargetDecoItem()
@@ -112,6 +121,11 @@ namespace KAP.ToolCreateMap
             var colorPath = info.Color > 0 ? "_" + info.Color : "";
             Name.text = info.Id.ToString() + colorPath;
         }
+        public void OnChangeInputIndex()
+        {
+            BubbleId = RoomId + "_" + _inputIndex.text;
+            //Debug.LogError("check: " + BubbleId);
+        }
         public void OnButtonRemoveItemClick()
         {
             var info = (DecoInfo)Deco.Info;
@@ -130,18 +144,18 @@ namespace KAP.ToolCreateMap
                     }
                 }
             }
-            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                if (root.Key.RoomId == RoomId)
-                {
-                    var count = root.Value.Count;
-                    for (var idx = 0; idx < count; idx++)
-                    {
-                        root.Value[idx].BubbleId = root.Key.RoomId + "_" + idx;
-                        Debug.LogError("test: " + root.Value[idx].BubbleId);
-                    }
-                }
-            }
+            //foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+            //{
+            //    if (root.Key.RoomId == RoomId)
+            //    {
+            //        var count = root.Value.Count;
+            //        for (var idx = 0; idx < count; idx++)
+            //        {
+            //            root.Value[idx].BubbleId = root.Key.RoomId + "_" + idx;
+            //            Debug.LogError("test: " + root.Value[idx].BubbleId);
+            //        }
+            //    }
+            //}
         }
 
         public void OnClickSpawnDeco()

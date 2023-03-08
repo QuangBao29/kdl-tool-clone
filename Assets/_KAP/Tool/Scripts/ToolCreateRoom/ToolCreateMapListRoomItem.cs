@@ -88,8 +88,9 @@ namespace KAP.ToolCreateMap
                 _img.color = _selectColor;
                 IsSelect = true;
                 _parentController.SetSelectedItem(this);
+                _toolBubbleDecoSetting.OnAddToScrollRect(_inputRoomId.text);
             }
-            _toolBubbleDecoSetting.OnSetupBubbleInRoom();
+            _toolBubbleDecoSetting.OnSelectRootDecoItems();
         }
         public void UnSelectRoomItem()
         {
