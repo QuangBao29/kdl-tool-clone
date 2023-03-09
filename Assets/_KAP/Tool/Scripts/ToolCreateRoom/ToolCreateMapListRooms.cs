@@ -94,6 +94,9 @@ namespace KAP.ToolCreateMap
             string _importSeparatedRoomsPath = "Assets/_KAP/_GameResources/Maps/SeparatedRooms/";
             string _exportSeparatedRoomsPath = "/_KAP/_GameResources/Maps/SeparatedRooms/";
 
+            string _importDecoRewardsPath = "Assets/_KAP/_GameResources/Maps/DecoRewards/";
+            string _exportDecoRewardsPath = "/_KAP/_GameResources/Maps/DecoRewards/";
+
             //_dctEditModeData.Add(EditMode.Room, new EditModeData(EditMode.Room, _importRoomPath, _exportRoomPath, _screenshotRoomPath, Color.black, KAPDefine.DefaultRoomId));
             //_dctEditModeData.Add(EditMode.Theme, new EditModeData(EditMode.Theme, _importThemePath, _exportThemePath, _screenshotThemePath, Color.red, KAPDefine.DefaultRoomThemeId));
             //_dctEditModeData.Add(EditMode.Wonder, new EditModeData(EditMode.Wonder, _importWonderPath, _exportWonderPath, _screenshotWonderPath, Color.blue, KAPDefine.DefaultWonderId));
@@ -101,7 +104,7 @@ namespace KAP.ToolCreateMap
             _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultMansionID));
             _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPath, _exportRoomPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.SeparatedRoom, new EditModeData(EditMode.SeparatedRoom, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
-            _dctEditModeData.Add(EditMode.DecoReward, new EditModeData(EditMode.DecoReward, "", "", "", Color.black, KAPDefine.DefaultRoomPlayKDLID));
+            _dctEditModeData.Add(EditMode.DecoReward, new EditModeData(EditMode.DecoReward, _importDecoRewardsPath, _exportDecoRewardsPath, "", Color.black, KAPDefine.DefaultRoomPlayKDLID));
         }
 
         private void OnTogglEditThemeChange(EditMode editMode)
@@ -255,7 +258,11 @@ namespace KAP.ToolCreateMap
                         item.gameObject.SetActive(true);
                         item.Setup(room, i, 0);
                     }
-                    
+                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.DecoReward)
+                    {
+                        item.gameObject.SetActive(true);
+                        item.Setup(room, i, 0);
+                    }
 
                     //Add Item to List
                     _lstRoomItems.Add(item);
@@ -277,8 +284,8 @@ namespace KAP.ToolCreateMap
         {
             _importDecoController.CreateARoom(_areaManager.ListRooms.Count, Vector3.zero, Vector3.one);
             Setup();
-            _toolBubbleSetting.UpdateListNumOfBubbleInARoom();
-            _toolBubbleSetting.DebugForCheck();
+            //_toolBubbleSetting.UpdateListNumOfBubbleInARoom();
+            //_toolBubbleSetting.DebugForCheck();
         }
 
         public void RemoveARoom(DecoRoot room)

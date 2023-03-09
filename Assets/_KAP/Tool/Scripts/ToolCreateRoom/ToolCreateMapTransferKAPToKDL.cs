@@ -25,8 +25,8 @@ namespace KAP.ToolCreateMap
         [Header("Input Id")]
         [SerializeField]
         private InputField _inputMapId = null;
-        [SerializeField]
-        private InputField _inputRoomId = null;
+        //[SerializeField]
+        //private InputField _inputDecoReward = null;
         [Space]
         [SerializeField]
         private GameObject _groupBtnConfig = null;
@@ -250,14 +250,14 @@ namespace KAP.ToolCreateMap
             }
         }
 
-        public void OnClickCreateDecoReward()
-        {
-            DctDecoReward.Clear();
-            CreateDecoReward();
-            _configController.SaveConfigDecoRewardCsv();
-        }
+        //public void OnClickCreateDecoReward()
+        //{
+        //    DctDecoReward.Clear();
+        //    CreateDecoReward();
+        //    _configController.SaveConfigDecoRewardCsv();
+        //}
 
-        private void CreateDecoReward()
+        public void CreateDecoReward()
         {
             var root = _areaManager.ListRooms[0];
             var infoRoot = (DecoInfo)root.Info;
@@ -269,23 +269,25 @@ namespace KAP.ToolCreateMap
                 {
                     var Id = info.Id;
                     var color = info.Color;
-                    string colorPath = color > 0 ? "_" + color : "";
-                    string decoId = Id + colorPath;
+                    string decoId = Id + "_" + color;
                     strDecoIds += decoId + ";";
                 }
             });
-            if (DctDecoReward.ContainsKey(_inputRoomId.text))
+            if (DctDecoReward.ContainsKey(_inputMapId.text))
             {
                 Debug.LogError("room nay da co lst deco id");
             }
             else
             {
-                DctDecoReward.Add(_inputRoomId.text, strDecoIds);
+                DctDecoReward.Add(_inputMapId.text, strDecoIds);
             }
             //Debug.LogError("count: " + DctDecoReward.Count);
         }
 
-        
+        public string GetInputDecoRewardId()
+        {
+            return _inputMapId.text;
+        }
 
         private void ConvertKAPToKDLPlay()
         {

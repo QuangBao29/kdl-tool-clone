@@ -54,8 +54,8 @@ namespace KAP.ToolCreateMap
         private AreaManager _areaManager = null;
         [SerializeField] 
         private InputField _inputMapId = null;
-        [SerializeField]
-        private InputField _inputRoomIdReward = null;
+        //[SerializeField]
+        //private InputField _inputRoomIdReward = null;
 
         private readonly ConfigDeco _configDeco = new ConfigDeco();
         private readonly ConfigDecoTheme _configDecoTheme = new ConfigDecoTheme();
@@ -294,7 +294,8 @@ namespace KAP.ToolCreateMap
             }
             else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
             {
-                var mess = string.Format("build config cho room play hien tai?");
+                var info = (DecoInfo)_areaManager.ListRooms[0].Info;
+                var mess = string.Format("build config cho room play: " + info.Id);
 
                 UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
                 {
@@ -305,7 +306,25 @@ namespace KAP.ToolCreateMap
                     return true;
                 });
             }
-            
+            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.DecoReward)
+            {
+                var mess = string.Format("build config deco reward cho man choi id: " + _toolTransfer.GetInputDecoRewardId());
+
+                UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
+                {
+                    if (result == UIMessageBox.MessageBoxAction.Accept)
+                    {
+                        BuildConfigDecoReward();
+                    }
+                    return true;
+                });
+            }
+        }
+        private void BuildConfigDecoReward()
+        {
+            _toolTransfer.DctDecoReward.Clear();
+            _toolTransfer.CreateDecoReward();
+            SaveConfigDecoRewardCsv();
         }
         private void BuildCurrentRoomPlay()
         {
@@ -930,7 +949,7 @@ namespace KAP.ToolCreateMap
                 for (var i = 0; i < _lstConfigDecoRewardRecords.Count; i++)
                 {
                     var record = _lstConfigDecoRewardRecords[i];
-                    if (record.RoomId == _inputRoomIdReward.text)
+                    if (record.RoomId == _inputMapId.text)
                     {
                         listRemovedRecord.Add(record);
                         Debug.LogError("add remove rec " + record.RoomId);

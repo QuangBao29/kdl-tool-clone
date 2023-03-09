@@ -340,7 +340,6 @@ namespace KAP.ToolCreateMap
                             }
                         }
                     }
-                    //Debug.LogError("check: " + root.Key.RoomId + "...." + DctRootDecoItems[root.Key].Count);
                     return item;
                 }
             }
@@ -362,7 +361,6 @@ namespace KAP.ToolCreateMap
                 decoItem.gameObject.SetActive(true);
                 decoItem.Name.text = idPath;
                 decoItem.gameObject.name = idPath;
-                //Debug.LogError("item check:" + decoItem.BubbleId);
                 if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                 {
                     decoItem.SetStar(_configController.ConfigBubbleHome.GetById(bubbleId).Star.ToString());
@@ -416,7 +414,6 @@ namespace KAP.ToolCreateMap
                         }
                     }
                 }
-                //Debug.LogError("check: " + rootDecoItem.RoomId + "...." + DctRootDecoItems[rootDecoItem].Count);
                 return decoItem;
             }
             else return null;
