@@ -37,6 +37,7 @@ namespace KAP.ToolCreateMap
             }
             else
             {
+                OnHideAllItems();
                 foreach (var root in DctRootDecoItems)
                 {
                     if (root.Key.RoomId == selectedItem.GetRoomId())
