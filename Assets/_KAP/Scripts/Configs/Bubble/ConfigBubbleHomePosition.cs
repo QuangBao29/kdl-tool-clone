@@ -45,6 +45,10 @@ namespace KAP.Config
         {
             return GetRecordByIndex<string>("RoomId", roomId);
         }
+        public ConfigBubbleHomePositionRecord GetByRoomIndex(int index)
+        {
+            return GetRecordByIndex<int>("Index", index);
+        }
         public IndexField<string> GetIndexField()
         {
             return GetIndexField<string>("RoomId");

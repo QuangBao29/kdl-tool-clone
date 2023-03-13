@@ -63,6 +63,8 @@ namespace KAP.ToolCreateMap
         private Dictionary<EditMode, EditModeData> _dctEditModeDataPostion = new Dictionary<EditMode, EditModeData>();
         private Dictionary<EditMode, EditModeData> _dctEditModeDataBubble = new Dictionary<EditMode, EditModeData>();
 
+        private bool _init = false;
+
         
         private void Awake()
         {
@@ -94,9 +96,6 @@ namespace KAP.ToolCreateMap
             string _importSeparatedRoomsPath = "Assets/_KAP/_GameResources/Maps/SeparatedRooms/";
             string _exportSeparatedRoomsPath = "/_KAP/_GameResources/Maps/SeparatedRooms/";
 
-            string _importDecoRewardsPath = "Assets/_KAP/_GameResources/Maps/DecoRewards/";
-            string _exportDecoRewardsPath = "/_KAP/_GameResources/Maps/DecoRewards/";
-
             //_dctEditModeData.Add(EditMode.Room, new EditModeData(EditMode.Room, _importRoomPath, _exportRoomPath, _screenshotRoomPath, Color.black, KAPDefine.DefaultRoomId));
             //_dctEditModeData.Add(EditMode.Theme, new EditModeData(EditMode.Theme, _importThemePath, _exportThemePath, _screenshotThemePath, Color.red, KAPDefine.DefaultRoomThemeId));
             //_dctEditModeData.Add(EditMode.Wonder, new EditModeData(EditMode.Wonder, _importWonderPath, _exportWonderPath, _screenshotWonderPath, Color.blue, KAPDefine.DefaultWonderId));
@@ -104,7 +103,7 @@ namespace KAP.ToolCreateMap
             _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultMansionID));
             _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPath, _exportRoomPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.SeparatedRoom, new EditModeData(EditMode.SeparatedRoom, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
-            _dctEditModeData.Add(EditMode.DecoReward, new EditModeData(EditMode.DecoReward, _importDecoRewardsPath, _exportDecoRewardsPath, "", Color.black, KAPDefine.DefaultRoomPlayKDLID));
+            _dctEditModeData.Add(EditMode.DecoReward, new EditModeData(EditMode.DecoReward, "", "", "", Color.black, KAPDefine.DefaultRoomPlayKDLID));
         }
 
         private void OnTogglEditThemeChange(EditMode editMode)
@@ -243,26 +242,30 @@ namespace KAP.ToolCreateMap
                     else
                         item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
 
-                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                    if (_init)
                     {
-                        var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
-                        int idx = 0;
-                        if (record != null)
-                            idx = record.Index;
-                        else return;
-                        item.gameObject.SetActive(true);
-                        item.Setup(room, i, idx);
+                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                        {
+                            var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
+                            int idx = 0;
+                            if (record != null)
+                                idx = record.Index;
+                            else return;
+                            item.gameObject.SetActive(true);
+                            item.Setup(room, i, idx);
+                        }
+                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                        {
+                            item.gameObject.SetActive(true);
+                            item.Setup(room, i, 0);
+                        }
                     }
-                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                    else
                     {
                         item.gameObject.SetActive(true);
                         item.Setup(room, i, 0);
                     }
-                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.DecoReward)
-                    {
-                        item.gameObject.SetActive(true);
-                        item.Setup(room, i, 0);
-                    }
+                    
 
                     //Add Item to List
                     _lstRoomItems.Add(item);
@@ -273,11 +276,27 @@ namespace KAP.ToolCreateMap
                 _toolBubbleDecoSetting.OnHideAllItems();
             }
 
-
-
-
             for (; roomItemIndex < roomItemCount; ++roomItemIndex)
                 _transGridRoom.GetChild(roomItemIndex).gameObject.SetActive(false);
+
+            if (_init)
+            {
+                var count = _configController.ListConfigBubbleHomePositionRecords.Count;
+                for (var c = 1; c <= count; c++)
+                {
+                    var rec = _configController.ListConfigBubbleHomePositionRecords[c - 1];
+                    if (rec == null)
+                        Debug.LogError("rec null");
+                    foreach (var room in _lstRoomItems)
+                    {
+                        if (room.GetRoomId().ToString() == rec.RoomId)
+                        {
+                            room.gameObject.transform.SetSiblingIndex(c - 1);
+                        }
+                    }
+                }
+            }
+            _init = true;
         }
 
         public void OnButtonAddClick()

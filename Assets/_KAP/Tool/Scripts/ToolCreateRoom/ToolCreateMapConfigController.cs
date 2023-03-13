@@ -91,7 +91,7 @@ namespace KAP.ToolCreateMap
 
         private readonly List<ConfigDecoRewardRecord> _lstConfigDecoRewardRecords = new List<ConfigDecoRewardRecord>();
         public ReadOnlyCollection<ConfigDecoRewardRecord> ListConfigDecoRewardRecords;
-
+        private Dictionary<string, int> dctRoomIdNumBubble = new Dictionary<string, int>();         //RoomId - num of bubble
         private Dictionary<string, string> dctRoomIdPosition = new Dictionary<string, string>();    //roomId - position
         private Dictionary<string, string> dctRoomIdIndex = new Dictionary<string, string>();       //roomId - Index
         private Dictionary<string, string> dctRoomIdUnpackDeco = new Dictionary<string, string>();  //roomId - unpack Deco
@@ -329,6 +329,7 @@ namespace KAP.ToolCreateMap
         private void BuildCurrentRoomPlay()
         {
             //clear cache data
+            dctRoomIdNumBubble.Clear();
             dctRoomIdUnpackDeco.Clear();
             dctRoomIdPosition.Clear();
             dctRoomIdIndex.Clear();
@@ -483,7 +484,7 @@ namespace KAP.ToolCreateMap
         private void BuildConfigFromCurrentMansion()
         {
             //clear cache data
-            //dctNumOfBubbleInRoom.Clear();
+            dctRoomIdNumBubble.Clear();
             dctRoomIdPosition.Clear();
             dctRoomIdIndex.Clear();
             dctBubbleIdDecoIds.Clear();
@@ -508,11 +509,9 @@ namespace KAP.ToolCreateMap
             }
             txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n";
 
-            //get num of bubble in each room, position
+            //get position, num of bubble in room
             foreach (var r in _toolBubbleDecoSetting.DctRootDecoItems)
             {
-                //if (!dctNumOfBubbleInRoom.ContainsKey(r.Key.RoomId.ToString()))
-                //    dctNumOfBubbleInRoom.Add(r.Key.RoomId.ToString(), r.Value.Count);
                 var count = r.Value.Count;
                 if (!dctRoomIdPosition.ContainsKey(r.Key.RoomId.ToString()))
                 {
@@ -538,6 +537,11 @@ namespace KAP.ToolCreateMap
                         }
                     }
                     dctRoomIdPosition.Add(r.Key.RoomId.ToString(), strPos);
+                }
+
+                if (!dctRoomIdNumBubble.ContainsKey(r.Key.RoomId.ToString()))
+                {
+                    dctRoomIdNumBubble.Add(r.Key.RoomId.ToString(), count);
                 }
             }
 
@@ -605,15 +609,47 @@ namespace KAP.ToolCreateMap
 
             //Build ConfigBubbleHome
             var idx = 0;
-            foreach (var pair in dctBubbleIdDecoIds)
+            List<string> lstRoomId = new List<string>();
+            for (var i = 1; i <= dctRoomIdIndex.Count; i++)
             {
-                txt += pair.Key + "\t" + pair.Value + "\t" + idx + "\t" + dctBubbleIdPrice[pair.Key] + "\t" + dctBubbleIdWD[pair.Key] + "\t" + dctBubbleIdStar[pair.Key] + "\n";
-                idx++;
+                foreach (var pair in dctRoomIdIndex)
+                {
+                    if (pair.Value == i.ToString())
+                    {
+                        lstRoomId.Add(pair.Key);
+                        break;
+                    }
+                }
             }
-            //Build ConfigBubbleHomePosition
-            foreach (var pair in dctRoomIdPosition)
+            for (var i = 0; i < lstRoomId.Count; i++)
             {
-                txtPos += pair.Key + "\t" + pair.Value + "\t" + dctRoomIdIndex[pair.Key] + "\n";
+                var roomId = lstRoomId[i];
+                for (var j = 0; j < dctRoomIdNumBubble[roomId]; j++)
+                {
+                    var bubbleId = roomId + "_" + j;
+                    txt += bubbleId + "\t" + dctBubbleIdDecoIds[bubbleId] + "\t" + idx + "\t" + dctBubbleIdPrice[bubbleId] + "\t" +
+                        dctBubbleIdWD[bubbleId] + "\t" + dctBubbleIdStar[bubbleId] + "\n";
+                    idx++;
+                }
+            }
+
+            //foreach (var pair in dctBubbleIdDecoIds)
+            //{
+            //    txt += pair.Key + "\t" + pair.Value + "\t" + idx + "\t" + dctBubbleIdPrice[pair.Key] + "\t" + dctBubbleIdWD[pair.Key] + "\t" + dctBubbleIdStar[pair.Key] + "\n";
+            //    idx++;
+            //}
+
+            //Build ConfigBubbleHomePosition
+            for (var i = 1; i <= dctRoomIdIndex.Count; i++)
+            {
+                foreach (var pair in dctRoomIdIndex)
+                {
+                    if (pair.Value == i.ToString())
+                    {
+                        txtPos += pair.Key + "\t" + dctRoomIdPosition[pair.Key] + "\t" + pair.Value + "\n";
+                        break;
+                    }
+                }
             }
 
             FileSaving.Save(Application.dataPath + _configBubbleHomeFilePath, txt);
