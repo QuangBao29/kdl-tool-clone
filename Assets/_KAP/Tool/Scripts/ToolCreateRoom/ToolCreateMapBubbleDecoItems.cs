@@ -132,6 +132,24 @@ namespace KAP.ToolCreateMap
             info.IsBubble = false;
             Deco.Info = info;
             _editManager.SetCurrent(null);
+            var curIdx = SGUtils.ParseStringToListInt(BubbleId, '_')[1];
+            Debug.LogError("cur Idx removed: " + curIdx);
+            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                if (root.Key.RoomId == RoomId)
+                {
+                    foreach (var item in root.Value)
+                    {
+                        var index = SGUtils.ParseStringToListInt(item.BubbleId, '_')[1];
+                        if (index > curIdx)
+                        {
+                            index--;
+                            item.BubbleId = item.RoomId + "_" + index;
+                            item.SetIndex(index.ToString());
+                        }
+                    }
+                }
+            }
             foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
             {
                 if (root.Key.RoomId == RoomId)

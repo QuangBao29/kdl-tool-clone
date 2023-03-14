@@ -302,6 +302,7 @@ namespace KAP.ToolCreateMap
                     if (result == UIMessageBox.MessageBoxAction.Accept)
                     {
                         BuildCurrentRoomPlay();
+                        SortConfigPlay();
                     }
                     return true;
                 });
@@ -531,6 +532,36 @@ namespace KAP.ToolCreateMap
             FileSaving.Save(Application.dataPath + _configBubblePlayFilePath, txt);
             FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
             Debug.LogError("Export Bubble Play success");
+        }
+        private void SortConfigPlay()
+        {
+            LoadFileCsv();
+            List<string> lstVariables = ConfigBubblePlayRecord.GetLstVariables();
+            string txt = "";
+            List<ConfigBubblePlayRecord> _newlstConfigPlay = new List<ConfigBubblePlayRecord>();
+            var txtBubblePlay = FileSaving.Load(Application.dataPath + _configBubblePlayFilePath);
+            var _configBubblePlay = new ConfigBubblePlay();
+            _configBubblePlay.LoadFromString(txtBubblePlay);
+            for (var i = 0; i < _lstConfigBubblePlayPositionRecords.Count; i++)
+            {
+                var roomId = _lstConfigBubblePlayPositionRecords[i].RoomId;
+                var count = _lstConfigBubblePlayPositionRecords[i].GetLstBubblePositionVector3().Count;
+                for (var j = 0; j < count; j++)
+                {
+                    _newlstConfigPlay.Add(_configBubblePlay.GetById(roomId + "_" + j));
+                }
+            }
+
+            _lstConfigBubblePlayRecords.Clear();
+            _lstConfigBubblePlayRecords.AddRange(_newlstConfigPlay);
+            ListConfigBubblePlayRecords = _lstConfigBubblePlayRecords.AsReadOnly();
+
+            for (var i = 0; i < lstVariables.Count - 1; i++)
+            {
+                txt += lstVariables[i] + "\t";
+            }
+            txt += lstVariables[lstVariables.Count - 1] + "\n" + ConvertConfigBubblePlayRecordToStringCsv(_newlstConfigPlay);
+            FileSaving.Save(Application.dataPath + _configBubblePlayFilePath, txt);
         }
         private void BuildConfigFromCurrentMansion()
         {
@@ -981,8 +1012,7 @@ namespace KAP.ToolCreateMap
         {
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                var txtBubbleHome = FileSaving.Load(Application.dataPath + _configBubbleHomeFilePath);
-                var _configBubbleHome = new ConfigBubbleHome();
+                var txtBubbleHome = FileSaving.Load(Application.dataPath + _configBubbleHomeFilePath);;
                 _configBubbleHome.LoadFromString(txtBubbleHome);
                 _lstConfigBubbleHomeRecords.Clear();
                 _lstConfigBubbleHomeRecords.AddRange(_configBubbleHome.Records);
@@ -990,13 +1020,12 @@ namespace KAP.ToolCreateMap
                 ListConfigBubbleHomeRecords = _lstConfigBubbleHomeRecords.AsReadOnly();
 
                 var txtBubbleHomePosition = FileSaving.Load(Application.dataPath + _configBubbleHomePositionFilePath);
-                var _configBubbleHomePosition = new ConfigBubbleHomePosition();
                 _configBubbleHomePosition.LoadFromString(txtBubbleHomePosition);
                 _lstConfigBubbleHomePositionRecords.Clear();
                 _lstConfigBubbleHomePositionRecords.AddRange(_configBubbleHomePosition.Records);
                 ListConfigBubbleHomePositionRecords = _lstConfigBubbleHomePositionRecords.AsReadOnly();
             }
-            else
+            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
             {
                 var txtBubblePlay = FileSaving.Load(Application.dataPath + _configBubblePlayFilePath);
                 var _configBubblePlay = new ConfigBubblePlay();
@@ -1006,19 +1035,20 @@ namespace KAP.ToolCreateMap
                 ListConfigBubblePlayRecords = _lstConfigBubblePlayRecords.AsReadOnly();
 
                 var txtBubblePlayPosition = FileSaving.Load(Application.dataPath + _configBubblePlayPositionFilePath);
-                var _configBubblePlayPosition = new ConfigBubblePlayPosition();
                 _lstConfigBubblePlayPositionRecords.Clear();
+                var _configBubblePlayPosition = new ConfigBubblePlayPosition();
                 _configBubblePlayPosition.LoadFromString(txtBubblePlayPosition);
                 _lstConfigBubblePlayPositionRecords.AddRange(_configBubblePlayPosition.Records);
                 ListConfigBubblePlayPositionRecords = _lstConfigBubblePlayPositionRecords.AsReadOnly();
             }
-
-            var txtDecoReward = FileSaving.Load(Application.dataPath + _configDecoRewardFilePath);
-            var _configDecoReward = new ConfigDecoReward();
-            _configDecoReward.LoadFromString(txtDecoReward);
-            _lstConfigDecoRewardRecords.Clear();
-            _lstConfigDecoRewardRecords.AddRange(_configDecoReward.Records);
-            ListConfigDecoRewardRecords = _lstConfigDecoRewardRecords.AsReadOnly();
+            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.DecoReward)
+            {
+                var txtDecoReward = FileSaving.Load(Application.dataPath + _configDecoRewardFilePath);
+                _configDecoReward.LoadFromString(txtDecoReward);
+                _lstConfigDecoRewardRecords.Clear();
+                _lstConfigDecoRewardRecords.AddRange(_configDecoReward.Records);
+                ListConfigDecoRewardRecords = _lstConfigDecoRewardRecords.AsReadOnly();
+            }
         }
         #endregion
 
@@ -1055,6 +1085,18 @@ namespace KAP.ToolCreateMap
             string txt = "";
             for (var i = 0; i < configRecords.Count; i++)
             {
+                //Debug.LogError("check: " + configRecords[i].BubbleId);
+                if (configRecords[i].BubbleId == null)
+                {
+                    Debug.LogError("bubbleId null");
+                    return txt;
+                }
+                if (configRecords[i].BubbleDecoIds == null)
+                {
+                    Debug.LogError("bubbledecosId null");
+                    return txt;
+                }
+                    
                 txt += configRecords[i].BubbleId + "\t" + configRecords[i].BubbleDecoIds + "\n";
             }
             return txt;

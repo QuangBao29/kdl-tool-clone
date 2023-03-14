@@ -114,31 +114,6 @@ namespace KAP.ToolCreateMap
             }
             DctRootDecoItems.Clear();
         }
-        //public void AddDecoToCurrentBubble()
-        //{
-        //    var id = 0;
-        //    var colorId = 0;
-        //    if (_editManager.Current != null)
-        //    {
-        //        id = _editManager.Current.deco.ParseInfo<DecoInfo>().Id;
-        //        colorId = _editManager.Current.deco.ParseInfo<DecoInfo>().Color;
-        //    }
-        //    else return;
-        //    if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor.ContainsKey(id))
-        //    {
-        //        _toolBubbleSetting.CurrentBubble.DctDecoIdColor.Add(id, new List<int>());
-        //        _toolBubbleSetting.CurrentBubble.DctDecoIdColor[id].Add(colorId);
-        //        CreateDecoItems(id, colorId);
-        //    }
-        //    else
-        //    {
-        //        if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor[id].Contains(colorId))
-        //        {
-        //            _toolBubbleSetting.CurrentBubble.DctDecoIdColor[id].Add(colorId);
-        //            CreateDecoItems(id, colorId);
-        //        }
-        //    }
-        //}
 
         public void RemoveDecoFromBubble()
         {
@@ -268,15 +243,6 @@ namespace KAP.ToolCreateMap
                 {
                     check = true;
                     root.Key.gameObject.SetActive(true);
-                    //foreach (var i in root.Value)
-                    //{
-                    //    var info = (DecoInfo)i.Info;
-                    //    if (info.Id == id)
-                    //    {
-                    //        root.Key.gameObject.SetActive(true);
-                    //        return i;
-                    //    }
-                    //}
                     ToolCreateMapBubbleDecoItems item = SGUtils.InstantiateObject<ToolCreateMapBubbleDecoItems>(_prefabDecoItems, root.Key.transform);
                     item.Image.sprite = FLSprite;
                     item.RoomId = roomId;
