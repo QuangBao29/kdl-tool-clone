@@ -55,7 +55,6 @@ namespace KAP.ToolCreateMap
 
         private List<int> _lstID = new List<int>();
 
-        #region On Click Create Config
         public void OnClickBtnGroupConfig()
         {
             if (_groupBtnConfig.activeSelf)
@@ -68,6 +67,8 @@ namespace KAP.ToolCreateMap
                 _groupBtnClear.SetActive(false);
             else _groupBtnClear.SetActive(true);
         }
+
+        #region Auto Config
         public void OnClickCreateRoomPlay()
         {
             _lstID.Clear();
@@ -183,15 +184,9 @@ namespace KAP.ToolCreateMap
                 _configController.SaveConfigPlayKAPToKDL();
             }
         }
-
         public void OnClickCreateRoomHome()
         {
             ClearAllList();
-            CreateRoomHome();
-            _configController.SaveConfigHomeKAPToKDL();
-        }
-        private void CreateRoomHome()
-        {
             foreach (var root in _areaManager.ListRooms)
             {
                 var infoRoot = (DecoInfo)root.Info;
@@ -248,109 +243,72 @@ namespace KAP.ToolCreateMap
                     DctBubble.Add(BubbleId, new List<string> { bubbleDecoIds, price, deco.WorldDirect.ToString() });
                 }
             }
+            _configController.SaveConfigHomeKAPToKDL();
         }
 
-        //public void OnClickCreateDecoReward()
-        //{
-        //    DctDecoReward.Clear();
-        //    CreateDecoReward();
-        //    _configController.SaveConfigDecoRewardCsv();
-        //}
-
-        public void CreateDecoReward()
-        {
-            var root = _areaManager.ListRooms[0];
-            var infoRoot = (DecoInfo)root.Info;
-            string strDecoIds = "";
-            root.Foreach((deco) =>
-            {
-                var info = (DecoInfo)deco.Info;
-                if (info.Id != infoRoot.Id && info.Id / 100000 < 22)
-                {
-                    var Id = info.Id;
-                    var color = info.Color;
-                    string decoId = Id + "_" + color;
-                    strDecoIds += decoId + ";";
-                }
-            });
-            if (DctDecoReward.ContainsKey(_inputMapId.text))
-            {
-                Debug.LogError("room nay da co lst deco id");
-            }
-            else
-            {
-                DctDecoReward.Add(_inputMapId.text, strDecoIds);
-            }
-            //Debug.LogError("count: " + DctDecoReward.Count);
-        }
-
-        public string GetInputDecoRewardId()
-        {
-            return _inputMapId.text;
-        }
-
-        private void ConvertKAPToKDLPlay()
-        {
-            foreach (var root in _areaManager.ListRooms)
-            {
-                var infoRoot = (DecoInfo)root.Info;
-                List<Deco> lstDeco = new List<Deco>();
-                root.Foreach((deco) =>
-                {
-                    var info = (DecoInfo)deco.Info;
-                    if (info.Id != infoRoot.Id && info.Id / 100000 < 22)
-                    {
-                        float v = Volume(deco.FLIsoSize);
-                        if (v >= 40)
-                        {
-                            if (lstDeco.Count >= 5)
-                            {
-                                var t = Sort(lstDeco, deco);
-                                lstDeco.Clear();
-                                lstDeco.AddRange(t);
-                            }
-                            else lstDeco.Add(deco);
-                        }
-                    }
-                });
-
-                root.Foreach((deco) =>
-                {
-                    var info = (DecoInfo)deco.Info;
-                    if (!lstDeco.Contains(deco))
-                        LstUnpackingDeco.Add(info.Id + "_" + info.Color);
-                });
-                Debug.LogError("num of list unpack " + LstUnpackingDeco.Count);
-
-                foreach (var deco in lstDeco)
-                {
-                    var info = (DecoInfo)deco.Info;
-                    var listDecoColor = _configController.ConfigDecoColor.GetListDecoColorsByDecoId(info.Id);
-                    if (listDecoColor == null)
-                    {
-                        Debug.LogError("cai list color null: " + info.Id);
-                    }
-                    else
-                    {
-                        string bubbleDecoIds = "";
-                        if (listDecoColor.Count >= 3)
-                        {
-                            for (var i = 0; i < 3; i++)
-                                bubbleDecoIds += listDecoColor[i].Id + ";";
-                        }
-                        else
-                        {
-                            for (var i = 0; i < listDecoColor.Count; i++)
-                                bubbleDecoIds += listDecoColor[i].Id + ";";
-                        }
-
-                        DctBubbleDecoIds.Add(infoRoot.Id + "_" + LstPosBubble.Count, bubbleDecoIds);
-                        LstPosBubble.Add(deco.Position);
-                    }
-                }
-            }
-        }
         #endregion
+
+        //private void ConvertKAPToKDLPlay()
+        //{
+        //    foreach (var root in _areaManager.ListRooms)
+        //    {
+        //        var infoRoot = (DecoInfo)root.Info;
+        //        List<Deco> lstDeco = new List<Deco>();
+        //        root.Foreach((deco) =>
+        //        {
+        //            var info = (DecoInfo)deco.Info;
+        //            if (info.Id != infoRoot.Id && info.Id / 100000 < 22)
+        //            {
+        //                float v = Volume(deco.FLIsoSize);
+        //                if (v >= 40)
+        //                {
+        //                    if (lstDeco.Count >= 5)
+        //                    {
+        //                        var t = Sort(lstDeco, deco);
+        //                        lstDeco.Clear();
+        //                        lstDeco.AddRange(t);
+        //                    }
+        //                    else lstDeco.Add(deco);
+        //                }
+        //            }
+        //        });
+
+        //        root.Foreach((deco) =>
+        //        {
+        //            var info = (DecoInfo)deco.Info;
+        //            if (!lstDeco.Contains(deco))
+        //                LstUnpackingDeco.Add(info.Id + "_" + info.Color);
+        //        });
+        //        Debug.LogError("num of list unpack " + LstUnpackingDeco.Count);
+
+        //        foreach (var deco in lstDeco)
+        //        {
+        //            var info = (DecoInfo)deco.Info;
+        //            var listDecoColor = _configController.ConfigDecoColor.GetListDecoColorsByDecoId(info.Id);
+        //            if (listDecoColor == null)
+        //            {
+        //                Debug.LogError("cai list color null: " + info.Id);
+        //            }
+        //            else
+        //            {
+        //                string bubbleDecoIds = "";
+        //                if (listDecoColor.Count >= 3)
+        //                {
+        //                    for (var i = 0; i < 3; i++)
+        //                        bubbleDecoIds += listDecoColor[i].Id + ";";
+        //                }
+        //                else
+        //                {
+        //                    for (var i = 0; i < listDecoColor.Count; i++)
+        //                        bubbleDecoIds += listDecoColor[i].Id + ";";
+        //                }
+
+        //                DctBubbleDecoIds.Add(infoRoot.Id + "_" + LstPosBubble.Count, bubbleDecoIds);
+        //                LstPosBubble.Add(deco.Position);
+        //            }
+        //        }
+        //    }
+        //}
 
         #region Utils
         public List<Deco> Sort(List<Deco> lst, Deco deco)
@@ -434,6 +392,35 @@ namespace KAP.ToolCreateMap
             DctBubblePos.Clear();
             DctBubble.Clear();
             DctNumOfBubbleInRoom.Clear();
+        }
+        public void CreateDecoReward()
+        {
+            var root = _areaManager.ListRooms[0];
+            var infoRoot = (DecoInfo)root.Info;
+            string strDecoIds = "";
+            root.Foreach((deco) =>
+            {
+                var info = (DecoInfo)deco.Info;
+                if (info.Id != infoRoot.Id && info.Id / 100000 < 22)
+                {
+                    var Id = info.Id;
+                    var color = info.Color;
+                    string decoId = Id + "_" + color;
+                    strDecoIds += decoId + ";";
+                }
+            });
+            if (DctDecoReward.ContainsKey(_inputMapId.text))
+            {
+                Debug.LogError("room nay da co lst deco id");
+            }
+            else
+            {
+                DctDecoReward.Add(_inputMapId.text, strDecoIds);
+            }
+        }
+        public string GetInputDecoRewardId()
+        {
+            return _inputMapId.text;
         }
         #endregion
     }

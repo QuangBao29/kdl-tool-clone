@@ -59,14 +59,14 @@ namespace KAP.ToolCreateMap
         }
         public void OnChangeModeUI()
         {
-            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
-            {
-                _toolUnpackingSetting.ShowPanelUnpacking();
-            }
-            else
-            {
-                _toolUnpackingSetting.HidePanelUnpacking();
-            }
+            //if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+            //{
+            //    _toolUnpackingSetting.ShowPanelUnpacking();
+            //}
+            //else
+            //{
+            //    _toolUnpackingSetting.HidePanelUnpacking();
+            //}
             foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
             {
                 foreach (var item in root.Value)
