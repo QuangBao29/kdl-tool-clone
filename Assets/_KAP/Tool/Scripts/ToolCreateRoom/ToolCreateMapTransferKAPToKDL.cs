@@ -41,7 +41,7 @@ namespace KAP.ToolCreateMap
         [HideInInspector]
         public List<string> LstUnpackingDeco = new List<string>();
         [HideInInspector]
-        public Dictionary<string, string> DctBubbleDecoIds = new Dictionary<string, string>();      //bubbleId - list <bubbleDecoIds, worldDirect>
+        public Dictionary<string, string> DctBubbleDecoIds = new Dictionary<string, string>();      //bubbleId - bubbleDecoIds
 
         //Data for ConfigHome
         [HideInInspector]
@@ -85,6 +85,7 @@ namespace KAP.ToolCreateMap
                 //Debug.LogError("path: " + path);
                 var json = FileSaving.Load(path);
                 //Debug.LogError("ID: " + _lstID[i] + " json: " + json);
+                var rootPos = Vector3.zero;
                 if (!string.IsNullOrEmpty(json))
                 {
                     var lstRooms = JsonReader.Deserialize<Dictionary<string, DecoDataArray[]>>(json);
@@ -105,6 +106,11 @@ namespace KAP.ToolCreateMap
                         {
                             if (deco == null)
                                 return;
+                            if (deco.Size != null)
+                            {
+                                rootPos = deco.Position == null ? Vector3.zero : deco.Position.ToVector3();
+                                continue;
+                            }
                             DecoInfo info = null;
                             if (!string.IsNullOrEmpty(deco.Info))
                                 info = JsonReader.Deserialize<DecoInfo>(deco.Info);
@@ -176,7 +182,8 @@ namespace KAP.ToolCreateMap
                             }
 
                             DctBubbleDecoIds.Add(_lstID[i] + "_" + LstPosBubble.Count, bubbleDecoIds);
-                            LstPosBubble.Add(deco.Position.ToVector3());
+                            LstPosBubble.Add(deco.Position.ToVector3() - rootPos);
+                            Debug.LogError("rootPos: " + rootPos);
                         }
                     }
                 }

@@ -247,6 +247,7 @@ namespace KAP.ToolCreateMap
                     item.Image.sprite = FLSprite;
                     item.RoomId = roomId;
                     item.BubbleId = bubbleId;
+                    //Debug.LogError("check room bubble id " + roomId + " " + bubbleId);
                     item.SetIndex(SGUtils.ParseStringToList(bubbleId, '_')[1]);
                     item.Info = new DecoInfo { Id = id, Color = colorId, IsBubble = true };
                     item.gameObject.SetActive(true);
@@ -293,10 +294,12 @@ namespace KAP.ToolCreateMap
                                     var info = (DecoInfo)deco.Info;
                                     if (info.Id == id)
                                     {
+                                        //Debug.LogError("dung id");
                                         var idx = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
                                         var rec = _configController.ConfigBubblePlayPosition.GetByRoomId(roomId.ToString());
                                         var Pos = rec.GetLstBubblePositionVector3()[idx];
                                         var realPos = Pos + r.Position;
+                                        //Debug.LogError("check pos " + realPos + "  " + deco.Position);
                                         if (deco.Position == realPos)
                                         {
                                             item.Deco = deco;

@@ -302,7 +302,7 @@ namespace KAP.ToolCreateMap
                     if (result == UIMessageBox.MessageBoxAction.Accept)
                     {
                         BuildCurrentRoomPlay();
-                        SortConfigPlay();
+                        SortConfigPlayRecords();
                     }
                     return true;
                 });
@@ -434,6 +434,7 @@ namespace KAP.ToolCreateMap
                     foreach (var root in _areaManager.ListRooms)
                     {
                         var rootInfo = (DecoInfo)root.Info;
+                        Debug.LogError("root pos: " + root.Position);
                         if (rootInfo.Id == r.Key.RoomId)
                         {
                             foreach (var item in r.Value)
@@ -533,7 +534,7 @@ namespace KAP.ToolCreateMap
             FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
             Debug.LogError("Export Bubble Play success");
         }
-        private void SortConfigPlay()
+        private void SortConfigPlayRecords()
         {
             LoadFileCsv();
             List<string> lstVariables = ConfigBubblePlayRecord.GetLstVariables();
@@ -1226,7 +1227,7 @@ namespace KAP.ToolCreateMap
                     if (listRecord[0] == _inputMapId.text)
                     {
                         listRemovedRecord.Add(record);
-                        Debug.LogError("remove");
+                        //Debug.LogError("remove");
                     }
                         
                 }
