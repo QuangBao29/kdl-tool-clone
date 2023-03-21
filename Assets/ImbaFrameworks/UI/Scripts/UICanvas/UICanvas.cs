@@ -161,7 +161,7 @@ namespace Imba.UI
 
             _isLandscape = _lastOrientation == ScreenOrientation.LandscapeLeft ||
                            _lastOrientation == ScreenOrientation.LandscapeRight ||
-                           _lastOrientation == ScreenOrientation.Landscape;
+                           _lastOrientation == ScreenOrientation.LandscapeLeft;
             onOrientationChange.Invoke();
 
         }
