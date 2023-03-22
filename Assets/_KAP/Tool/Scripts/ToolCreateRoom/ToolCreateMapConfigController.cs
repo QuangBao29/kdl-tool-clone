@@ -434,11 +434,17 @@ namespace KAP.ToolCreateMap
                     foreach (var root in _areaManager.ListRooms)
                     {
                         var rootInfo = (DecoInfo)root.Info;
-                        Debug.LogError("root pos: " + root.Position);
+                        //Debug.LogError("root pos: " + root.Position);
                         if (rootInfo.Id == r.Key.RoomId)
                         {
-                            foreach (var item in r.Value)
+                            //foreach (var item in r.Value)
+                            //{
+                            //    pos = item.Deco.Position - root.Position;
+                            //    strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
+                            //}
+                            for (var i = 0; i < r.Value.Count; i++)
                             {
+                                var item = _toolBubbleDecoSetting.OnGetBubbleDecoItemWithIndex(r.Key.RoomId, i);
                                 pos = item.Deco.Position - root.Position;
                                 strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
                             }

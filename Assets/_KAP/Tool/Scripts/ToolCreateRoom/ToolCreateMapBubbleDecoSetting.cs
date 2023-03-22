@@ -78,6 +78,21 @@ namespace KAP.ToolCreateMap
                 }
             }
         }
+        public ToolCreateMapBubbleDecoItems OnGetBubbleDecoItemWithIndex(int roomId, int index)
+        {
+            foreach (var pair in DctRootDecoItems)
+            {
+                if (pair.Key.RoomId == roomId)
+                {
+                    foreach (var item in pair.Value)
+                    {
+                        if (item.GetIndex() == index.ToString())
+                            return item;
+                    }
+                }
+            }
+            return null;
+        }
         public void OnAddToScrollRect(string id)
         {
             foreach (var root in DctRootDecoItems)
@@ -299,9 +314,10 @@ namespace KAP.ToolCreateMap
                                         var rec = _configController.ConfigBubblePlayPosition.GetByRoomId(roomId.ToString());
                                         var Pos = rec.GetLstBubblePositionVector3()[idx];
                                         var realPos = Pos + r.Position;
-                                        //Debug.LogError("check pos " + realPos + "  " + deco.Position);
+                                        Debug.LogError("check 1 " + realPos + "  " + deco.Position);
                                         if (deco.Position == realPos)
                                         {
+                                            Debug.LogError("co lun 1");
                                             item.Deco = deco;
                                         }
                                     }
@@ -374,8 +390,10 @@ namespace KAP.ToolCreateMap
                                     var rec = _configController.ConfigBubblePlayPosition.GetByRoomId(roomId.ToString());
                                     var Pos = rec.GetLstBubblePositionVector3()[idx];
                                     var realPos = Pos + root.Position;
+                                    Debug.LogError("check 2 " + realPos + "  " + deco.Position);
                                     if (deco.Position == realPos)
                                     {
+                                        Debug.LogError("co lun 2");
                                         decoItem.Deco = deco;
                                     }
                                 }

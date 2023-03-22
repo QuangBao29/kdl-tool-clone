@@ -135,7 +135,7 @@ namespace KAP.ToolCreateMap
                 if (root.Key.RoomId == rootInfo.Id)
                 {
                     numOfBubble = root.Value.Count;
-                    Debug.LogError("bum of bubble " + numOfBubble);
+                    Debug.LogError("num of bubble " + numOfBubble);
                     break;
                 }
             }

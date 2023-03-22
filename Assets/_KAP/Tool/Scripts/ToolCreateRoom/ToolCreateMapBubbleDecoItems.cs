@@ -128,9 +128,13 @@ namespace KAP.ToolCreateMap
         }
         public void OnButtonRemoveItemClick()
         {
-            var info = (DecoInfo)Deco.Info;
-            info.IsBubble = false;
-            Deco.Info = info;
+            if (Deco != null)
+            {
+                var info = (DecoInfo)Deco.Info;
+                info.IsBubble = false;
+                Deco.Info = info;
+            }
+            
             _editManager.SetCurrent(null);
             var curIdx = SGUtils.ParseStringToListInt(BubbleId, '_')[1];
             Debug.LogError("cur Idx removed: " + curIdx);
@@ -162,18 +166,6 @@ namespace KAP.ToolCreateMap
                     }
                 }
             }
-            //foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            //{
-            //    if (root.Key.RoomId == RoomId)
-            //    {
-            //        var count = root.Value.Count;
-            //        for (var idx = 0; idx < count; idx++)
-            //        {
-            //            root.Value[idx].BubbleId = root.Key.RoomId + "_" + idx;
-            //            Debug.LogError("test: " + root.Value[idx].BubbleId);
-            //        }
-            //    }
-            //}
         }
 
         public void OnClickSpawnDeco()
