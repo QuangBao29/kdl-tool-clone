@@ -183,7 +183,7 @@ namespace KAP.ToolCreateMap
 
                             DctBubbleDecoIds.Add(_lstID[i] + "_" + LstPosBubble.Count, bubbleDecoIds);
                             LstPosBubble.Add(deco.Position.ToVector3() - rootPos);
-                            Debug.LogError("rootPos: " + rootPos);
+                            //Debug.LogError("rootPos: " + rootPos);
                         }
                     }
                 }
