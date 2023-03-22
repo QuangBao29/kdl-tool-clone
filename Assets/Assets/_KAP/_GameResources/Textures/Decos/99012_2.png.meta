@@ -291,7 +291,7 @@ TextureImporter:
       213: 5769852410272873319
     second: 2537032_b_1
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -311,6 +311,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -319,9 +321,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -342,13 +344,65 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -2388,6 +2442,103 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      2507009_b_2: 179455993787561614
+      2537030_2: -2707774325039957996
+      2517031_b_2: -4829129092345198076
+      2517009_1: 8269871647800949522
+      2527009_b_2: 752731110389734642
+      2517031_b: -1349326471479771453
+      2537031_b_3: 879032466951645841
+      2527030_b_2: 6211129947705235720
+      2507031_b_2: 473853185586951560
+      2527031_b_1: -3747646054133618493
+      2527009: -4804529425625401672
+      2527009_2: -777814959463660377
+      2527031_3: -1459881489405936381
+      2507009: -2534688818939896482
+      2507030_b: 2474500584102657225
+      2527009_1: -2069668826028085498
+      2507009_1: 8655628428491748168
+      2517009_b_2: -4852968877346001764
+      2537031_1: -7237914057290891223
+      2527030_2: 3700186017236694860
+      2537032: -8672097220226015916
+      2537009_b: 2248156950164547902
+      2507031_b: 7089826845766892554
+      2537030_b_2: -4907464916712376027
+      2507009_2: 6405264558478562148
+      2537009_b_2: -3386037398294151774
+      2527030_1: 3056465784344010620
+      2507031_1: 6855023097598413727
+      2527032_b_1: 2372800899198371340
+      2507009_b_1: 6809498605178321996
+      2517009_b_1: -4001220155710291580
+      2527031: 3342846760717879921
+      2517030_b: 2484961116749352595
+      2517009: 1207013506335410589
+      2517009_2: -8681480543391623095
+      2517009_b: 2905363242579007242
+      2537030_b_1: 2433188222943676097
+      2507032_1: 6274431245548764931
+      2537031_3: 2661147996202395966
+      2507032_b_1: 190792724304239174
+      2507032: -773768956233684913
+      2517031_1: -8343963031784440036
+      2527030_b: 166090036147199623
+      2517032_b_1: 6633857836011951873
+      2517031: -1016450617543161457
+      2527031_2: -5053570711644828345
+      2507030_2: -7936499791264086771
+      2517030_2: -8662492996436934389
+      2537031_b_1: 5548433477129223094
+      2507031_b_1: 6875025664126204420
+      2527031_b_2: 7977408180661629597
+      2507031: 4519398256129397002
+      2517031_3: 3620785037290437492
+      2517030_b_2: 2347914176004829498
+      2537031: 65941175224528359
+      2527031_b_3: -1350858537707500459
+      2517032_b: 490180203974766760
+      2527031_b: 7036053818574976407
+      2527032_b: -3149942093126827245
+      2537031_b: -6401130984486529055
+      2507030_1: -3253506139237982710
+      2517032: -7405891423816604033
+      2527009_b_1: 8862393901474026416
+      2537030_b: -2654208164596918290
+      2537031_2: 7930874722474277284
+      2507009_b: -2262202975136344113
+      2507031_b_3: 1005955383067042939
+      2507031_2: -524674552002594639
+      2537009_b_1: 3563988315651783217
+      2537030: 2890308824630363598
+      2517030_b_1: -3235825738016378439
+      2527030_b_1: 8178204916601846288
+      2537030_1: -4941186191702171480
+      2537009_2: -7156342853433155560
+      2537009_1: 3309314399187660248
+      2507030_b_1: -3862708439295178808
+      2507032_b: 3006967163767061051
+      2527031_1: 331262376276629309
+      2517031_b_3: -7232687498903155825
+      2507030_b_2: 8108632855327611971
+      2527032: 229797114402289908
+      2537032_b_1: 5769852410272873319
+      2527009_b: -6384339355889636639
+      2507030: 8815878661862571843
+      2527032_1: -3582832056475463696
+      2537032_b: -4284138081122683488
+      2537009: 8316680562212129269
+      2537032_1: 1398518083073285525
+      2507031_3: 3742342937337439154
+      2517031_2: -9192028181479568937
+      2517032_1: 7008361668160109122
+      2517030_1: 5941261402259789333
+      2537031_b_2: -734056194440448867
+      2517030: 3439707951486714635
+      2517031_b_1: 2658565436215309903
+      2527030: -2047979796538834531
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

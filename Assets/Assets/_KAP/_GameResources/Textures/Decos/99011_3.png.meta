@@ -135,7 +135,7 @@ TextureImporter:
       213: 2259098096950734060
     second: 2507025_b_5
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -155,6 +155,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -163,9 +165,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -186,13 +188,65 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1140,6 +1194,51 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      2507025_4: 7133621982867422011
+      2507001_2: 3085488078506631428
+      2507002_3: -6529217261617133666
+      2507001_b_3: -5544530646279634681
+      2507002_b_4: 3322550769128552146
+      2507002: 8177437114697585205
+      2507025_2: 6790485236448696196
+      2507001: 611848432643105997
+      2507024_1: -5473686945680959155
+      2507024_b_3: -8982956992105298670
+      2507025_b_3: 8362353660634812862
+      2507025_b_1: -6328145560305476583
+      2507002_1: 8334166348394472063
+      2507025: 8106911539992181812
+      2507002_b_2: 8536327938859584136
+      2507024_b_4: -6838129575568719814
+      2507024_4: -7920461750526096092
+      2507001_1: 7079165859351681634
+      2507025_5: -2900312250867029300
+      2507002_b_1: 3079457101675190618
+      2507001_b_2: 3969004941018275586
+      2507025_1: -8289055095983500061
+      2507002_4: -559634730511859630
+      2507001_3: 2446757210644882081
+      2507001_b: 7909405433489247248
+      2507025_b: -8033502444292492369
+      2507024_b_5: -5445955689873776807
+      2507001_4: 8467776661080388870
+      2507025_b_4: 539534132310864099
+      2507002_b: -4908128826588818227
+      2507024_b: 4638444809850410410
+      2507001_b_1: -8920600103075044357
+      2507024_2: -2392862076239946834
+      2507024_b_2: -903287793416076550
+      2507025_b_5: 2259098096950734060
+      2507025_3: 6817772330278613614
+      2507002_b_3: 7937141736862885213
+      2507001_b_4: -3948281981743253157
+      2507024_3: -6393451754831173663
+      2507002_2: -7764338005327349631
+      2507024: 2824217351107206164
+      2507024_b_1: 198143373518501749
+      2507025_b_2: 8534347750139062974
+      2507024_5: 4782664424041317635
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

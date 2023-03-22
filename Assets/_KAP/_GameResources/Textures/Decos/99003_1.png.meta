@@ -255,7 +255,7 @@ TextureImporter:
       213: -7289688049696792551
     second: 2081002_3
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -275,6 +275,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -283,9 +285,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -306,10 +308,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -357,6 +363,18 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 1
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1800,6 +1818,75 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      2081002_2: 242514786582116662
+      1880002_2: 327980288744054067
+      2060006: 8039081796090637495
+      1140001_2: -7454256554781687593
+      1410001_2: 4181528928610666781
+      2060006_3: -6573126097632217335
+      1011001_2: -5135796701190946159
+      1880002: -127885245520544833
+      1460003_1: 5972087002559539054
+      1410001_3: -8996539164205706979
+      1161005_1: -8710348586313298527
+      2081002_3: -7289688049696792551
+      1011001_b_1: -8522673200979078207
+      2060006_1: -3097247941852638022
+      1011001_b: -8247667456758082508
+      2060006_2: -293751271179311635
+      2081002: -6643670977009333675
+      1190007: -8650119012536739601
+      1880002_3: 3778276327360987612
+      1140001_3: 4180165171415402118
+      1060003_3: 2481863371029552124
+      2031003_2: 1403450206711843561
+      1160004: 4228742157284773750
+      1190007_1: -5962518833315712684
+      1160004_2: 4515134912873468464
+      1190022_3: -8492007888533793268
+      2031003: 9197929348799678039
+      1011001_3: -6074276490450136204
+      1140001: 5335305227534361572
+      1880002_1: -4627466580497447042
+      1181003_2: -7683265030262146373
+      1011001: -1109980319493612744
+      1160004_b: 7818350818286755459
+      1410001_1: 28951527539209521
+      1460003_2: 2322310535577697865
+      1460003: -779244144996360788
+      1161005: -345817202363891390
+      1011001_b_3: 8776039886680213002
+      1060003_1: 1136348181308222623
+      1181003: 7106351855409841972
+      1011001_b_2: 6014810572552616593
+      1160004_b_1: -8358037385706014742
+      1190022: -7182857318188156059
+      1161005_3: -4439941312435339182
+      1161001_1: 1984983108624263025
+      1161005_2: 6702969801009683227
+      1060003: -8621853129932200419
+      1181003_3: -2960996936193186927
+      1060003_2: -5178327459794194836
+      1160004_3: 5110011562808572792
+      1190022_2: -2404080580274985884
+      1460003_3: 4719345667179658397
+      1160004_1: 6427538336697285193
+      1190007_3: 6514218089766867784
+      1181003_1: -7151132541082236147
+      1190007_2: -954924290344720292
+      1011001_1: -6318018391396515517
+      1140001_1: -2810823819567086589
+      1161001: -4626100673167520787
+      1190022_1: 435474587502585747
+      1161001_2: 5060972454131288412
+      1161001_3: -8811234322816160418
+      1160004_b_3: -6586716141781557925
+      1160004_b_2: -4497236469653830932
+      1410001: 3900696042017290718
+      2081002_1: -3007464903281614445
+      2031003_3: -4590787852963099637
+      2031003_1: -5916386179038268617
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
