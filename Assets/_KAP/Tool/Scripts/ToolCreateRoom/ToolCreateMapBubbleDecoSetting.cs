@@ -314,10 +314,10 @@ namespace KAP.ToolCreateMap
                                         var rec = _configController.ConfigBubblePlayPosition.GetByRoomId(roomId.ToString());
                                         var Pos = rec.GetLstBubblePositionVector3()[idx];
                                         var realPos = Pos + r.Position;
-                                        Debug.LogError("check 1 " + realPos + "  " + deco.Position);
+                                        //Debug.LogError("check 1 " + realPos + "  " + deco.Position);
                                         if (deco.Position == realPos)
                                         {
-                                            Debug.LogError("co lun 1");
+                                            //Debug.LogError("co lun 1");
                                             item.Deco = deco;
                                         }
                                     }
@@ -390,10 +390,10 @@ namespace KAP.ToolCreateMap
                                     var rec = _configController.ConfigBubblePlayPosition.GetByRoomId(roomId.ToString());
                                     var Pos = rec.GetLstBubblePositionVector3()[idx];
                                     var realPos = Pos + root.Position;
-                                    Debug.LogError("check 2 " + realPos + "  " + deco.Position);
+                                    //Debug.LogError("check 2 " + realPos + "  " + deco.Position);
                                     if (deco.Position == realPos)
                                     {
-                                        Debug.LogError("co lun 2");
+                                        //Debug.LogError("co lun 2");
                                         decoItem.Deco = deco;
                                     }
                                 }
