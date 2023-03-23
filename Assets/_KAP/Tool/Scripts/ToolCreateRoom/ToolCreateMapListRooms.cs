@@ -247,10 +247,10 @@ namespace KAP.ToolCreateMap
                         if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                         {
                             var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
-                            int idx = 0;
+                            int idx = lstRooms.Count;
+                            Debug.LogError("idx: " + idx);
                             if (record != null)
                                 idx = record.Index;
-                            else return;
                             item.gameObject.SetActive(true);
                             item.Setup(room, i, idx);
                         }
@@ -298,13 +298,40 @@ namespace KAP.ToolCreateMap
             }
             _init = true;
         }
-
+        private void SetupAddRoom()
+        {
+            var lstRooms = _areaManager.ListRooms;
+            if (lstRooms.Count != 0)
+            {
+                foreach (var room in lstRooms)
+                {
+                    var roomInfo = (DecoInfo)room.Info;
+                    int roomId = 0;
+                    if (roomInfo != null && roomInfo.Id > 1000 && ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                    {
+                        roomId = roomInfo.Id;
+                    }
+                    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                    {
+                        roomId = KAPDefine.DefaultRoomPlayId;
+                        room.Info = new DecoInfo { Id = roomId };
+                    }
+                    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                    {
+                        roomId = int.Parse(_inputMapId.text);
+                        room.Info = new DecoInfo { Id = roomId };
+                    }
+                    Debug.LogError("roomId: " + roomId);
+                    room.name = roomId.ToString();
+                }
+            }
+            ToolCreateMapListRoomItem item = null;
+            item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
+        }
         public void OnButtonAddClick()
         {
             _importDecoController.CreateARoom(_areaManager.ListRooms.Count, Vector3.zero, Vector3.one);
             Setup();
-            //_toolBubbleSetting.UpdateListNumOfBubbleInARoom();
-            //_toolBubbleSetting.DebugForCheck();
         }
 
         public void RemoveARoom(DecoRoot room)
@@ -312,6 +339,7 @@ namespace KAP.ToolCreateMap
             if (room == null)
                 return;
             _areaManager.RemoveRoom(room);
+            _toolBubbleDecoSetting.OnRemoveRootFromDict(((DecoInfo)room.Info).Id.ToString());
             Setup();
         }
 
