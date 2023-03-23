@@ -17,7 +17,6 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapListDecos _uiParent = null;
         [SerializeField] private Image _imgIcon = null;
         [SerializeField] private Text _lblName = null;
-        //[SerializeField] private GameObject _panelBubbleDecoSetting = null;
         [Space]
         [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
