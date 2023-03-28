@@ -735,7 +735,7 @@ namespace KAP.ToolCreateMap
                 {
                     if (pair.Value == i.ToString())
                     {
-                        txtPos += pair.Key + "\t" + dctRoomIdPosition[pair.Key] + "\t" + pair.Value + "\n";
+                        txtPos += pair.Key + "\t" + dctRoomIdPosition[pair.Key] + "\t" + pair.Value + "\t" + dctRoomIdNumBubble[pair.Key] + "\n";
                         break;
                     }
                 }
