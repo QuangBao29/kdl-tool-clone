@@ -729,13 +729,15 @@ namespace KAP.ToolCreateMap
             //}
 
             //Build ConfigBubbleHomePosition
+            int exp = 0;
             for (var i = 1; i <= dctRoomIdIndex.Count; i++)
             {
                 foreach (var pair in dctRoomIdIndex)
                 {
                     if (pair.Value == i.ToString())
                     {
-                        txtPos += pair.Key + "\t" + dctRoomIdPosition[pair.Key] + "\t" + pair.Value + "\t" + dctRoomIdNumBubble[pair.Key] + "\n";
+                        txtPos += pair.Key + "\t" + dctRoomIdPosition[pair.Key] + "\t" + pair.Value + "\t" + exp + "\n";
+                        exp += dctRoomIdNumBubble[pair.Key];
                         break;
                     }
                 }
