@@ -130,15 +130,15 @@ namespace KAP.ToolCreateMap
             var info = (DecoInfo)cur.deco.Info;
             var rootInfo = (DecoInfo)cur.deco.Root.Info;
             int numOfBubble = 0;
-            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                if (root.Key.RoomId == rootInfo.Id)
-                {
-                    numOfBubble = root.Value.Count;
-                    Debug.LogError("num of bubble " + numOfBubble);
-                    break;
-                }
-            }
+            //foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+            //{
+            //    if (root.Key.RoomId == rootInfo.Id)
+            //    {
+            //        numOfBubble = root.Value.Count;
+            //        Debug.LogError("num of bubble " + numOfBubble);
+            //        break;
+            //    }
+            //}
             info.IsBubble = _toggleIsBubble.isOn;
             if (info.IsBubble)
             {
