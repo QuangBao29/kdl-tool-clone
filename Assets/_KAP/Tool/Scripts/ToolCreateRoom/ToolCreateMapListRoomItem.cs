@@ -126,7 +126,6 @@ namespace KAP.ToolCreateMap
         public void OnButtonXClick()
         {
             _parentController.RemoveARoom(_room);
-            //_toolBubbleSetting.RemoveAllBubbleInARoom(_index);
         }
 
         public void OnButtonClearClick()
@@ -207,7 +206,7 @@ namespace KAP.ToolCreateMap
                 };
                 piece.Setup(_room, piece.Container, parameters);
             }
-            Debug.LogError("check");
+            //Debug.LogError("check");
             _room.Apply(null, null);
             _areaManager.SortRoom();
         }
@@ -215,8 +214,34 @@ namespace KAP.ToolCreateMap
         public void OnInputRoomIdChange()
         {
             var room = _areaManager.ListRooms[_index];
-            var roomInfo = (DecoInfo)room.Info; 
+            if (room != _room)
+            {
+                Debug.LogError("error");
+            }
+            var roomInfo = (DecoInfo)room.Info;
+            var preRoomId = roomInfo.Id;
             roomInfo.Id = int.Parse(_inputRoomId.text);
+            room.gameObject.name = roomInfo.Id.ToString();
+            //Debug.LogError("pre vs cur " + preRoomId + " " + roomInfo.Id);
+            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                if (root.Key.RoomId == preRoomId)
+                {
+                    root.Key.RoomId = roomInfo.Id;
+                    root.Key.gameObject.name = roomInfo.Id.ToString();
+
+                    foreach (var item in root.Value)
+                    {
+                        item.RoomId = root.Key.RoomId;
+                        item.BubbleId = item.RoomId + "_" + item.GetIndex();
+                    }
+                    break;
+                }
+            }
+            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+            {
+                Debug.LogError("id: " + root.Key.RoomId);
+            }
         }
      
         #endregion

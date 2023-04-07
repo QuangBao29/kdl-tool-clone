@@ -308,69 +308,6 @@ namespace KAP.ToolCreateMap
             _panelListBubble.SetActive(false);
         }
 
-        public void SwapBubbleInSameRoom()
-        {
-            var tempIndex_0 = ListSwapBubble[0].Index;
-            var tempBubbleId_0 = ListSwapBubble[0].BubbleId;
-            var tempIndex_1 = ListSwapBubble[1].Index;
-            var tempBubbleId_1 = ListSwapBubble[1].BubbleId;
-            ListSwapBubble[0].Index = tempIndex_1;
-            ListSwapBubble[0].UpdateBubbleId();
-            ListSwapBubble[1].Index = tempIndex_0;
-            ListSwapBubble[1].UpdateBubbleId();
-            int index0 = 0;
-            int index1 = 0;
-            foreach (var pair in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                if (pair.Key.BubbleId == tempBubbleId_0)
-                {
-                    pair.Key.BubbleIndex = tempIndex_1;
-                    pair.Key.BubbleId = tempBubbleId_1;
-                    pair.Key.gameObject.name = "Bubble: " + pair.Key.BubbleId;
-                    foreach (var value in pair.Value)
-                    {
-                        value.BubbleIndex = pair.Key.BubbleIndex;
-                        value.BubbleId = pair.Key.BubbleId;
-                    }
-                    if (pair.Key.BubbleDeco != null)
-                    {
-                        pair.Key.BubbleDeco.BubbleIndex = pair.Key.BubbleIndex;
-                        pair.Key.BubbleDeco.BubbleId = pair.Key.BubbleId;
-                    }
-                    break;
-                }
-                index0++;
-            }
-            foreach (var pair in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                if (pair.Key.BubbleId == tempBubbleId_1 && index1 != index0)
-                {
-                    pair.Key.BubbleIndex = tempIndex_0;
-                    pair.Key.BubbleId = tempBubbleId_0;
-                    pair.Key.gameObject.name = "Bubble: " + pair.Key.BubbleId;
-                    foreach (var value in pair.Value)
-                    {
-                        value.BubbleIndex = pair.Key.BubbleIndex;
-                        value.BubbleId = pair.Key.BubbleId;
-                    }
-                    if (pair.Key.BubbleDeco != null)
-                    {
-                        pair.Key.BubbleDeco.BubbleIndex = pair.Key.BubbleIndex;
-                        pair.Key.BubbleDeco.BubbleId = pair.Key.BubbleId;
-                    }
-                    break;
-                }
-                index1++;
-            }
-
-            foreach (var item in ListSwapBubble)
-            {
-                item.ResetColorImgSwap();
-            }
-            ListSwapBubble.Clear();
-            SortListBubble();
-        }
-
         public void SortListBubble()
         {
             List<ToolCreateMapBubbleItem> sortedList = new List<ToolCreateMapBubbleItem>();

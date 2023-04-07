@@ -49,24 +49,7 @@ namespace KAP.ToolCreateMap
                 else root.Key.gameObject.SetActive(true);
             }
         }
-        public void OnClickSwapBtn()
-        {
-            if (_swapImg.color == _defaultSwapBtnColor)
-            {
-                _swapImg.color = _selectedSwapBtnColor;
-                _toolBubbleSetting.ListSwapBubble.Add(this);
-                if (_toolBubbleSetting.ListSwapBubble.Count == 2)
-                {
-                    _toolBubbleSetting.SwapBubbleInSameRoom();
-                }
-            }
-            else
-            {
-                _swapImg.color = _defaultSwapBtnColor;
-                _toolBubbleSetting.ListSwapBubble.Remove(this);
-            }
-            
-        }
+
         public void ResetColor()
         {
             _img.color = _defaultColor;

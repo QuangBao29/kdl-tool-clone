@@ -630,13 +630,14 @@ namespace KAP.ToolCreateMap
 
                 if (!dctRoomIdNumBubble.ContainsKey(r.Key.RoomId.ToString()))
                 {
-                    dctRoomIdNumBubble.Add(r.Key.RoomId.ToString(), count);
+                    dctRoomIdNumBubble.Add(r.Key.RoomId.ToString(), count);                
                 }
             }
 
             //get Indx Room
             foreach (var room in _toolLstRooms.GetLstRoomItem())
             {
+                Debug.LogError("check room: " + room.GetRoomId());
                 if (!dctRoomIdIndex.ContainsKey(room.GetRoomId().ToString()))
                 {
                     dctRoomIdIndex.Add(room.GetRoomId().ToString(), room.GetRoomOrder());

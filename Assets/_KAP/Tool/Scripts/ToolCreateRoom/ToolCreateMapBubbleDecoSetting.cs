@@ -26,8 +26,14 @@ namespace KAP.ToolCreateMap
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
 
         [HideInInspector]
-        public Dictionary<ToolCreateMapBubbleDecoItems, List<ToolCreateMapBubbleDecoItems>> DctRootDecoItems = 
+        public Dictionary<ToolCreateMapBubbleDecoItems, List<ToolCreateMapBubbleDecoItems>> _dctRootDecoItems = 
             new Dictionary<ToolCreateMapBubbleDecoItems, List<ToolCreateMapBubbleDecoItems>>();
+
+        public Dictionary<ToolCreateMapBubbleDecoItems, List<ToolCreateMapBubbleDecoItems>> DctRootDecoItems
+        {
+            get => _dctRootDecoItems;
+            set => _dctRootDecoItems = value;
+        }
         public void OnSelectRootDecoItems()
         {
             var selectedItem = _toolLstRooms.GetSelectedItem();
@@ -50,15 +56,25 @@ namespace KAP.ToolCreateMap
                 {
                     var curRoomId = selectedItem.GetRoomId();
                     var lstRecs = _configController.ListConfigBubbleHomeRecords;
+                    var check = false;
                     foreach (var rec in lstRecs)
                     {
                         var roomId = SGUtils.ParseStringToListInt(rec.BubbleId, '_')[0];
                         if (roomId == curRoomId)
                         {
+                            check = true;
                             var decoId = SGUtils.ParseStringToList(rec.BubbleDecoIds, ';')[0];
                             var lst = SGUtils.ParseStringToListInt(decoId, '_');
                             CreateBubbleDecoItemsAtBeginning(lst[0], lst[1], roomId, rec.BubbleId);
                         }
+                    }
+                    if (!check)
+                    {
+                        var rootDecoItem = SGUtils.InstantiateObject<ToolCreateMapBubbleDecoItems>(_prefabRootDeco, _content);
+                        rootDecoItem.RoomId = curRoomId;
+                        rootDecoItem.gameObject.name = rootDecoItem.RoomId.ToString();
+                        DctRootDecoItems.Add(rootDecoItem, new List<ToolCreateMapBubbleDecoItems>());
+                        rootDecoItem.gameObject.SetActive(true);
                     }
                 }
                 if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)

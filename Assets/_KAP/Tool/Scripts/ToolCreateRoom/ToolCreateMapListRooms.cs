@@ -234,18 +234,25 @@ namespace KAP.ToolCreateMap
                     room.name = roomId.ToString();
                     ToolCreateMapListRoomItem item = null;
                     if (roomItemIndex < roomItemCount)
+                    {
                         item = _transGridRoom.GetChild(roomItemIndex++).GetComponent<ToolCreateMapListRoomItem>();
-                    else
-                        item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
+                    }
+                    else item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
+
 
                     if (_init)
                     {
                         if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                         {
+                            //Debug.LogError("check roomid: " + roomInfo.Id);
                             var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
                             int idx = lstRooms.Count;
                             if (record != null)
+                            {
                                 idx = record.Index;
+                                Debug.LogError("idx vs roomid: " + idx + " " + roomInfo.Id);
+                            }
+                                
                             item.gameObject.SetActive(true);
                             item.Setup(room, i, idx);
                         }
@@ -267,12 +274,17 @@ namespace KAP.ToolCreateMap
                     item.OnClickRoomItem();
                     ++i;
                 }
+                //Debug.LogError("count: " + _lstRoomItems.Count);
                 OnUnselectAllItems();
                 _toolBubbleDecoSetting.OnHideAllItems();
             }
-
+            //Debug.LogError(roomItemIndex + " " + roomItemCount);
             for (; roomItemIndex < roomItemCount; ++roomItemIndex)
+            {
                 _transGridRoom.GetChild(roomItemIndex).gameObject.SetActive(false);
+                Debug.LogError("check idx: " + roomItemIndex);
+            }
+                
 
             if (_init)
             {
@@ -286,6 +298,7 @@ namespace KAP.ToolCreateMap
                     {
                         if (room.GetRoomId().ToString() == rec.RoomId)
                         {
+                            //Debug.LogError("check: " + rec.RoomId);
                             room.gameObject.transform.SetSiblingIndex(c - 1);
                         }
                     }
@@ -296,8 +309,22 @@ namespace KAP.ToolCreateMap
         
         public void OnButtonAddClick()
         {
-            _importDecoController.CreateARoom(_areaManager.ListRooms.Count, Vector3.zero, Vector3.one);
+            var room = _importDecoController.CreateARoom(_areaManager.ListRooms.Count, Vector3.zero, Vector3.one);
             Setup();
+            //var item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
+            //int roomId = KAPDefine.DefaultRoomPlayId;
+            //room.Info = new DecoInfo { Id = roomId };
+            //if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+            //{
+            //    int idx = _areaManager.ListRooms.Count;
+            //    item.gameObject.SetActive(true);
+            //    item.Setup(room, i, idx);
+            //}
+            //if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+            //{
+            //    item.gameObject.SetActive(true);
+            //    item.Setup(room, i, 0);
+            //}
         }
 
         public void RemoveARoom(DecoRoot room)
@@ -306,6 +333,18 @@ namespace KAP.ToolCreateMap
                 return;
             _areaManager.RemoveRoom(room);
             _toolBubbleDecoSetting.OnRemoveRootFromDict(((DecoInfo)room.Info).Id.ToString());
+            ToolCreateMapListRoomItem temp = null;
+            foreach (var roomItem in _lstRoomItems)
+            {
+                if (roomItem.GetRoomId() == ((DecoInfo)room.Info).Id)
+                {
+                    temp = roomItem;
+                    Destroy(roomItem.gameObject);
+                    Debug.LogError("done");
+                }
+            }
+            _lstRoomItems.Remove(temp);
+            Debug.LogError("count of lstroomitem: " + _lstRoomItems.Count);
             Setup();
         }
 
@@ -390,6 +429,13 @@ namespace KAP.ToolCreateMap
                 var lstRooms = JsonReader.Deserialize<Dictionary<string, DecoDataArray[]>>(json);
                 _importDecoController.Import(lstRooms);
             }
+            
+            //foreach (var roomItem in _lstRoomItems)
+            //{
+            //    Destroy(roomItem.gameObject);
+            //    Debug.LogError("done");
+            //}
+            //_lstRoomItems.Clear();
             Setup();
         }
         #endregion

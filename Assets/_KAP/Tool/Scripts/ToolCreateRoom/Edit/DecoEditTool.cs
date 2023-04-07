@@ -125,42 +125,7 @@ namespace KAP
                         _editManager.SetCurrent(null);
                         break;
                     case KHHEditStatus.CanSwap:
-                        //_editManager.SetCurrent(null);
-                        //var swapDeco = current.ListOverlaps[0];
-                        //var swapDecoEdit = swapDeco.GetComponent<DecoEditDemo>();
-                        //swapDecoEdit.StartMove();
-                        //_editManager.SetCurrent(swapDecoEdit);
-
-                        //current.EndMove();
-                        //if (current.EditStatus != KHHEditStatus.Valid)
-                        //{
-                        //    _editManager.SetCurrent(null);
-                        //    _editManager.SetCurrent(current);
-                        //}
-
-                        ////for tile & wallpaper
-
-                        //var colliderLayer = swapDecoEdit.deco.gameObject.layer;
-                        //if (colliderLayer == (int)DemoColliderLayer.Tile || colliderLayer == (int)DemoColliderLayer.Wallpaper)
-                        //{
-                        //    var lstAreaPieces = swapDecoEdit.deco.LstAreaPieces;
-                        //    foreach (var piece in lstAreaPieces)
-                        //    {
-                        //        piece.Lock();
-                        //        var cloneList = new List<Deco>(piece.LstChilds);
-                        //        foreach (var deco in cloneList)
-                        //        {
-                        //            deco.Apply(null, null);
-                        //            var moveData = _areaManager.Move(deco);
-                        //            if (moveData != null)
-                        //            {
-                        //                deco.Apply(moveData.piece, moveData.overlapPieces);
-                        //            }
-                        //        }
-                        //        piece.Unlock();
-                        //    }
-                        //}
-                        //swapDecoEdit.EndMove();
+                        
                         break;
                 }
                 
@@ -172,59 +137,7 @@ namespace KAP
                 {
                     var preRoomIndex = currentBubble.RoomIndex;
                     var preBubbleIndex = currentBubble.BubbleIndex;
-                    var preBubbleId = currentBubble.BubbleId;
-
-                    #region PHASE BUBBLE
-                    //if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Bubble)
-                    //{
-                    //    var bubbleInfo = (DecoInfo)current.deco.Info;
-                    //    if (bubbleInfo.IsBubble && currentBubble.Prefab == null)
-                    //    {
-                    //        Debug.LogError("Is Bubble va Prefab null");
-                    //        if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor.ContainsKey(bubbleInfo.Id))
-                    //        {
-                    //            _toolBubbleSetting.CurrentBubble.DctDecoIdColor.Add(bubbleInfo.Id, new List<int>());
-                    //            _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Add(bubbleInfo.Color);
-                    //            currentBubble.Prefab = _toolBubbleDecoSetting.CreateDecoItems(bubbleInfo.Id, bubbleInfo.Color);
-                    //            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-                    //            {
-                    //                if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
-                    //                {
-                    //                    foreach (var item in root.Value)
-                    //                    {
-                    //                        item.UnActiveImgCheck();
-                    //                    }
-                    //                    break;
-                    //                }
-                    //            }
-                    //            currentBubble.Prefab.SetActiveImgCheck();
-                    //        }
-                    //        else if (!_toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Contains(bubbleInfo.Color))
-                    //        {
-                    //            _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Add(bubbleInfo.Color);
-                    //            currentBubble.Prefab = _toolBubbleDecoSetting.CreateDecoItems(bubbleInfo.Id, bubbleInfo.Color);
-                    //            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-                    //            {
-                    //                if (root.Key.BubbleId == _toolBubbleSetting.CurrentBubble.BubbleId)
-                    //                {
-                    //                    foreach (var item in root.Value)
-                    //                    {
-                    //                        item.UnActiveImgCheck();
-                    //                    }
-                    //                    break;
-                    //                }
-                    //            }
-                    //            currentBubble.Prefab.SetActiveImgCheck();
-                    //        }
-                    //        else
-                    //        {
-                    //            Debug.LogError("this deco is already in Bubble!");
-                    //            return;
-                    //        }
-                    //    }
-                    //}
-                    
-                    #endregion 
+                    var preBubbleId = currentBubble.BubbleId; 
 
                     Debug.LogError("roomidx bubbleIdx bubbleId: " + preRoomIndex + " " + preBubbleIndex + " " + preBubbleId);
                     Debug.LogError("_areaManager.ListRooms.Count" + _areaManager.ListRooms.Count);
