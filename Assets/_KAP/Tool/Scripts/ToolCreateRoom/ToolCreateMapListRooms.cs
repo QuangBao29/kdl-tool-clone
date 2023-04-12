@@ -152,6 +152,53 @@ namespace KAP.ToolCreateMap
                         roomId = int.Parse(_inputMapId.text);
                         room.Info = new DecoInfo { Id = roomId };
                     }
+
+                    Debug.LogError("roomId: " + roomId);
+                    room.name = roomId.ToString();
+                    ToolCreateMapListRoomItem item = null;
+                    if (roomItemIndex < roomItemCount)
+                    {
+                        item = _transGridRoom.GetChild(roomItemIndex++).GetComponent<ToolCreateMapListRoomItem>();
+                    }
+                    else item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
+
+                    if (_init)
+                    {
+                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                        {
+                            //Debug.LogError("check roomid: " + roomInfo.Id);
+                            var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
+                            int idx = lstRooms.Count;
+                            if (record != null)
+                            {
+                                idx = record.Index;
+                                Debug.LogError("idx vs roomid: " + idx + " " + roomInfo.Id);
+                            }
+
+                            item.gameObject.SetActive(true);
+                            item.Setup(room, i, idx);
+                        }
+                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                        {
+                            item.gameObject.SetActive(true);
+                            item.Setup(room, i, 0);
+                        }
+                    }
+                    else
+                    {
+                        item.gameObject.SetActive(true);
+                        item.Setup(room, i, 0);
+                    }
+
+                    //Add Item to List
+                    _lstRoomItems.Add(item);
+                    item.OnClickRoomItem();
+                    ++i;
+                }
+                foreach (var room in lstRooms)
+                {
+                    var roomInfo = (DecoInfo)room.Info;
+                    int roomId = roomInfo.Id;
                     if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                     {
                         var lstRecPos = _configController.ListConfigBubbleHomePositionRecords;
@@ -229,50 +276,6 @@ namespace KAP.ToolCreateMap
                             }
                         }
                     }
-
-                    Debug.LogError("roomId: " + roomId);
-                    room.name = roomId.ToString();
-                    ToolCreateMapListRoomItem item = null;
-                    if (roomItemIndex < roomItemCount)
-                    {
-                        item = _transGridRoom.GetChild(roomItemIndex++).GetComponent<ToolCreateMapListRoomItem>();
-                    }
-                    else item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
-
-
-                    if (_init)
-                    {
-                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                        {
-                            //Debug.LogError("check roomid: " + roomInfo.Id);
-                            var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
-                            int idx = lstRooms.Count;
-                            if (record != null)
-                            {
-                                idx = record.Index;
-                                Debug.LogError("idx vs roomid: " + idx + " " + roomInfo.Id);
-                            }
-                                
-                            item.gameObject.SetActive(true);
-                            item.Setup(room, i, idx);
-                        }
-                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
-                        {
-                            item.gameObject.SetActive(true);
-                            item.Setup(room, i, 0);
-                        }
-                    }
-                    else
-                    {
-                        item.gameObject.SetActive(true);
-                        item.Setup(room, i, 0);
-                    }
-                    
-
-                    //Add Item to List
-                    _lstRoomItems.Add(item);
-                    item.OnClickRoomItem();
-                    ++i;
                 }
                 //Debug.LogError("count: " + _lstRoomItems.Count);
                 OnUnselectAllItems();
@@ -284,7 +287,6 @@ namespace KAP.ToolCreateMap
                 _transGridRoom.GetChild(roomItemIndex).gameObject.SetActive(false);
                 Debug.LogError("check idx: " + roomItemIndex);
             }
-                
 
             if (_init)
             {
