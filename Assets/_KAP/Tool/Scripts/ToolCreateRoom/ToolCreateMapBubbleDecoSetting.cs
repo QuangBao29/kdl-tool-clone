@@ -323,7 +323,7 @@ namespace KAP.ToolCreateMap
 
             if (!check)
             {
-                Debug.LogError("abc");
+                //Debug.LogError("abc");
                 var rootDecoItem = SGUtils.InstantiateObject<ToolCreateMapBubbleDecoItems>(_prefabRootDeco, _content);
                 rootDecoItem.RoomId = roomId;
                 rootDecoItem.gameObject.name = rootDecoItem.RoomId.ToString();

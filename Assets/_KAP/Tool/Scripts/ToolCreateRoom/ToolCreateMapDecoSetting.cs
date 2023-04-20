@@ -155,7 +155,7 @@ namespace KAP.ToolCreateMap
                         {
                             if (child.Deco == cur.deco)
                             {
-                                Debug.LogError("dung deco");
+                                //Debug.LogError("dung deco");
                                 temp = child;
                                 Destroy(child.gameObject);
                                 _editManager.SetCurrent(null);
@@ -163,7 +163,7 @@ namespace KAP.ToolCreateMap
                             }
                         }
                         root.Value.Remove(temp);
-                        Debug.LogError("count: " + root.Value.Count);
+                        //Debug.LogError("count: " + root.Value.Count);
                         break;
                     }
                 }

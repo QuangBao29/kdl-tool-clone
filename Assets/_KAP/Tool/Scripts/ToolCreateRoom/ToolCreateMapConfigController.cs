@@ -753,7 +753,7 @@ namespace KAP.ToolCreateMap
         {
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                var txtBubbleHome = FileSaving.Load(Application.dataPath + _configBubbleHomeFilePath);;
+                var txtBubbleHome = FileSaving.Load(Application.dataPath + _configBubbleHomeFilePath);
                 _configBubbleHome.LoadFromString(txtBubbleHome);
                 _lstConfigBubbleHomeRecords.Clear();
                 _lstConfigBubbleHomeRecords.AddRange(_configBubbleHome.Records);
