@@ -11740,7 +11740,7 @@ MonoBehaviour:
       - m_Target: {fileID: 503449531}
         m_TargetAssemblyTypeName: KAP.ToolCreateMap.ToolCreateMapConfigController,
           KAP
-        m_MethodName: OnClickDecoReward
+        m_MethodName: OnClickBaseGem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -1029,6 +1029,28 @@ namespace KAP.ToolCreateMap
             FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
             Debug.LogError("Export Bubble Play success");
         }
+        public void OnClickBaseGem()
+        {
+            List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
+            string txtPos = "";
+            for (var i = 0; i < lstVariablesPos.Count; i++)
+            {
+                txtPos += lstVariablesPos[i] + "\t";
+            }
+            txtPos += "BaseGem" + "\n";
+            for (var i = 0; i < _lstConfigBubblePlayPositionRecords.Count; i++)
+            {
+                var rec = _lstConfigBubblePlayPositionRecords[i];
+                txtPos += rec.RoomId + "\t";
+                txtPos += rec.LstBubblePosition + "\t";
+                txtPos += rec.LstUnpackingDeco + "\t";
+                txtPos += rec.LstUnpackingDeco + "\t";
+                txtPos += "10" + "\n";
+            }
+
+            FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
+            Debug.LogError("Export Bubble Play success");
+        }
         public ConfigDeco ConfigDeco
         {
             get
