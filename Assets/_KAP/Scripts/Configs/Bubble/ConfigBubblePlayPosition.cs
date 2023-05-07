@@ -10,6 +10,7 @@ namespace KAP.Config
         public string RoomId;
         public string LstBubblePosition;
         public string LstUnpackingDeco;
+        public string LstDecoReward;
 
         private List<string> _lstUnpackingDeco;
 
@@ -42,6 +43,7 @@ namespace KAP.Config
             return new List<string> { "RoomId"
                                     , "LstBubblePosition"
                                     , "LstUnpackingDeco"
+                                    , "LstDecoReward"
             };
         }
     }

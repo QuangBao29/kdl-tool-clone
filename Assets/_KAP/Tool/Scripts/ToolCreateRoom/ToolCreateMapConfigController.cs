@@ -38,8 +38,6 @@ namespace KAP.ToolCreateMap
 
         private string _configBubblePlayPositionFilePath = "/_KDL/_GameResources/Configs/Bubble/ConfigBubblePlayPosition.csv";
 
-        private string _configDecoRewardFilePath = "/_KDL/_GameResources/Configs/Deco/ConfigDecoReward.csv";
-
         [SerializeField]
         private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] 
@@ -65,7 +63,6 @@ namespace KAP.ToolCreateMap
         private readonly ConfigBubbleHomePosition _configBubbleHomePosition = new ConfigBubbleHomePosition();
         private readonly ConfigBubblePlay _configBubblePlay = new ConfigBubblePlay();
         private readonly ConfigBubblePlayPosition _configBubblePlayPosition = new ConfigBubblePlayPosition();
-        private readonly ConfigDecoReward _configDecoReward = new ConfigDecoReward();
 
         private readonly List<ConfigRoomRecord> _lstConfigRoomRecords = new List<ConfigRoomRecord>();
         public ReadOnlyCollection<ConfigRoomRecord> ListConfigRoomRecords;
@@ -89,8 +86,6 @@ namespace KAP.ToolCreateMap
         private readonly List<ConfigBubblePlayPositionRecord> _lstConfigBubblePlayPositionRecords = new List<ConfigBubblePlayPositionRecord>();
         public ReadOnlyCollection<ConfigBubblePlayPositionRecord> ListConfigBubblePlayPositionRecords;
 
-        private readonly List<ConfigDecoRewardRecord> _lstConfigDecoRewardRecords = new List<ConfigDecoRewardRecord>();
-        public ReadOnlyCollection<ConfigDecoRewardRecord> ListConfigDecoRewardRecords;
         private Dictionary<string, int> dctRoomIdNumBubble = new Dictionary<string, int>();         //RoomId - num of bubble
         private Dictionary<string, string> dctRoomIdPosition = new Dictionary<string, string>();    //roomId - position
         private Dictionary<string, string> dctRoomIdIndex = new Dictionary<string, string>();       //roomId - Index
@@ -154,11 +149,6 @@ namespace KAP.ToolCreateMap
             _configBubblePlayPosition.LoadFromString(txtBubblePlayPosition);
             _lstConfigBubblePlayPositionRecords.AddRange(_configBubblePlayPosition.Records);
             ListConfigBubblePlayPositionRecords = _lstConfigBubblePlayPositionRecords.AsReadOnly();
-
-            var txtDecoReward = FileSaving.Load(Application.dataPath + _configDecoRewardFilePath);
-            _configDecoReward.LoadFromString(txtDecoReward);
-            _lstConfigDecoRewardRecords.AddRange(_configDecoReward.Records);
-            ListConfigDecoRewardRecords = _lstConfigDecoRewardRecords.AsReadOnly();
         }
 
 
@@ -307,77 +297,8 @@ namespace KAP.ToolCreateMap
                     return true;
                 });
             }
-            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.DecoReward)
-            {
-                var mess = string.Format("build config deco reward cho man choi id: " + _toolTransfer.GetInputDecoRewardId());
-
-                UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
-                {
-                    if (result == UIMessageBox.MessageBoxAction.Accept)
-                    {
-                        BuildConfigDecoReward();
-                    }
-                    return true;
-                });
-            }
         }
-        private void BuildConfigDecoReward()
-        {
-            _toolTransfer.DctDecoReward.Clear();
-            _toolTransfer.CreateDecoReward();   //create DctDecoReward
-
-            LoadFileCsv();
-            var txt = "";
-            List<string> lstVariables = ConfigDecoRewardRecord.GetLstVariables();
-            for (var i = 0; i < lstVariables.Count - 1; i++)
-            {
-                txt += lstVariables[i] + "\t";
-            }
-            txt += lstVariables[lstVariables.Count - 1] + "\n";
-
-            if (_lstConfigDecoRewardRecords.Count != 0)
-            {
-                List<ConfigDecoRewardRecord> listRemovedRecord = new List<ConfigDecoRewardRecord>();
-                for (var i = 0; i < _lstConfigDecoRewardRecords.Count; i++)
-                {
-                    var record = _lstConfigDecoRewardRecords[i];
-                    if (record.RoomId == _inputMapId.text)
-                    {
-                        listRemovedRecord.Add(record);
-                        Debug.LogError("add remove rec " + record.RoomId);
-                    }
-                }
-                foreach (var rec in listRemovedRecord)
-                {
-                    _lstConfigDecoRewardRecords.Remove(rec);
-                }
-
-                foreach (var pair in _toolTransfer.DctDecoReward)
-                {
-                    ConfigDecoRewardRecord newRecord = new ConfigDecoRewardRecord();
-                    newRecord.RoomId = pair.Key;
-                    newRecord.LstDecoIds = pair.Value;
-                    _lstConfigDecoRewardRecords.Add(newRecord);
-                }
-                string newtxt = "";
-                for (var i = 0; i < lstVariables.Count - 1; i++)
-                {
-                    newtxt += lstVariables[i] + "\t";
-                }
-                newtxt += lstVariables[lstVariables.Count - 1] + "\n" + ConvertConfigDecoRewardRecordToStringCsv(_lstConfigDecoRewardRecords);
-                FileSaving.Save(Application.dataPath + _configDecoRewardFilePath, newtxt);
-                Debug.LogError("Export Deco Reward Success");
-            }
-            else
-            {
-                foreach (var pair in _toolTransfer.DctDecoReward)
-                {
-                    txt += pair.Key + '\t' + pair.Value + '\n';
-                }
-                FileSaving.Save(Application.dataPath + _configDecoRewardFilePath, txt);
-                Debug.LogError("Export Deco Reward Success");
-            }
-        }
+        
         private void BuildCurrentRoomPlay()
         {
             //clear cache data
@@ -518,6 +439,7 @@ namespace KAP.ToolCreateMap
                         {
                             rec.LstBubblePosition = pair.Value;
                             rec.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
+                            //rec.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
                         }
                     }
                 }
@@ -527,6 +449,7 @@ namespace KAP.ToolCreateMap
                     newConfig.RoomId = pair.Key;
                     newConfig.LstBubblePosition = pair.Value;
                     newConfig.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
+                    //newConfig.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
                     _lstConfigBubblePlayPositionRecords.Add(newConfig);
                 }
             }
@@ -782,14 +705,6 @@ namespace KAP.ToolCreateMap
                 _lstConfigBubblePlayPositionRecords.AddRange(_configBubblePlayPosition.Records);
                 ListConfigBubblePlayPositionRecords = _lstConfigBubblePlayPositionRecords.AsReadOnly();
             }
-            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.DecoReward)
-            {
-                var txtDecoReward = FileSaving.Load(Application.dataPath + _configDecoRewardFilePath);
-                _configDecoReward.LoadFromString(txtDecoReward);
-                _lstConfigDecoRewardRecords.Clear();
-                _lstConfigDecoRewardRecords.AddRange(_configDecoReward.Records);
-                ListConfigDecoRewardRecords = _lstConfigDecoRewardRecords.AsReadOnly();
-            }
         }
         #endregion
 
@@ -839,15 +754,6 @@ namespace KAP.ToolCreateMap
                 }
                     
                 txt += configRecords[i].BubbleId + "\t" + configRecords[i].BubbleDecoIds + "\n";
-            }
-            return txt;
-        }
-        public string ConvertConfigDecoRewardRecordToStringCsv(List<ConfigDecoRewardRecord> configRecords)
-        {
-            string txt = "";
-            for (var i = 0; i < configRecords.Count; i++)
-            {
-                txt += configRecords[i].RoomId + "\t" + configRecords[i].LstDecoIds + "\n";
             }
             return txt;
         }
@@ -1101,20 +1007,28 @@ namespace KAP.ToolCreateMap
             FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
             Debug.LogError("Clear Data Play Success");
         }
-        public void ClearDecoReward()
-        {
-            List<string> lstVariables = ConfigDecoRewardRecord.GetLstVariables();
-            string txt = "";
-            for (var i = 0; i < lstVariables.Count - 1; i++)
-            {
-                txt += lstVariables[i] + "\t";
-            }
-            txt += lstVariables[lstVariables.Count - 1] + "\n";
-            FileSaving.Save(Application.dataPath + _configDecoRewardFilePath, txt);
-            Debug.LogError("Clear Data Deco Reward Success");
-        }
         #endregion
+        public void OnClickDecoReward()
+        {
+            List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
+            string txtPos = "";
+            for (var i = 0; i < lstVariablesPos.Count; i++)
+            {
+                txtPos += lstVariablesPos[i] + "\t";
+            }
+            txtPos += "LstDecoReward" + "\n";
+            for (var i = 0; i < _lstConfigBubblePlayPositionRecords.Count; i++)
+            {
+                var rec = _lstConfigBubblePlayPositionRecords[i];
+                txtPos += rec.RoomId + "\t";
+                txtPos += rec.LstBubblePosition + "\t";
+                txtPos += rec.LstUnpackingDeco + "\t";
+                txtPos += rec.LstUnpackingDeco + "\n";
+            }
 
+            FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
+            Debug.LogError("Export Bubble Play success");
+        }
         public ConfigDeco ConfigDeco
         {
             get
@@ -1161,10 +1075,6 @@ namespace KAP.ToolCreateMap
         public ConfigBubblePlayPosition ConfigBubblePlayPosition
         {
             get => _configBubblePlayPosition;
-        }
-        public ConfigDecoReward ConfigDecoReward
-        {
-            get => _configDecoReward;
         }
     }
 

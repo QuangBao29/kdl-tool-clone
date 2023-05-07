@@ -99,7 +99,6 @@ namespace KAP.ToolCreateMap
             _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultMansionID));
             _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPath, _exportRoomPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.SeparatedRoom, new EditModeData(EditMode.SeparatedRoom, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
-            _dctEditModeData.Add(EditMode.DecoReward, new EditModeData(EditMode.DecoReward, "", "", "", Color.black, KAPDefine.DefaultRoomPlayKDLID));
         }
 
         private void OnTogglEditThemeChange(EditMode editMode)
