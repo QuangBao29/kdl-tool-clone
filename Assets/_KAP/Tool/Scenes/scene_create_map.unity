@@ -11737,10 +11737,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 503449531}
-        m_TargetAssemblyTypeName: KAP.ToolCreateMap.ToolCreateMapConfigController,
-          KAP
-        m_MethodName: OnClickBaseGem
+      - m_Target: {fileID: 976342555}
+        m_TargetAssemblyTypeName: KAP.ToolCreateMap.ToolCreateMapListRooms, KAP
+        m_MethodName: OnTempCreateBubbleItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
