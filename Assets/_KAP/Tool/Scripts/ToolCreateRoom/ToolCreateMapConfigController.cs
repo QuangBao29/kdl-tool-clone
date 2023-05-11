@@ -1033,19 +1033,19 @@ namespace KAP.ToolCreateMap
         {
             List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
             string txtPos = "";
-            for (var i = 0; i < lstVariablesPos.Count; i++)
+            for (var i = 0; i < lstVariablesPos.Count - 1; i++)
             {
                 txtPos += lstVariablesPos[i] + "\t";
             }
-            txtPos += "BaseGem" + "\n";
+            txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n";
             for (var i = 0; i < _lstConfigBubblePlayPositionRecords.Count; i++)
             {
                 var rec = _lstConfigBubblePlayPositionRecords[i];
                 txtPos += rec.RoomId + "\t";
                 txtPos += rec.LstBubblePosition + "\t";
                 txtPos += rec.LstUnpackingDeco + "\t";
-                txtPos += rec.LstUnpackingDeco + "\t";
-                txtPos += "10" + "\n";
+                txtPos += rec.LstDecoReward + "\t";
+                txtPos += "100" + "\n";
             }
 
             FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);

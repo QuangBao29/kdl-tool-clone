@@ -44,6 +44,7 @@ namespace KAP.Config
                                     , "LstBubblePosition"
                                     , "LstUnpackingDeco"
                                     , "LstDecoReward"
+                                    , "BaseGem"
             };
         }
     }
