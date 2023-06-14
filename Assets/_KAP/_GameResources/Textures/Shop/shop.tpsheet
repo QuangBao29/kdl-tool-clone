@@ -4,7 +4,7 @@
 # To import these sprites into your Unity project, download "TexturePackerImporter":
 # https://www.codeandweb.com/texturepacker/unity
 #
-# $TexturePacker:SmartUpdate:2a862b01487f8cb0fdb1aa774f29c365:b56a4f239b557427e624bcf183e17663:b9c857228db46a10f00394dbfaca6f74$
+# $TexturePacker:SmartUpdate:0394b481977ee4ca7acfa6257dbefc61:83e1d23a718ddbbdd3aab8fda9e56260:b9c857228db46a10f00394dbfaca6f74$
 #
 :format=40300
 :texture=shop.png
@@ -13,9 +13,9 @@
 :borders=disabled
 :alphahandling=ClearTransparentPixels
 
-16;103;21;76;68; 0.5;0.5; 0;0;0;0
-17;120;89;98;74; 0.5;0.5; 0;0;0;0
-18;0;30;103;119; 0.5;0.5042016806722689; 0;0;0;0
-22;179;23;63;66; 0.5;0.5; 0;0;0;0
-23;120;163;101;93; 0.5;0.5; 0;0;0;0
-24;0;149;120;107; 0.5;0.5; 0;0;0;0
+16;189;110;63;60; 0.5;0.5; 0;0;0;0
+17;101;104;88;66; 0.5;0.5; 0;0;0;0
+18;0;12;80;92; 0.5;0.5; 0;0;0;0
+22;80;25;76;79; 0.5;0.5; 0;0;0;0
+23;0;163;101;93; 0.5;0.5; 0;0;0;0
+24;101;170;96;86; 0.5;0.5; 0;0;0;0
