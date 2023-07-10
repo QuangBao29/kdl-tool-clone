@@ -171,7 +171,7 @@ namespace KAP.ToolCreateMap
                             if (record != null)
                             {
                                 idx = record.Index;
-                                Debug.LogError("idx vs roomid: " + idx + " " + roomInfo.Id);
+                                //Debug.LogError("idx vs roomid: " + idx + " " + roomInfo.Id);
                             }
 
                             item.gameObject.SetActive(true);

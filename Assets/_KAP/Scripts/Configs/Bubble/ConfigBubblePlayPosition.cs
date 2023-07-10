@@ -11,6 +11,7 @@ namespace KAP.Config
         public string LstBubblePosition;
         public string LstUnpackingDeco;
         public string LstDecoReward;
+        public string BaseGem;
 
         private List<string> _lstUnpackingDeco;
 
