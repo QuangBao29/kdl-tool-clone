@@ -8,6 +8,7 @@ namespace KAP.Config
     public class ConfigBubblePlayPositionRecord
     {
         public string RoomId;
+        public string Id;
         public string LstBubblePosition;
         public string LstUnpackingDeco;
         public string LstDecoReward;
@@ -41,7 +42,8 @@ namespace KAP.Config
 
         public static List<string> GetLstVariables()
         {
-            return new List<string> { "RoomId"
+            return new List<string> { "Id"
+                                    , "RoomId"
                                     , "LstBubblePosition"
                                     , "LstUnpackingDeco"
                                     , "LstDecoReward"
