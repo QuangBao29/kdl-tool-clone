@@ -1051,6 +1051,27 @@ namespace KAP.ToolCreateMap
             FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
             Debug.LogError("Export Bubble Play success");
         }
+        //public void AddIdColumn()
+        //{
+        //    LoadFileCsv();
+        //    List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
+        //    string txtPos = "Id" + "\t";
+        //    int j = 1;
+        //    for (var i = 0; i < lstVariablesPos.Count - 1; i++)
+        //    {
+        //        txtPos += lstVariablesPos[i] + "\t";
+        //    }
+        //    txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n";
+        //    foreach (var config in _lstConfigBubblePlayPositionRecords)
+        //    {
+        //        //ConfigBubblePlayPositionRecord newRec = new ConfigBubblePlayPositionRecord();
+        //        txtPos += j.ToString() + "\t" + config.RoomId + "\t" + config.LstBubblePosition + "\t" +
+        //            config.LstUnpackingDeco + "\t" + config.LstDecoReward + "\t" + config.BaseGem + "\n";
+        //        j++;
+        //    }
+        //    FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
+        //    Debug.LogError("Export Bubble Play success");
+        //}
         public ConfigDeco ConfigDeco
         {
             get
