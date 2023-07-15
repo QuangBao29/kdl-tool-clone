@@ -449,7 +449,7 @@ namespace KAP.ToolCreateMap
                     newConfig.RoomId = pair.Key;
                     newConfig.LstBubblePosition = pair.Value;
                     newConfig.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
-                    //newConfig.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
+                    newConfig.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
                     _lstConfigBubblePlayPositionRecords.Add(newConfig);
                 }
             }
@@ -763,7 +763,8 @@ namespace KAP.ToolCreateMap
             string txt = "";
             for (var i = 0; i < configRecords.Count; i++)
             {
-                txt += configRecords[i].RoomId + "\t" + configRecords[i].LstBubblePosition + "\t" + configRecords[i].LstUnpackingDeco + "\n";
+                txt += (i + 1).ToString() + "\t" + configRecords[i].RoomId + "\t" + configRecords[i].LstBubblePosition + "\t" + 
+                    configRecords[i].LstUnpackingDeco + "\t" + configRecords[i].LstDecoReward + "\t" + configRecords[i].BaseGem + "\n";
             }
             return txt;
         }

@@ -7,8 +7,8 @@ namespace KAP.Config
 {
     public class ConfigBubblePlayPositionRecord
     {
-        public string RoomId;
         public string Id;
+        public string RoomId;
         public string LstBubblePosition;
         public string LstUnpackingDeco;
         public string LstDecoReward;
