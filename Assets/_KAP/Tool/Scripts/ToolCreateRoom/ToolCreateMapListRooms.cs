@@ -165,13 +165,11 @@ namespace KAP.ToolCreateMap
                     {
                         if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                         {
-                            //Debug.LogError("check roomid: " + roomInfo.Id);
                             var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
                             int idx = lstRooms.Count;
                             if (record != null)
                             {
                                 idx = record.Index;
-                                //Debug.LogError("idx vs roomid: " + idx + " " + roomInfo.Id);
                             }
 
                             item.gameObject.SetActive(true);
@@ -271,6 +269,7 @@ namespace KAP.ToolCreateMap
                                         }
                                     }
                                 });
+                                _toolBubbleDecoSetting.BaseGem.text = rec.BaseGem;
                                 break;
                             }
                         }

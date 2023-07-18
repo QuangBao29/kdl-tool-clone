@@ -439,7 +439,7 @@ namespace KAP.ToolCreateMap
                         {
                             rec.LstBubblePosition = pair.Value;
                             rec.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
-                            //rec.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
+                            rec.BaseGem = _toolBubbleDecoSetting.BaseGem.text;
                         }
                     }
                 }
@@ -450,6 +450,7 @@ namespace KAP.ToolCreateMap
                     newConfig.LstBubblePosition = pair.Value;
                     newConfig.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
                     newConfig.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
+                    newConfig.BaseGem = _toolBubbleDecoSetting.BaseGem.text;
                     _lstConfigBubblePlayPositionRecords.Add(newConfig);
                 }
             }

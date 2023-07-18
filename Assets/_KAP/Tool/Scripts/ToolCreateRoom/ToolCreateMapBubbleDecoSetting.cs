@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Kawaii.ResourceManager;
 using KAP.Tools;
 using Kawaii.IsoTools.DecoSystem;
+using TMPro;
 
 namespace KAP.ToolCreateMap
 {
@@ -12,16 +13,14 @@ namespace KAP.ToolCreateMap
     {
         [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] private EditManager _editManager = null;
-        [SerializeField]
-        private AreaManager _areaManager = null;
+        [SerializeField] private AreaManager _areaManager = null;
         [SerializeField] protected ToolCreateMapConfigController _configController = null;
         [SerializeField] private ToolCreateMapBubbleDecoItems _prefabDecoItems = null;
         [SerializeField] private ToolCreateMapBubbleDecoItems _prefabRootDeco = null;
         [SerializeField] private Transform _content = null;
-        [SerializeField]
-        private ToolCreateMapListRooms _toolLstRooms = null;
-        [SerializeField]
-        private ScrollRect _scrollItem = null;
+        [SerializeField] private ToolCreateMapListRooms _toolLstRooms = null;
+        [SerializeField] private ScrollRect _scrollItem = null;
+        [SerializeField] public TMP_InputField BaseGem = null;
         
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
 
