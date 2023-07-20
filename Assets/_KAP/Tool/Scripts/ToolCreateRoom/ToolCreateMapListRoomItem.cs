@@ -76,6 +76,10 @@ namespace KAP.ToolCreateMap
         }
         public void OnClickRoomItem()
         {
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.OldRoom)
+            {
+                return;
+            }
             if (IsSelect)
             {
                 UnSelectRoomItem();

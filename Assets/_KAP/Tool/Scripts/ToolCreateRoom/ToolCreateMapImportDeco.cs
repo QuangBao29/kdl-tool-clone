@@ -5,6 +5,7 @@ using Kawaii.IsoTools.DecoSystem;
 using Kawaii.IsoTools;
 using Pathfinding.Serialization.JsonFx;
 using Kawaii.ResourceManager;
+using KAP.Tools;
 
 namespace KAP.ToolCreateMap
 {
@@ -154,7 +155,6 @@ namespace KAP.ToolCreateMap
                 CreateARoom(info != null?info.Id:_areaManager.ListRooms.Count, data.Position != null ? data.Position.ToVector3() : Vector3.zero, data.Size.ToVector3());
                 return;
             }
-            
             var id = info.Id;
             var color = info.Color;
             var deco = CreateDeco(id, color);

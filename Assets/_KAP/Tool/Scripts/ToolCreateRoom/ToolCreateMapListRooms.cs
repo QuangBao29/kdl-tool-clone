@@ -96,9 +96,13 @@ namespace KAP.ToolCreateMap
             string _importSeparatedRoomsPath = "Assets/_KAP/_GameResources/Maps/SeparatedRooms/";
             string _exportSeparatedRoomsPath = "/_KAP/_GameResources/Maps/SeparatedRooms/";
 
+            string _importOldRoomsPath = "Assets/_KAP/_GameResources/Maps/OldRooms/";
+            string _exportOldRoomsPath = "/_KAP/_GameResources/Maps/OldRooms/";
+
             _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultMansionID));
             _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPath, _exportRoomPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.SeparatedRoom, new EditModeData(EditMode.SeparatedRoom, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
+            _dctEditModeData.Add(EditMode.OldRoom, new EditModeData(EditMode.OldRoom, _importOldRoomsPath, _exportOldRoomsPath, "", Color.gray, KAPDefine.DefaultOldMansionID));
         }
 
         private void OnTogglEditThemeChange(EditMode editMode)
@@ -151,6 +155,14 @@ namespace KAP.ToolCreateMap
                         roomId = int.Parse(_inputMapId.text);
                         room.Info = new DecoInfo { Id = roomId };
                     }
+                    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.OldRoom)
+                    {
+                        if (roomInfo.Id < 1000000)
+                        {
+                            roomId = int.Parse("2" + roomInfo.Id);
+                            room.Info = new DecoInfo { Id = roomId };
+                        }
+                    }
 
                     Debug.LogError("roomId: " + roomId);
                     room.name = roomId.ToString();
@@ -161,7 +173,7 @@ namespace KAP.ToolCreateMap
                     }
                     else item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
 
-                    if (_init)
+                    if (_init && ToolEditMode.Instance.CurrentEditMode != EditMode.OldRoom)
                     {
                         if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                         {
@@ -189,95 +201,101 @@ namespace KAP.ToolCreateMap
 
                     //Add Item to List
                     _lstRoomItems.Add(item);
-                    item.OnClickRoomItem();
+                    if (ToolEditMode.Instance.CurrentEditMode != EditMode.OldRoom)
+                    {
+                        item.OnClickRoomItem();
+                    }
                     ++i;
                 }
-                foreach (var room in lstRooms)
+                if (ToolEditMode.Instance.CurrentEditMode != EditMode.OldRoom)
                 {
-                    var roomInfo = (DecoInfo)room.Info;
-                    int roomId = roomInfo.Id;
-                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                    foreach (var room in lstRooms)
                     {
-                        var lstRecPos = _configController.ListConfigBubbleHomePositionRecords;
-                        var lstRecHome = _configController.ListConfigBubbleHomeRecords;
-                        foreach (var rec in lstRecPos)
+                        var roomInfo = (DecoInfo)room.Info;
+                        int roomId = roomInfo.Id;
+                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                         {
-                            if (rec.RoomId == roomId.ToString())
+                            var lstRecPos = _configController.ListConfigBubbleHomePositionRecords;
+                            var lstRecHome = _configController.ListConfigBubbleHomeRecords;
+                            foreach (var rec in lstRecPos)
                             {
-                                var lstPos = rec.GetLstBubblePositionVector3();
-                                List<string> lstRoomDecoId = new List<string>();
-                                foreach (var bubbleRec in lstRecHome)
+                                if (rec.RoomId == roomId.ToString())
                                 {
-                                    var rID = SGUtils.ParseStringToListInt(bubbleRec.BubbleId, '_')[0];
-                                    if (roomId == rID)
+                                    var lstPos = rec.GetLstBubblePositionVector3();
+                                    List<string> lstRoomDecoId = new List<string>();
+                                    foreach (var bubbleRec in lstRecHome)
                                     {
-                                        var decoid = SGUtils.ParseStringToList(bubbleRec.BubbleDecoIds, ';')[0];
-                                        var id = SGUtils.ParseStringToList(decoid, '_')[0];
-                                        lstRoomDecoId.Add(id);
-                                    }
-                                }
-                                room.Foreach((deco) => {
-                                    var info = (DecoInfo)deco.Info;
-                                    if (lstRoomDecoId.Contains(info.Id.ToString()))
-                                    {
-                                        foreach (var pos in lstPos)
+                                        var rID = SGUtils.ParseStringToListInt(bubbleRec.BubbleId, '_')[0];
+                                        if (roomId == rID)
                                         {
-                                            var isoPos = pos + room.Position;
-                                            if (isoPos == deco.Position)
-                                            {
-                                                deco.Info = new DecoInfo { Id = info.Id, Color = info.Color, IsBubble = true };
-                                            }
+                                            var decoid = SGUtils.ParseStringToList(bubbleRec.BubbleDecoIds, ';')[0];
+                                            var id = SGUtils.ParseStringToList(decoid, '_')[0];
+                                            lstRoomDecoId.Add(id);
                                         }
                                     }
-                                });
-                                break;
+                                    room.Foreach((deco) => {
+                                        var info = (DecoInfo)deco.Info;
+                                        if (lstRoomDecoId.Contains(info.Id.ToString()))
+                                        {
+                                            foreach (var pos in lstPos)
+                                            {
+                                                var isoPos = pos + room.Position;
+                                                if (isoPos == deco.Position)
+                                                {
+                                                    deco.Info = new DecoInfo { Id = info.Id, Color = info.Color, IsBubble = true };
+                                                }
+                                            }
+                                        }
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                        {
+                            var lstRecPos = _configController.ListConfigBubblePlayPositionRecords;
+                            var lstRecPlay = _configController.ListConfigBubblePlayRecords;
+                            foreach (var rec in lstRecPos)
+                            {
+                                if (rec.RoomId == roomId.ToString())
+                                {
+                                    var lstPos = rec.GetLstBubblePositionVector3();
+                                    List<string> lstRoomDecoId = new List<string>();
+                                    foreach (var bubbleRec in lstRecPlay)
+                                    {
+                                        var rID = SGUtils.ParseStringToListInt(bubbleRec.BubbleId, '_')[0];
+                                        if (roomId == rID)
+                                        {
+                                            var decoid = SGUtils.ParseStringToList(bubbleRec.BubbleDecoIds, ';')[0];
+                                            var id = SGUtils.ParseStringToList(decoid, '_')[0];
+                                            lstRoomDecoId.Add(id);
+                                        }
+                                    }
+                                    room.Foreach((deco) =>
+                                    {
+                                        var info = (DecoInfo)deco.Info;
+                                        if (lstRoomDecoId.Contains(info.Id.ToString()))
+                                        {
+                                            foreach (var pos in lstPos)
+                                            {
+                                                var isoPos = pos + room.Position;
+                                                if (isoPos == deco.Position)
+                                                {
+                                                    deco.Info = new DecoInfo { Id = info.Id, Color = info.Color, IsBubble = true };
+                                                }
+                                            }
+                                        }
+                                    });
+                                    _toolBubbleDecoSetting.BaseGem.text = rec.BaseGem;
+                                    break;
+                                }
                             }
                         }
                     }
-                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
-                    {
-                        var lstRecPos = _configController.ListConfigBubblePlayPositionRecords;
-                        var lstRecPlay = _configController.ListConfigBubblePlayRecords;
-                        foreach (var rec in lstRecPos)
-                        {
-                            if (rec.RoomId == roomId.ToString())
-                            {
-                                var lstPos = rec.GetLstBubblePositionVector3();
-                                List<string> lstRoomDecoId = new List<string>();
-                                foreach (var bubbleRec in lstRecPlay)
-                                {
-                                    var rID = SGUtils.ParseStringToListInt(bubbleRec.BubbleId, '_')[0];
-                                    if (roomId == rID)
-                                    {
-                                        var decoid = SGUtils.ParseStringToList(bubbleRec.BubbleDecoIds, ';')[0];
-                                        var id = SGUtils.ParseStringToList(decoid, '_')[0];
-                                        lstRoomDecoId.Add(id);
-                                    }
-                                }
-                                room.Foreach((deco) =>
-                                {
-                                    var info = (DecoInfo)deco.Info;
-                                    if (lstRoomDecoId.Contains(info.Id.ToString()))
-                                    {
-                                        foreach (var pos in lstPos)
-                                        {
-                                            var isoPos = pos + room.Position;
-                                            if (isoPos == deco.Position)
-                                            {
-                                                deco.Info = new DecoInfo { Id = info.Id, Color = info.Color, IsBubble = true };
-                                            }
-                                        }
-                                    }
-                                });
-                                _toolBubbleDecoSetting.BaseGem.text = rec.BaseGem;
-                                break;
-                            }
-                        }
-                    }
+                    //Debug.LogError("count: " + _lstRoomItems.Count);
+                    OnUnselectAllItems();
+                    _toolBubbleDecoSetting.OnHideAllItems();
                 }
-                //Debug.LogError("count: " + _lstRoomItems.Count);
-                OnUnselectAllItems();
-                _toolBubbleDecoSetting.OnHideAllItems();
             }
             //Debug.LogError(roomItemIndex + " " + roomItemCount);
             for (; roomItemIndex < roomItemCount; ++roomItemIndex)
@@ -480,6 +498,10 @@ namespace KAP.ToolCreateMap
             string mess = "";
             var targetEditMode = _dctEditModeData[ToolEditMode.Instance.CurrentEditMode];
             Debug.LogError("current Mode: " + targetEditMode.Mode);
+            if (int.Parse(_inputMapId.text) < 1000000)
+            {
+                _inputMapId.text = "2" + _inputMapId.text;
+            }
             mess = string.Format("export {0}: {1}", targetEditMode.Mode, _inputMapId.text);
 
             UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>

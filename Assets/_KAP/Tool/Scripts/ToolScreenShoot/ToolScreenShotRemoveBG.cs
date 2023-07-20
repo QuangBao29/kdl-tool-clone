@@ -31,8 +31,8 @@ namespace KAP.Tools
 
         void Awake()
         {
-            CreateBlackAndWhiteCameras();
-            HideBlackAndWhiteCameras();
+            //CreateBlackAndWhiteCameras();
+            //HideBlackAndWhiteCameras();
             CacheAndInitialiseFields();
         }
 
@@ -48,7 +48,39 @@ namespace KAP.Tools
 
         // =============================================================================
         #region ScreenShoot
+        public void OnClickScreenShotKDL()
+        {
+            ActionSetupScreenShoot?.Invoke();
+            StartCoroutine(SetupScreenShotKDL());
+        }
+        public IEnumerator SetupScreenShotKDL()
+        {
+            yield return new WaitForEndOfFrame(); // it must be a coroutine 
 
+            Vector2 temp = _mainCam.transform.position;
+            var startX = temp.x - _screenWidth / 2;
+            var startY = temp.y - _screenHeight / 2;
+
+            var tex = new Texture2D(_screenWidth, _screenHeight, TextureFormat.RGB24, false);
+            tex.ReadPixels(new Rect(-1, -1, _screenWidth, _screenHeight), 0, 0);
+            tex.Apply();
+
+            // Encode texture into PNG
+            var bytes = tex.EncodeToPNG();
+            Destroy(tex);
+
+            string saveFolder = Path.Combine(Application.dataPath, _saveFolderPath);
+            string nameWithURL = Path.Combine(saveFolder, GetScreenShootName());
+
+            File.WriteAllBytes(nameWithURL, bytes);
+
+            //string imgsrc = System.Convert.ToBase64String(bytes);
+            //Texture2D scrnShot = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+            //scrnShot.LoadImage(System.Convert.FromBase64String(imgsrc));
+
+            //Sprite sprite = Sprite.Create(scrnShot, new Rect(0, 0, scrnShot.width, scrnShot.height), new Vector2(.5f, .5f));
+            //img.sprite = sprite;
+        }
         public void OnScreenShotClick()
         {
             SetupScreenshot();
@@ -151,7 +183,7 @@ namespace KAP.Tools
         {
             cam.enabled = true;
             cam.Render();
-            WriteScreenImageToTexture(tex);
+            WriteScreenImageToTexture(cam, tex);
             cam.enabled = false;
         }
 
@@ -185,9 +217,9 @@ namespace KAP.Tools
         // =============================================================================
         #region Calculate & Export PNG
 
-        private void WriteScreenImageToTexture(Texture2D tex)
+        private void WriteScreenImageToTexture(Camera cam, Texture2D tex)
         {
-            tex.ReadPixels(new Rect(0, 0, _screenWidth, _screenHeight), 0, 0);
+            tex.ReadPixels(new Rect(0, 0, _screenWidth, _screenHeight), 1, 1);
             tex.Apply();
         }
 
