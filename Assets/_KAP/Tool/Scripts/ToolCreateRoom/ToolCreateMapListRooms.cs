@@ -164,7 +164,7 @@ namespace KAP.ToolCreateMap
                         }
                     }
 
-                    Debug.LogError("roomId: " + roomId);
+                    //Debug.LogError("roomId: " + roomId);
                     room.name = roomId.ToString();
                     ToolCreateMapListRoomItem item = null;
                     if (roomItemIndex < roomItemCount)
@@ -522,23 +522,21 @@ namespace KAP.ToolCreateMap
 
         public void OnExportSeparatedRoomsInTheme()
         {
-            var temp = _inputMapId.text;
             foreach (var r in _areaManager.ListRooms)
             {
                 var info = (DecoInfo)r.Info;
-                _inputMapId.text = info.Id.ToString();
-                string mapName = string.Format("{0}.json", temp + _inputMapId.text);
+                var roomId = info.Id.ToString();
+                string mapName = string.Format("{0}.json", _inputMapId.text + roomId);
                 var targetEditMode = _dctEditModeData[EditMode.SeparatedRoom];
                 string path = Application.dataPath + Path.Combine(targetEditMode.ExportPath, mapName);
                 string mess = string.Format("export {0}: {1}", "Separated Rooms", _inputMapId.text);
 
                 var data = _toolExportData.Export(null, r);
-                Debug.LogError("path: " + path);
-                Debug.LogError("data: " + JsonWriter.Serialize(data));
+                //Debug.LogError("path: " + path);
+                //Debug.LogError("data: " + JsonWriter.Serialize(data));
                 FileSaving.Save(path, JsonWriter.Serialize(data));
-                Debug.LogError("Export Separated Rooms " + _inputMapId.text + " success");
+                Debug.LogError("Export Separated Rooms " + _inputMapId.text + roomId + " success");
             }
-            _inputMapId.text = temp;
         }
 
         #endregion
