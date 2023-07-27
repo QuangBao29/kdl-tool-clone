@@ -157,11 +157,7 @@ namespace KAP.ToolCreateMap
                     }
                     else if (ToolEditMode.Instance.CurrentEditMode == EditMode.OldRoom)
                     {
-                        if (roomInfo.Id < 1000000)
-                        {
-                            roomId = int.Parse("2" + roomInfo.Id);
-                            room.Info = new DecoInfo { Id = roomId };
-                        }
+                        roomId = roomInfo.Id;
                     }
 
                     //Debug.LogError("roomId: " + roomId);
@@ -498,10 +494,10 @@ namespace KAP.ToolCreateMap
             string mess = "";
             var targetEditMode = _dctEditModeData[ToolEditMode.Instance.CurrentEditMode];
             Debug.LogError("current Mode: " + targetEditMode.Mode);
-            if (int.Parse(_inputMapId.text) < 1000000)
-            {
-                _inputMapId.text = "2" + _inputMapId.text;
-            }
+            //if (int.Parse(_inputMapId.text) < 1000000)
+            //{
+            //    _inputMapId.text = "2" + _inputMapId.text;
+            //}
             mess = string.Format("export {0}: {1}", targetEditMode.Mode, _inputMapId.text);
 
             UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
