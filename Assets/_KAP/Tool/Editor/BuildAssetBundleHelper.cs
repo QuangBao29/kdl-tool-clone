@@ -15,7 +15,7 @@ namespace KAP.Tools
         [MenuItem("Tools/KAP/Create all Atlas & Build AssetBundle For Streaming Asset", false, 2)]
         public static void BuildAssetbundleForStreamingAsset()
         {
-            CreateConfigHiveShop.Create();
+            //CreateConfigHiveShop.Create();
             //ConfigAllThemeInRoom.ConfigAllThemeUseInRoom();
             //ConfigAllThemeInRoomTheme.ConfigAllThemeUseInRoomTheme();
             //ConfigAllThemeInWonder.SetConfigAllThemeUseInWonder();
