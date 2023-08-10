@@ -43,8 +43,6 @@ namespace KAP.ToolCreateMap
         [SerializeField] 
         private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
         [SerializeField]
-        private ToolCreateMapUnpackingSetting _toolUnpackingSetting = null;
-        [SerializeField]
         private ToolCreateMapTransferKAPToKDL _toolTransfer = null;
         [SerializeField]
         private ToolCreateMapListRooms _toolLstRooms = null;

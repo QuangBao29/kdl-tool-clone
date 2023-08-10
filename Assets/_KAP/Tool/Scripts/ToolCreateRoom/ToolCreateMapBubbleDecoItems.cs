@@ -14,7 +14,6 @@ namespace KAP.ToolCreateMap
     {
         [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
-        [SerializeField] private ToolCreateMapUnpackingSetting _toolUnpackingSetting = null;
         [SerializeField] private ToolCreateMapImportDeco _importDecoController = null;
         [SerializeField] private EditManager _editManager = null;
         [SerializeField] private GameObject _imgCheck = null;
@@ -303,79 +302,6 @@ namespace KAP.ToolCreateMap
             _imgCheck.SetActive(true);
         }
 
-        #endregion
-
-        #region Deco Unpacking
-        public void OnClickSpawnUnpackingDeco()
-        {
-            var decoInfo = this.ParseInfo<DecoInfo>();
-            var deco = _importDecoController.CreateDeco(decoInfo.Id, decoInfo.Color);
-            deco.Info = new DecoInfo { Id = decoInfo.Id, Color = decoInfo.Color, IsUnpacking = true, IsBubble = false };
-            deco.Position = IsoWorld.WorldToIso(Camera.main.transform.position, 0);
-            var decoEdit = deco.GetComponent<DecoEditDemo>();
-            if (_editManager.Current != null)
-            {
-                var current = _editManager.Current;
-                foreach (var item in _toolUnpackingSetting.LstDecoItem)
-                {
-                    if (item.Deco == current.deco)
-                    {
-                        item.UnActiveImgCheck();
-                        break;
-                    }
-                }
-                _editManager.SetCurrent(null);
-                current.deco.Remove();
-            }
-            if (_editManager.SetCurrent(decoEdit))
-            {
-                decoEdit.StartMove();
-                decoEdit.EndMove();
-                _editManager.editTool.SetValid(decoEdit.EditStatus);
-            }
-            this.Deco = deco;
-            //foreach (var item in _toolUnpackingSetting.LstDecoItem)
-            //{
-            //    if (decoInfo.IsUnpacking)
-            //    {
-            //        Debug.LogError("unpacking nha");
-            //        item.UnActiveImgCheck();
-            //    }
-            //}
-            SetActiveImgCheck();
-        }
-        public void OnButtonRemoveDecoUnpackClick()
-        {
-            var decoInfo = this.ParseInfo<DecoInfo>();
-            var id = decoInfo.Id;
-            var colorId = decoInfo.Color;
-            var decoId = (id + "_" + colorId).ToString();
-            if (_toolUnpackingSetting.LstUnpackDeco.Contains(decoId))
-            {
-                foreach (var item in _toolUnpackingSetting.LstDecoItem)
-                {
-                    var info = item.ParseInfo<DecoInfo>();
-                    var IdItem = info.Id + "_" + info.Color;
-                    if (decoId == IdItem)
-                    {
-                        Destroy(item.gameObject);
-                        var current = _editManager.Current;
-                        if (item.Deco != null)
-                        {
-                            if (current != null && item.Deco == current.deco)
-                            {
-                                _editManager.SetCurrent(null);
-                                item.Deco.Remove();
-                            }
-                            else item.Deco.Remove();
-                        }
-                        _toolUnpackingSetting.LstDecoItem.Remove(item);
-                        break;
-                    }                   
-                }
-                _toolUnpackingSetting.LstUnpackDeco.Remove(decoId);
-            }
-        }
         #endregion
     }
 

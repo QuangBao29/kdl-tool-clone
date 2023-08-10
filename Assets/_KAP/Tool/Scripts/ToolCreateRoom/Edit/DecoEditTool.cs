@@ -29,7 +29,6 @@ namespace KAP
         [SerializeField] private InputField _inputfielGroup = null;
         [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
-        [SerializeField] private ToolCreateMapUnpackingSetting _toolUnpackingSetting  = null;
 
         private void Awake()
         {
@@ -57,18 +56,7 @@ namespace KAP
                     {
                         var current = _editManager.Current;
                         var info = (DecoInfo)current.deco.Info;
-                        if (info.IsUnpacking)
-                        {
-                            foreach (var item in _toolUnpackingSetting.LstDecoItem)
-                            {
-                                if (item.Deco == current.deco)
-                                {
-                                    item.UnActiveImgCheck();
-                                    break;
-                                }
-                            }
-                        }
-                        else if (info.IsBubble)
+                        if (info.IsBubble)
                         {
                             var currentBubble = current.gameObject.GetComponent<Bubble>();
                             if (currentBubble != null)
@@ -99,33 +87,9 @@ namespace KAP
                 switch (current.EditStatus)
                 {
                     case KHHEditStatus.Valid:
-                        if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Unpacking)
-                        {
-                            var info = current.deco.ParseInfo<DecoInfo>();
-                            var decoId = info.Id + "_" + info.Color;
-                            if (info.IsUnpacking && !_toolUnpackingSetting.LstUnpackDeco.Contains(decoId))
-                                _toolUnpackingSetting.ButtonAddDecoToListUnpack();
-                        }
-                        else if (ToolEditMode.Instance.CurrentPhaseMode == PhaseMode.Bubble)
-                        {
-                            var currentbubble = current.gameObject.GetComponent<Bubble>();
-                            if (currentbubble != null && currentbubble.Prefab == null)
-                            {
-                                Debug.LogError("cos component bubble va prefab null");
-                                var bubbleInfo = (DecoInfo)current.deco.Info;
-                                if (_toolBubbleSetting.CurrentBubble.DctDecoIdColor.ContainsKey(bubbleInfo.Id) &&
-                                        _toolBubbleSetting.CurrentBubble.DctDecoIdColor[bubbleInfo.Id].Contains(bubbleInfo.Color))
-                                {
-                                    Debug.LogError("this deco is already in Bubble! o tren");
-                                    return;
-                                }
-                            }
-                            
-                        }
                         _editManager.SetCurrent(null);
                         break;
                     case KHHEditStatus.CanSwap:
-                        
                         break;
                 }
                 

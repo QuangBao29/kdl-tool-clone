@@ -197,10 +197,10 @@ namespace KAP.ToolCreateMap
 
                     //Add Item to List
                     _lstRoomItems.Add(item);
-                    if (ToolEditMode.Instance.CurrentEditMode != EditMode.OldRoom)
-                    {
-                        item.OnClickRoomItem();
-                    }
+                    //if (ToolEditMode.Instance.CurrentEditMode != EditMode.OldRoom)
+                    //{
+                    //    item.OnClickRoomItem();
+                    //}
                     ++i;
                 }
                 if (ToolEditMode.Instance.CurrentEditMode != EditMode.OldRoom)

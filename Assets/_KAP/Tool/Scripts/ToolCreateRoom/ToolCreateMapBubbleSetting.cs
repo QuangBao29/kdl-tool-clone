@@ -7,6 +7,7 @@ using Kawaii.IsoTools;
 using Kawaii.IsoTools.DecoSystem;
 using System.Linq;
 using Kawaii.ResourceManager;
+using Kawaii.Utils;
 //using Kawaii.ResourceManager.Editor;
 
 namespace KAP.ToolCreateMap
@@ -24,16 +25,17 @@ namespace KAP.ToolCreateMap
         [SerializeField] private Transform _transGrid = null;
         [SerializeField] private ToolCreateMapBubbleItem _prefabBubbleItem = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
-        [SerializeField] private ToolCreateMapUnpackingSetting _toolUnpackingSetting = null;
         [SerializeField] private ToolCreateMapConfigController _configController = null;
 
         private List<ToolCreateMapBubbleItem> _lstBubbleItems = new List<ToolCreateMapBubbleItem>();
         private Dictionary<int, int> _dctNumBubbleInRoom = new Dictionary<int, int>();
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
         
-
         [HideInInspector] public ToolCreateMapBubbleItem CurrentBubble = null;
         [HideInInspector] public List<ToolCreateMapBubbleItem> ListSwapBubble = new List<ToolCreateMapBubbleItem>();
+        [Header("Bubble ID Item")]
+        [SerializeField] private ListItemGenerator _generator = null;
+        [SerializeField] private GameObject _panel = null;
         public Dictionary<int, int> DctNumBubbleInRoom
         {
             get => _dctNumBubbleInRoom;
@@ -289,12 +291,6 @@ namespace KAP.ToolCreateMap
                 _lstBubbleItems.Clear();
             }
         }
-        public void ClearBubbles()
-        {
-            _dctNumBubbleInRoom.Clear();
-            ClearAll();
-            _toolUnpackingSetting.ClearAll();
-        }
         #endregion
 
         #region Utils
@@ -345,6 +341,28 @@ namespace KAP.ToolCreateMap
             {
                 sortedArray[i].transform.SetSiblingIndex(i);
             }
+        }
+        #endregion
+        
+        #region Bubble Id Item
+        public void OnGenerateItem(string roomId)
+        {
+            var count = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId).GetLstBubblePositionVector3().Count;
+            _generator.Setup(count);
+            OnShowPanel();
+        }
+        //them ham bam vao bubbleID Item se generate cac deco item
+        public void OnGenerateDecoItem()
+        {
+
+        }
+        public void OnHidePanel()
+        {
+            _panel.SetActive(false);
+        }
+        public void OnShowPanel()
+        {
+            _panel.SetActive(true);
         }
         #endregion
     }
