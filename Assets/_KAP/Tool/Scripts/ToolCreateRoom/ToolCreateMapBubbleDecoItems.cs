@@ -17,10 +17,13 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapImportDeco _importDecoController = null;
         [SerializeField] private EditManager _editManager = null;
         [SerializeField] private GameObject _imgCheck = null;
-        [SerializeField] private InputField _inputStar = null;
-        [SerializeField] private InputField _inputIndex = null;
         [SerializeField] private SGPanZoom _sgPanZoom = null;
         [SerializeField] private Camera _cam = null;
+        [Header("Config Data")]
+        [SerializeField] private InputField _inputStar = null;
+        [SerializeField] private InputField _inputIndex = null;
+        [SerializeField] private InputField _inputPrice = null;
+        [Space]
         public Image Image = null;
         public Text Name = null;
         public float _editCameraZoom = 6.5f;
@@ -96,6 +99,14 @@ namespace KAP.ToolCreateMap
         {
             _inputIndex.text = idx;
         }
+        public string GetPrice()
+        {
+            return _inputPrice.text;
+        }
+        public void SetPrice(string price)
+        {
+            _inputPrice.text = price;
+        }
         #region Bubble Deco
 
         public void OnClickTargetDecoItem()
@@ -124,6 +135,10 @@ namespace KAP.ToolCreateMap
         {
             BubbleId = RoomId + "_" + _inputIndex.text;
             //Debug.LogError("check: " + BubbleId);
+        }
+        public void OnChangeInputStar()
+        {
+            _toolBubbleDecoSetting.OnChangeInputStars(_inputStar.text);
         }
         public void OnButtonRemoveItemClick()
         {

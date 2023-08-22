@@ -8,7 +8,6 @@ using Kawaii.IsoTools.DecoSystem;
 using System.Linq;
 using Kawaii.ResourceManager;
 using Kawaii.Utils;
-//using Kawaii.ResourceManager.Editor;
 
 namespace KAP.ToolCreateMap
 {   
@@ -36,6 +35,8 @@ namespace KAP.ToolCreateMap
         [Header("Bubble ID Item")]
         [SerializeField] private ListItemGenerator _generator = null;
         [SerializeField] private GameObject _panel = null;
+
+        private List<ToolCreateMapBubbleIDItems> _lstBubbleIDItem = null;
         public Dictionary<int, int> DctNumBubbleInRoom
         {
             get => _dctNumBubbleInRoom;
@@ -348,14 +349,15 @@ namespace KAP.ToolCreateMap
         public void OnGenerateItem(string roomId)
         {
             var count = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId).GetLstBubblePositionVector3().Count;
-            _generator.Setup(count);
+            _lstBubbleIDItem = _generator.Setup<ToolCreateMapBubbleIDItems>(count);
+            for (var i = 0; i < count; i++)
+            {
+                var item = _lstBubbleIDItem[i];
+                item.SetBubbleID(roomId + "_" + i);
+            }
             OnShowPanel();
         }
-        //them ham bam vao bubbleID Item se generate cac deco item
-        public void OnGenerateDecoItem()
-        {
-
-        }
+        
         public void OnHidePanel()
         {
             _panel.SetActive(false);

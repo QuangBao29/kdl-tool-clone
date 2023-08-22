@@ -6,6 +6,7 @@ using Kawaii.ResourceManager;
 using KAP.Tools;
 using Kawaii.IsoTools.DecoSystem;
 using TMPro;
+using Kawaii.Utils;
 
 namespace KAP.ToolCreateMap
 {
@@ -21,7 +22,10 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapListRooms _toolLstRooms = null;
         [SerializeField] private ScrollRect _scrollItem = null;
         [SerializeField] public TMP_InputField BaseGem = null;
-        
+        [Header("Bubble ID Item")]
+        [SerializeField] private ListItemGenerator _generator = null;
+
+        private List<ToolCreateMapBubbleDecoItems> _lstBubbleDecoItems = null;
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
 
         [HideInInspector]
@@ -583,6 +587,53 @@ namespace KAP.ToolCreateMap
                     Destroy(deco.gameObject);
                 }
                 DctRootDecoItems.Remove(root.Key);
+            }
+        }
+
+        public void OnGenerateItem(List<string> lstID, string bubbleId)
+        {
+            _lstBubbleDecoItems = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstID.Count);
+            var config = _configController.ConfigBubbleHome.GetById(bubbleId);
+            var lstPrice = config.GetLstPrice();
+            for (var i = 0; i < lstID.Count; i++)
+            {
+                int id = SGUtils.ParseStringToListInt(lstID[i], '_')[0];
+                int color = SGUtils.ParseStringToListInt(lstID[i], '_')[1];
+                OnCreateDeco(_lstBubbleDecoItems[i], id, color, bubbleId, lstPrice[i]);
+            }
+        }
+
+        public void OnCreateDeco(ToolCreateMapBubbleDecoItems item, int id, int color, string bubbleId, int price)
+        {
+            var colorPath = color > 0 ? "_" + color : "";
+            string idPath = id.ToString() + colorPath;
+            var config = _configController.ConfigDeco.GetDecoById(id);
+            if (config == null)
+                return;
+            int roomId = SGUtils.ParseStringToListInt(bubbleId, '_')[0];
+            var configbubble = _configController.ConfigBubbleHome.GetById(bubbleId);
+            KawaiiAtlas atlas = null;
+#if UNITY_EDITOR
+            atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + config.ThemeId + ".asset", config.ThemeId.ToString());
+#endif
+            var FLSprite = atlas != null ? atlas.GetSprite(idPath) : null;
+
+            item.Image.sprite = FLSprite;
+            item.RoomId = roomId;
+            item.SetIndex(configbubble.Index);
+            item.SetPrice(price.ToString());
+            item.SetStar(configbubble.Star.ToString());
+            item.BubbleId = bubbleId;
+            item.Info = new DecoInfo { Id = id, Color = color/*, IsBubble = true*/ };
+            item.Name.text = idPath;
+            item.gameObject.name = idPath;
+        }
+
+        public void OnChangeInputStars(string star)
+        {
+            foreach (var item in _lstBubbleDecoItems)
+            {
+                item.SetStar(star);
             }
         }
     }
