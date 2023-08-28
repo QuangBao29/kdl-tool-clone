@@ -27,7 +27,7 @@ public class ToolCreateMapBubbleIDItems : MonoBehaviour
     private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
     public void OnGenerateDecoItem()
     {
-        _bubbleSetting.OnHidePanel();
+        _bubbleSetting.OnShowViewDecoBubble();
         var config = _configController.ConfigBubbleHome.GetById(_bubbleId);
         var lstID = config.GetLstBubbleDeco();
         _bubbleDecoSetting.OnGenerateItem(lstID, _bubbleId);

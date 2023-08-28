@@ -42,19 +42,20 @@ namespace KAP.ToolCreateMap
             var selectedItem = _toolLstRooms.GetSelectedItem();
             if (selectedItem == null)
             {
+                Debug.LogError("selectedItem = null");
                 return;
             }
             else
             {
                 OnHideAllItems();
-                foreach (var root in DctRootDecoItems)
-                {
-                    if (root.Key.RoomId == selectedItem.GetRoomId())
-                    {
-                        root.Key.gameObject.SetActive(true);
-                        return;
-                    }
-                }
+                //foreach (var root in DctRootDecoItems)
+                //{
+                //    if (root.Key.RoomId == selectedItem.GetRoomId())
+                //    {
+                //        root.Key.gameObject.SetActive(true);
+                //        return;
+                //    }
+                //}
                 if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                 {
                     var curRoomId = selectedItem.GetRoomId();

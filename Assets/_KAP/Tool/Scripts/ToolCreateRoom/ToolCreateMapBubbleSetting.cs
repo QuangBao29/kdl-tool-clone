@@ -34,7 +34,9 @@ namespace KAP.ToolCreateMap
         [HideInInspector] public List<ToolCreateMapBubbleItem> ListSwapBubble = new List<ToolCreateMapBubbleItem>();
         [Header("Bubble ID Item")]
         [SerializeField] private ListItemGenerator _generator = null;
-        [SerializeField] private GameObject _panel = null;
+        [SerializeField] private GameObject _panelDecoBubble = null;
+        [SerializeField] private GameObject _panelBubbleID = null;
+        [SerializeField] private GameObject _btnBack = null;
 
         private List<ToolCreateMapBubbleIDItems> _lstBubbleIDItem = null;
         public Dictionary<int, int> DctNumBubbleInRoom
@@ -360,11 +362,23 @@ namespace KAP.ToolCreateMap
         
         public void OnHidePanel()
         {
-            _panel.SetActive(false);
+            _panelBubbleID.SetActive(false);
         }
         public void OnShowPanel()
         {
-            _panel.SetActive(true);
+            _panelBubbleID.SetActive(true);
+        }
+        public void OnShowViewDecoBubble()
+        {
+            OnHidePanel();
+            _panelDecoBubble.SetActive(true);
+            _btnBack.SetActive(true);
+        }
+        public void OnClickBackToBubbleID()
+        {
+            OnShowPanel();
+            _panelDecoBubble.SetActive(false);
+            _btnBack.SetActive(false);
         }
         #endregion
     }

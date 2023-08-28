@@ -84,8 +84,8 @@ namespace KAP.ToolCreateMap
             {
                 UnSelectRoomItem();
                 _parentController.SetSelectedItem(null);
-                _toolBubbleDecoSetting.OnUnselectedItems(_inputRoomId.text);
-                _toolBubbleSetting.OnHidePanel();
+                //_toolBubbleDecoSetting.OnUnselectedItems(_inputRoomId.text);
+                _toolBubbleSetting.OnClickBackToBubbleID();
 
             }
             else
@@ -94,10 +94,8 @@ namespace KAP.ToolCreateMap
                 _img.color = _selectColor;
                 IsSelect = true;
                 _parentController.SetSelectedItem(this);
-                //_toolBubbleDecoSetting.OnAddToScrollRect(_inputRoomId.text);
                 _toolBubbleSetting.OnGenerateItem(_inputRoomId.text);
             }
-            //_toolBubbleDecoSetting.OnSelectRootDecoItems();
         }
         public void UnSelectRoomItem()
         {
