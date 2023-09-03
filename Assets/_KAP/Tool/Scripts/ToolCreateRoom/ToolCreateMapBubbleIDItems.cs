@@ -21,20 +21,25 @@ public class ToolCreateMapBubbleIDItems : MonoBehaviour
     private ToolCreateMapBubbleDecoSetting _bubbleDecoSetting = null;
     [SerializeField]
     private TextMeshProUGUI _textBubbleID = null;
-
+    [HideInInspector]
+    public Deco CurrentDeco = null;
     private string _bubbleId = "";
 
     private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
-    public void OnGenerateDecoItem()
+    public void OnClickGenerateDecoItem()
     {
         _bubbleSetting.OnShowViewDecoBubble();
-        var config = _configController.ConfigBubbleHome.GetById(_bubbleId);
-        var lstID = config.GetLstBubbleDeco();
+        var record = _configController.ConfigBubbleHome.GetById(_bubbleId);
+        var lstID = record.GetLstBubbleDeco();
         _bubbleDecoSetting.OnGenerateItem(lstID, _bubbleId);
     }
     public void SetBubbleID(string bubbleID)
     {
         _bubbleId = bubbleID;
         _textBubbleID.text = bubbleID;
+    }
+    public string GetBubbleID()
+    {
+        return _bubbleId;
     }
 }

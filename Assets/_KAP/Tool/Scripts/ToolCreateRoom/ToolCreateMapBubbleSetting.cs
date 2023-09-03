@@ -19,343 +19,50 @@ namespace KAP.ToolCreateMap
         [SerializeField] private InputField _inputMapId = null;
         [SerializeField] private AreaManager _areaManager = null;
         [SerializeField] private GameObject _panelListBubble = null;
+        [SerializeField] private ToolCreateMapImportDeco _importDeco = null;
 
         [Header("Deco Item")]
         [SerializeField] private Transform _transGrid = null;
-        [SerializeField] private ToolCreateMapBubbleItem _prefabBubbleItem = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
         [SerializeField] private ToolCreateMapConfigController _configController = null;
 
-        private List<ToolCreateMapBubbleItem> _lstBubbleItems = new List<ToolCreateMapBubbleItem>();
-        private Dictionary<int, int> _dctNumBubbleInRoom = new Dictionary<int, int>();
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
         
-        [HideInInspector] public ToolCreateMapBubbleItem CurrentBubble = null;
-        [HideInInspector] public List<ToolCreateMapBubbleItem> ListSwapBubble = new List<ToolCreateMapBubbleItem>();
         [Header("Bubble ID Item")]
         [SerializeField] private ListItemGenerator _generator = null;
         [SerializeField] private GameObject _panelDecoBubble = null;
         [SerializeField] private GameObject _panelBubbleID = null;
         [SerializeField] private GameObject _btnBack = null;
 
-        private List<ToolCreateMapBubbleIDItems> _lstBubbleIDItem = null;
-        public Dictionary<int, int> DctNumBubbleInRoom
+        private List<string> _lstDecoBoxID = new List<string>();
+        private List<ToolCreateMapBubbleIDItems> _lstCurBubbleIDItem = new List<ToolCreateMapBubbleIDItems>();
+        //bubbleId - Deco in room
+        private Dictionary<string, Deco> _dctDecoInRoom = new Dictionary<string, Deco>();
+        public Dictionary<string, Deco> DctDecoInRoom
         {
-            get => _dctNumBubbleInRoom;
+            get => _dctDecoInRoom;
+            set => _dctDecoInRoom = value;
         }
-        #region Create Bubble
-        public void OnAddBubbleClick()
+        public List<string> LstDecoBoxID
         {
-            UpdateListNumOfBubbleInARoom();
-            ToolCreateMapBubbleItem item = SGUtils.InstantiateObject<ToolCreateMapBubbleItem>(_prefabBubbleItem, _transGrid);
-            item.Setup(_dctNumBubbleInRoom.ElementAt(_dctNumBubbleInRoom.Count - 1).Value);
-            item.gameObject.SetActive(true);
-            _lstBubbleItems.Add(item);
-            _toolBubbleDecoSetting.AddRootClone(item.RoomIndex, item.Index);
-            DebugForCheck();
-        }
-        public void OnImportAddBubble(int RoomIndex, int index, Vector3 BubblePosition)
-        {
-            UpdateListNumOfBubbleInARoom();
-            ToolCreateMapBubbleItem item = SGUtils.InstantiateObject<ToolCreateMapBubbleItem>(_prefabBubbleItem, _transGrid);
-            item.Index = index;
-            item.RoomIndex = RoomIndex;
-            item.UpdateBubbleId();
-            Debug.LogError("item.BubbleId: " + item.BubbleId);
-            item.BubblePosition = BubblePosition;
-            item.gameObject.SetActive(true);
-            _lstBubbleItems.Add(item);
-            Debug.LogError("num of room: " + _areaManager.ListRooms.Count);
-            Debug.LogError("_dctNumBubbleInRoom.Count: " + _dctNumBubbleInRoom.Count);
-            Debug.LogError("item.RoomIndex: " + item.RoomIndex);
-            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
-            {
-                _dctNumBubbleInRoom[_dctNumBubbleInRoom.ElementAt(0).Key]++;
-            }
-            else
-            {
-                _dctNumBubbleInRoom[item.RoomIndex]++;
-                Debug.LogError("homeeeeee");
-            }
-        }
-        public void UpdateListNumOfBubbleInARoom()
-        {
-            if (_dctNumBubbleInRoom.Count < _areaManager.ListRooms.Count)
-            {
-                for (var i = 0; i < _areaManager.ListRooms.Count; i++)
-                {
-                    var info = (DecoInfo)_areaManager.ListRooms[i].Info;
-                    if (!_dctNumBubbleInRoom.ContainsKey(info.Id))
-                    {
-                        _dctNumBubbleInRoom.Add(info.Id, 0);
-                    }
-                }
-            }
-        }
-        public void DebugForCheck()
-        {
-            for (var i = 0; i < _dctNumBubbleInRoom.Count; i++)
-            {
-                Debug.LogError("num of bubble in room: " + _dctNumBubbleInRoom.ElementAt(i));
-            }
-        }
-        public void ResetColorAllBubbleItems()
-        {
-            foreach (var item in _lstBubbleItems)
-            {
-                item.ResetColor();
-            }
+            get => _lstDecoBoxID;
+            set => _lstDecoBoxID = value;
         }
 
-        public List<ToolCreateMapBubbleItem> GetLstBubble()
-        {
-            return _lstBubbleItems;
-        }
-
-        public string GetBubbleId(int roomIndex, int bubbleIdx)
-        {
-            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                return (roomIndex + "_" + bubbleIdx).ToString();
-            else return (_inputMapId.text + "_" + bubbleIdx).ToString();
-        }
-
-        public int GetRoomId(int roomIndex)
-        {
-            var roomId = 0;
-            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                return roomIndex;
-            else
-            {
-                if (!int.TryParse(_inputMapId.text, out roomId))
-                    Debug.LogError("cannot parse RoomId");
-                return roomId;
-            }
-        }
-
-        public Bubble CreateDecoBubble(int decoId, int colorId)
-        {
-            var config = _configController.ConfigDeco.GetDecoById(decoId);
-            if (config == null)
-                return null;
-            KawaiiAtlas atlas = null;
-#if UNITY_EDITOR
-            atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + config.ThemeId + ".asset", config.ThemeId.ToString());
-#endif
-            var colorPath = colorId > 0 ? "_" + colorId : "";
-            var parameters = new DecoParameters
-            {
-                IsWallHang = config.IsWallHang,
-                SortingLayerName = config.SortingLayerName.ToString(),
-                FLSize = new Vector3(config.SizeX, config.SizeY, config.SizeZ),
-                FLSprite = atlas != null ? atlas.GetSprite(config.Id + colorPath) : null,
-                BRSprite = atlas != null ? atlas.GetSprite(config.Id + "_b" + colorPath) : null,
-                CanInFaces = config.CanInAreaFaces,
-                ColliderLayer = config.ColliderLayer.GetHashCode(),
-                ListColliderRects = config.GetListFLLocalColliderRect()
-            };
-
-            if (parameters.BRSprite == null)
-                parameters.BRSprite = parameters.FLSprite;
-
-            var allAreas = _configController.ConfigDecoArea.GetListDecoAreaByDecoId(config.Id);
-            if (allAreas != null)
-            {
-                foreach (var record in allAreas)
-                {
-                    var pieceParameters = new AreaParameters
-                    {
-                        IsWall = record.IsWall,
-                        Face = record.Face.GetHashCode(),
-                        SortingLayerName = record.SortingLayerName.ToString(),
-                        FLLocalPos = new Vector3(record.FLLocalPosX, record.FLLocalPosY, record.FLLocalPosZ),
-                        PieceSize = new Vector2(record.PieceSizeX, record.PieceSizeY),
-                        UseRootSorting = record.UseRootSorting,
-                        Alone = record.Alone
-                    };
-                    parameters.ListAreas.Add(pieceParameters);
-                }
-            }
-
-            var deco = SGUtils.InstantiateObject<Bubble>(_prefabBubble, null);
-            deco.gameObject.SetActive(true);
-            deco.SetupParameters(parameters);
-            deco.name = config.Id.ToString();
-            return deco;
-        }
-
-        #endregion
-
-        #region Remove Bubble
-        public void OnDeleteBubbleClick()
-        {
-            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                if (root.Key.BubbleId == CurrentBubble.BubbleId)
-                {
-                    if (root.Key.BubbleDeco != null)
-                    {
-                        var temp = root.Key.BubbleDeco;
-                        temp.Remove();
-                        root.Key.BubbleDeco = null;
-                    }
-                    _toolBubbleDecoSetting.DctRootDecoItems.Remove(root.Key);
-                    Destroy(root.Key.gameObject);
-                    break;
-                }
-            }
-            _lstBubbleItems.Remove(CurrentBubble);
-            var bubble = CurrentBubble;
-            CurrentBubble = null;
-            Destroy(bubble.gameObject);
-
-            var count = _lstBubbleItems.Count;
-            for (var i = 0; i < count; i++)
-            {
-                if (_lstBubbleItems[i].RoomIndex == bubble.RoomIndex)
-                    _lstBubbleItems[i].UpdateIndexAfterDeleteBubble(bubble.Index);
-            }
-            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                _dctNumBubbleInRoom[bubble.RoomIndex]--;
-            else _dctNumBubbleInRoom[_dctNumBubbleInRoom.ElementAt(0).Key]--;
-            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                if (root.Key.RoomId == bubble.RoomIndex)
-                {
-                    if (root.Key.BubbleIndex > bubble.BubbleIndex)
-                    {
-                        root.Key.BubbleIndex -= 1;
-                        root.Key.SetupBubbleId();
-                        root.Key.gameObject.name = "Bubble: " + root.Key.BubbleId;
-                        foreach (var value in root.Value)
-                        {
-                            value.BubbleIndex = root.Key.BubbleIndex;
-                            value.BubbleId = root.Key.BubbleId;
-                        }
-                        if (root.Key.BubbleDeco != null)
-                        {
-                            root.Key.BubbleDeco.BubbleIndex = root.Key.BubbleIndex;
-                            root.Key.BubbleDeco.BubbleId = root.Key.BubbleId;
-                        }
-                    }
-                }
-            }
-            DebugForCheck();
-        }
-        public void RemoveAllBubbleInARoom(int roomIndex)
-        {
-            DebugForCheck();
-            List<ToolCreateMapBubbleItem> listTemp = new List<ToolCreateMapBubbleItem>();
-            if (!_dctNumBubbleInRoom.ContainsKey(roomIndex))
-            {
-                Debug.LogError("roomIndex out of range");
-                return;
-            }
-            else _dctNumBubbleInRoom.Remove(roomIndex);
-            foreach (var bubble in _lstBubbleItems)
-            {
-                if (bubble.RoomIndex == roomIndex)
-                    listTemp.Add(bubble);
-            }
-            foreach (var bub in listTemp)
-            {
-                CurrentBubble = bub;
-                OnDeleteBubbleClick();
-            }
-            //xoa cac bubbleItem tren man hinh
-        }
-
-        public void ClearAll()
-        {
-            var listTemp = _lstBubbleItems;
-            if (_lstBubbleItems.Count > 0)
-            {
-                foreach (var bubble in _lstBubbleItems)
-                {
-                    foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-                    {
-                        if (root.Key.BubbleId == bubble.BubbleId)
-                        {
-                            if (root.Key.BubbleDeco != null)
-                            {
-                                var temp = root.Key.BubbleDeco;
-                                temp.Remove();
-                                root.Key.BubbleDeco = null;
-                            }
-                            _toolBubbleDecoSetting.DctRootDecoItems.Remove(root.Key);
-                            Destroy(root.Key.gameObject);
-                            break;
-                        }
-                    }
-                }
-                foreach (var bubble in listTemp)
-                {
-                    Destroy(bubble.gameObject);
-                }
-                _lstBubbleItems.Clear();
-            }
-        }
-        #endregion
-
-        #region Utils
-        public void ShowPanelListBubble()
-        {
-            _panelListBubble.SetActive(true);
-        }
-
-        public void HidePanelListBubble()
-        {
-            _panelListBubble.SetActive(false);
-        }
-
-        public void SortListBubble()
-        {
-            List<ToolCreateMapBubbleItem> sortedList = new List<ToolCreateMapBubbleItem>();
-            List<int> lstRoomIndex = new List<int>();
-            foreach (var item in _lstBubbleItems)
-            {
-                if (!lstRoomIndex.Contains(item.RoomIndex))
-                    lstRoomIndex.Add(item.RoomIndex);
-            }
-            lstRoomIndex.Sort();
-            
-            foreach (var roomIndex in lstRoomIndex)
-            {
-                List<int> lstBubbleIndex = new List<int>();
-                foreach (var item in _lstBubbleItems)
-                {
-                    if (item.RoomIndex == roomIndex)
-                    {
-                        lstBubbleIndex.Add(item.Index);
-                    }
-                }
-                lstBubbleIndex.Sort();
-                foreach (var index in lstBubbleIndex)
-                {
-                    foreach (var item in _lstBubbleItems)
-                    {
-                        if (item.Index == index && item.RoomIndex == roomIndex)
-                            sortedList.Add(item);
-                    }
-                }
-            }
-            _lstBubbleItems = sortedList;
-            var sortedArray = _lstBubbleItems.ToArray();
-            for (var i = 0; i < sortedArray.Length; i++)
-            {
-                sortedArray[i].transform.SetSiblingIndex(i);
-            }
-        }
-        #endregion
-        
         #region Bubble Id Item
         public void OnGenerateItem(string roomId)
         {
             var count = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId).GetLstBubblePositionVector3().Count;
-            _lstBubbleIDItem = _generator.Setup<ToolCreateMapBubbleIDItems>(count);
+            _lstCurBubbleIDItem = _generator.Setup<ToolCreateMapBubbleIDItems>(count);
             for (var i = 0; i < count; i++)
             {
-                var item = _lstBubbleIDItem[i];
-                item.SetBubbleID(roomId + "_" + i);
+                var item = _lstCurBubbleIDItem[i];
+                string bubbleId = roomId + "_" + i;
+                item.SetBubbleID(bubbleId);
+                if (!_toolBubbleDecoSetting.DctBubbleDecoItems.ContainsKey(bubbleId))
+                {
+                    _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, new List<string>());
+                }
             }
             OnShowPanel();
         }
@@ -381,6 +88,29 @@ namespace KAP.ToolCreateMap
             _btnBack.SetActive(false);
         }
         #endregion
+
+        public void OnClickDecoBox()
+        {
+            if (LstDecoBoxID.Count > 0)
+            {
+                var idPath = LstDecoBoxID[0];
+                var listId = SGUtils.ParseStringToListInt(idPath, '_');
+                int id = listId[0];
+                int color = listId[1];
+                if (listId.Count > 1) color = listId[1];
+                var deco = _importDeco.CreateDeco(id, color);
+                deco.Info = new DecoInfo { Id = id, Color = color, IsBubble = false };
+                deco.Position = IsoWorld.WorldToIso(Camera.main.transform.position, 0);
+                var decoEdit = deco.GetComponent<DecoEditDemo>();
+                if (_editManager.SetCurrent(decoEdit))
+                {
+                    decoEdit.StartMove();
+                    decoEdit.EndMove();
+                    _editManager.editTool.SetValid(decoEdit.EditStatus);
+                }
+                LstDecoBoxID.Remove(idPath);
+            }
+        }
     }
 }
 

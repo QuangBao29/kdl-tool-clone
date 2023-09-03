@@ -130,43 +130,33 @@ namespace KAP.ToolCreateMap
             var info = (DecoInfo)cur.deco.Info;
             var rootInfo = (DecoInfo)cur.deco.Root.Info;
             int numOfBubble = 0;
-            //foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            //{
-            //    if (root.Key.RoomId == rootInfo.Id)
-            //    {
-            //        numOfBubble = root.Value.Count;
-            //        Debug.LogError("num of bubble " + numOfBubble);
-            //        break;
-            //    }
-            //}
             info.IsBubble = _toggleIsBubble.isOn;
             if (info.IsBubble)
             {
-                _toolBubbleDecoSetting.CreateBubbleDecoItems(info.Id, info.Color, rootInfo.Id, rootInfo.Id + "_" + numOfBubble, cur.deco);
+                //_toolBubbleDecoSetting.CreateBubbleDecoItems(info.Id, info.Color, rootInfo.Id, rootInfo.Id + "_" + numOfBubble, cur.deco);
+                //tao 1 bubbleID item va tao deco bubble item cua no luon
             }
             else
             {
-                foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-                {
-                    if (root.Key.RoomId == rootInfo.Id)
-                    {
-                        ToolCreateMapBubbleDecoItems temp = null;
-                        foreach (var child in root.Value)
-                        {
-                            if (child.Deco == cur.deco)
-                            {
-                                //Debug.LogError("dung deco");
-                                temp = child;
-                                Destroy(child.gameObject);
-                                _editManager.SetCurrent(null);
-                                break;
-                            }
-                        }
-                        root.Value.Remove(temp);
-                        //Debug.LogError("count: " + root.Value.Count);
-                        break;
-                    }
-                }
+                //foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+                //{
+                //    if (root.Key.RoomId == rootInfo.Id)
+                //    {
+                //        ToolCreateMapBubbleDecoItems temp = null;
+                //        foreach (var child in root.Value)
+                //        {
+                //            if (child.Deco == cur.deco)
+                //            {
+                //                temp = child;
+                //                Destroy(child.gameObject);
+                //                _editManager.SetCurrent(null);
+                //                break;
+                //            }
+                //        }
+                //        root.Value.Remove(temp);
+                //        break;
+                //    }
+                //}
             }
             ShowBubbleKDL();
         }

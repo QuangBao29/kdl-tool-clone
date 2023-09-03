@@ -84,9 +84,7 @@ namespace KAP.ToolCreateMap
             {
                 UnSelectRoomItem();
                 _parentController.SetSelectedItem(null);
-                //_toolBubbleDecoSetting.OnUnselectedItems(_inputRoomId.text);
                 _toolBubbleSetting.OnClickBackToBubbleID();
-
             }
             else
             {
@@ -95,6 +93,7 @@ namespace KAP.ToolCreateMap
                 IsSelect = true;
                 _parentController.SetSelectedItem(this);
                 _toolBubbleSetting.OnGenerateItem(_inputRoomId.text);
+                _toolBubbleSetting.OnClickBackToBubbleID();
             }
         }
         public void UnSelectRoomItem()
@@ -216,38 +215,38 @@ namespace KAP.ToolCreateMap
             _areaManager.SortRoom();
         }
 
-        public void OnInputRoomIdChange()
-        {
-            var room = _areaManager.ListRooms[_index];
-            if (room != _room)
-            {
-                Debug.LogError("error");
-            }
-            var roomInfo = (DecoInfo)room.Info;
-            var preRoomId = roomInfo.Id;
-            roomInfo.Id = int.Parse(_inputRoomId.text);
-            room.gameObject.name = roomInfo.Id.ToString();
-            //Debug.LogError("pre vs cur " + preRoomId + " " + roomInfo.Id);
-            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                if (root.Key.RoomId == preRoomId)
-                {
-                    root.Key.RoomId = roomInfo.Id;
-                    root.Key.gameObject.name = roomInfo.Id.ToString();
+        //public void OnInputRoomIdChange()
+        //{
+        //    var room = _areaManager.ListRooms[_index];
+        //    if (room != _room)
+        //    {
+        //        Debug.LogError("error");
+        //    }
+        //    var roomInfo = (DecoInfo)room.Info;
+        //    var preRoomId = roomInfo.Id;
+        //    roomInfo.Id = int.Parse(_inputRoomId.text);
+        //    room.gameObject.name = roomInfo.Id.ToString();
+        //    //Debug.LogError("pre vs cur " + preRoomId + " " + roomInfo.Id);
+        //    foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+        //    {
+        //        if (root.Key == preRoomId.ToString())
+        //        {
+        //            root.Key = roomInfo.Id;
+        //            root.Key.gameObject.name = roomInfo.Id.ToString();
 
-                    foreach (var item in root.Value)
-                    {
-                        item.RoomId = root.Key.RoomId;
-                        item.BubbleId = item.RoomId + "_" + item.GetIndex();
-                    }
-                    break;
-                }
-            }
-            foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            {
-                Debug.LogError("id: " + root.Key.RoomId);
-            }
-        }
+        //            foreach (var item in root.Value)
+        //            {
+        //                item.RoomId = root.Key.RoomId;
+        //                item.BubbleId = item.RoomId + "_" + item.GetIndex();
+        //            }
+        //            break;
+        //        }
+        //    }
+        //    foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
+        //    {
+        //        Debug.LogError("id: " + root.Key.RoomId);
+        //    }
+        //}
      
         #endregion
     }
