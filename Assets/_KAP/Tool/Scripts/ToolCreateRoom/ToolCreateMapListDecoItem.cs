@@ -41,17 +41,28 @@ namespace KAP.ToolCreateMap
             var current = _editManager.Current;
             if (current != null && current.EditStatus != KHHEditStatus.Valid)
                 return;
-            if (record != null)
+            if (_toolBubbleDecoSetting.ToggleDecoMode.isOn)
             {
-                var deco = _importDecoController.CreateDeco(record.Id, 0);
-                deco.Info = new DecoInfo { Id = record.Id, IsBubble = false };
-                deco.Position = IsoWorld.WorldToIso(Camera.main.transform.position, 0);
-                var decoEdit = deco.GetComponent<DecoEditDemo>();
-                if (_editManager.SetCurrent(decoEdit))
+                if (record != null)
                 {
-                    decoEdit.StartMove();
-                    decoEdit.EndMove();
-                    _editManager.editTool.SetValid(decoEdit.EditStatus);
+                    var deco = _toolBubbleSetting.DctDecoInRoom[_toolBubbleSetting.CurrentBubbleID];
+                    _toolBubbleDecoSetting.SwapBubbleDeco(deco, record.Id, 0);
+                }
+            }
+            else
+            {
+                if (record != null)
+                {
+                    var deco = _importDecoController.CreateDeco(record.Id, 0);
+                    deco.Info = new DecoInfo { Id = record.Id, IsBubble = false };
+                    deco.Position = IsoWorld.WorldToIso(Camera.main.transform.position, 0);
+                    var decoEdit = deco.GetComponent<DecoEditDemo>();
+                    if (_editManager.SetCurrent(decoEdit))
+                    {
+                        decoEdit.StartMove();
+                        decoEdit.EndMove();
+                        _editManager.editTool.SetValid(decoEdit.EditStatus);
+                    }
                 }
             }
         }

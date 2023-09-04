@@ -31,6 +31,7 @@ public class ToolCreateMapBubbleIDItems : MonoBehaviour
         _bubbleSetting.OnShowViewDecoBubble();
         var record = _configController.ConfigBubbleHome.GetById(_bubbleId);
         var lstID = record.GetLstBubbleDeco();
+        _bubbleSetting.CurrentBubbleID = _bubbleId;
         _bubbleDecoSetting.OnGenerateItem(lstID, _bubbleId);
     }
     public void SetBubbleID(string bubbleID)

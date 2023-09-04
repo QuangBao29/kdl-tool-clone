@@ -20,10 +20,12 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapBubbleDecoItems _prefabRootDeco = null;
         [SerializeField] private Transform _content = null;
         [SerializeField] private ToolCreateMapListRooms _toolLstRooms = null;
+        [SerializeField] private ToolCreateMapImportDeco _importDecoController = null;
         [SerializeField] private ScrollRect _scrollItem = null;
         [SerializeField] public TMP_InputField BaseGem = null;
         [Header("Bubble ID Item")]
         [SerializeField] private ListItemGenerator _generator = null;
+        [SerializeField] private Toggle _toggleDecoMode = null;
 
         private List<ToolCreateMapBubbleDecoItems> _lstCurrentBubbleDeco = null;
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
@@ -37,6 +39,71 @@ namespace KAP.ToolCreateMap
         {
             get => _dctBubbleDecoItems;
             set => _dctBubbleDecoItems = value;
+        }
+        public List<ToolCreateMapBubbleDecoItems> LstCurrentbubbleDeco
+        {
+            set => _lstCurrentBubbleDeco = value;
+            get => _lstCurrentBubbleDeco;
+        }
+        public Toggle ToggleDecoMode
+        {
+            get => _toggleDecoMode;
+            set => _toggleDecoMode = value;
+        }
+        public void SwapBubbleDeco(Deco curDeco, int id, int color)
+        {
+            Debug.LogError("swap");
+            var allChilds = curDeco.GetAllChilds();
+            if (allChilds != null)
+            {
+                foreach (var child in allChilds)
+                {
+                    var childDecoInfo = child.ParseInfo<DecoInfo>();
+                    string childId = childDecoInfo.Id.ToString() + "_" + childDecoInfo.Color.ToString();
+                    if (childDecoInfo != null) _toolBubbleSetting.LstDecoBoxID.Add(childId);
+                    else Debug.LogError("child info not found");
+                }
+            }
+            curDeco.Remove();
+            var newDeco = _importDecoController.CreateDeco(id, color);
+            newDeco.Info = new DecoInfo { Id = id, Color = color, IsBubble = true };
+            newDeco.Position = curDeco.Position;
+            newDeco.WorldDirect = curDeco.WorldDirect;
+            var decoEdit = newDeco.GetComponent<DecoEditDemo>();
+
+            var moveData = _areaManager.Move(newDeco);
+            if (moveData.ListOverlaps != null)
+            {
+                foreach (var decoItem in moveData.ListOverlaps)
+                {
+                    if (decoItem == newDeco)
+                    {
+                        continue;
+                    }
+                    var current = decoItem;
+                    var children = current.GetAllChilds();
+                    foreach (var child in children)
+                    {
+                        var childDecoInfo = child.ParseInfo<DecoInfo>();
+                        string childId = childDecoInfo.Id.ToString() + "_" + childDecoInfo.Color.ToString();
+                        if (childDecoInfo != null) _toolBubbleSetting.LstDecoBoxID.Add(childId);
+                        else Debug.LogError("child info not found");
+                        child.Remove();
+                    }
+                    var itemInfo = current.ParseInfo<DecoInfo>();
+                    string itemId = itemInfo.Id.ToString() + "_" + itemInfo.Color.ToString();
+                    _toolBubbleSetting.LstDecoBoxID.Add(itemId);
+                    current.Remove();
+                }
+            }
+
+            if (_editManager.SetCurrent(decoEdit))
+            {
+                decoEdit.StartMove();
+                decoEdit.EndMove();
+            }
+            if (decoEdit.EditStatus == KHHEditStatus.Valid) _editManager.SetCurrent(null);
+            _toolBubbleSetting.DctDecoInRoom[_toolBubbleSetting.CurrentBubbleID] = newDeco;
         }
         public void OnSelectRootDecoItems()
         {

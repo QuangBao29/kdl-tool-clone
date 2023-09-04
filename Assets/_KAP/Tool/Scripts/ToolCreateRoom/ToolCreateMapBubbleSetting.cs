@@ -38,8 +38,13 @@ namespace KAP.ToolCreateMap
         private List<ToolCreateMapBubbleIDItems> _lstCurBubbleIDItem = new List<ToolCreateMapBubbleIDItems>();
         //bubbleId - Deco in room
         private Dictionary<string, Deco> _dctDecoInRoom = new Dictionary<string, Deco>();
-
+        private string _bubbleId;
         private bool _isInit = false;
+        public string CurrentBubbleID
+        {
+            set => _bubbleId = value;
+            get => _bubbleId;
+        }
         public Dictionary<string, Deco> DctDecoInRoom
         {
             get => _dctDecoInRoom;
@@ -60,7 +65,6 @@ namespace KAP.ToolCreateMap
                 for (var i = 0; i < count; i++)
                 {
                     string bubbleId = roomId + "_" + i;
-                    Debug.LogError("bubbleId: " + bubbleId);
                     if (!_toolBubbleDecoSetting.DctBubbleDecoItems.ContainsKey(bubbleId))
                     {
                         _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, new List<string>());
@@ -77,17 +81,14 @@ namespace KAP.ToolCreateMap
                 Init();
             }
             int count = 0;
-            Debug.LogError("dict: " + _toolBubbleDecoSetting.DctBubbleDecoItems.Count);
             foreach (var pair in _toolBubbleDecoSetting.DctBubbleDecoItems)
             {
                 var lstID = SGUtils.ParseStringToListInt(pair.Key, '_');
-                Debug.LogError("checK: roomId " + lstID[0] + " " + roomId);
                 if (lstID[0].ToString() == roomId)
                 {
                     count++;
                 }
             }
-            Debug.LogError("count " + count);
             _lstCurBubbleIDItem = _generator.Setup<ToolCreateMapBubbleIDItems>(count);
             for (var i = 0; i < count; i++)
             {

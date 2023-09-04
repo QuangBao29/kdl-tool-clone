@@ -124,60 +124,10 @@ namespace KAP.ToolCreateMap
             }
             else
             {
-                Debug.LogError("case 2");
-                var allChilds = deco.GetAllChilds();
-                if (allChilds != null)
-                {
-                    foreach (var child in allChilds)
-                    {
-                        var childDecoInfo = child.ParseInfo<DecoInfo>();
-                        string childId = childDecoInfo.Id.ToString() + "_" + childDecoInfo.Color.ToString();
-                        if (childDecoInfo != null) _toolBubbleSetting.LstDecoBoxID.Add(childId);
-                        else Debug.LogError("child info not found");
-                    }
-                }
-                deco.Remove();
-                var newDeco = _importDecoController.CreateDeco(curInfo.Id, curInfo.Color);
-                newDeco.Info = new DecoInfo { Id = curInfo.Id, Color = curInfo.Color, IsBubble = true };
-                newDeco.Position = deco.Position;
-                newDeco.WorldDirect = deco.WorldDirect;
-                var decoEdit = newDeco.GetComponent<DecoEditDemo>();
-
-                var moveData = _areaManager.Move(newDeco);
-                if (moveData.ListOverlaps != null)
-                {
-                    foreach (var decoItem in moveData.ListOverlaps)
-                    {
-                        if (decoItem == newDeco)
-                        {
-                            continue;
-                        }
-                        var curDeco = decoItem;
-                        var children = curDeco.GetAllChilds();
-                        foreach (var child in children)
-                        {
-                            var childDecoInfo = child.ParseInfo<DecoInfo>();
-                            string childId = childDecoInfo.Id.ToString() + "_" + childDecoInfo.Color.ToString();
-                            if (childDecoInfo != null) _toolBubbleSetting.LstDecoBoxID.Add(childId);
-                            else Debug.LogError("child info not found");
-                            child.Remove();
-                        }
-                        var itemInfo = curDeco.ParseInfo<DecoInfo>();
-                        string itemId = itemInfo.Id.ToString() + "_" + itemInfo.Color.ToString();
-                        _toolBubbleSetting.LstDecoBoxID.Add(itemId);
-                        curDeco.Remove();
-                    }
-                }
-
-                if (_editManager.SetCurrent(decoEdit))
-                {
-                    decoEdit.StartMove();
-                    decoEdit.EndMove();
-                }
-                if (decoEdit.EditStatus == KHHEditStatus.Valid) _editManager.SetCurrent(null);
-                _toolBubbleSetting.DctDecoInRoom[BubbleId] = newDeco;
+                _toolBubbleDecoSetting.SwapBubbleDeco(deco, curInfo.Id, curInfo.Color);
             }
         }
+        
         public void UpDateInfo(int RoomIndex, Vector3 BubblePosition, int BubbleIndex)
         {
             //_roomId = _toolBubbleSetting.GetRoomId(RoomIndex);

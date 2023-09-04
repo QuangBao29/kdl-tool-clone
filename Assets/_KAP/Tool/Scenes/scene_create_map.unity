@@ -8660,9 +8660,11 @@ MonoBehaviour:
   _prefabRootDeco: {fileID: 0}
   _content: {fileID: 1517211385}
   _toolLstRooms: {fileID: 976342555}
+  _importDecoController: {fileID: 184224762}
   _scrollItem: {fileID: 1019972568}
   BaseGem: {fileID: 1842923913}
   _generator: {fileID: 1019972569}
+  _toggleDecoMode: {fileID: 888490516}
 --- !u!114 &575354279
 MonoBehaviour:
   m_ObjectHideFlags: 0
