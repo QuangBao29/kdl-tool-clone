@@ -38,6 +38,8 @@ namespace KAP.ToolCreateMap
         private List<ToolCreateMapBubbleIDItems> _lstCurBubbleIDItem = new List<ToolCreateMapBubbleIDItems>();
         //bubbleId - Deco in room
         private Dictionary<string, Deco> _dctDecoInRoom = new Dictionary<string, Deco>();
+
+        private bool _isInit = false;
         public Dictionary<string, Deco> DctDecoInRoom
         {
             get => _dctDecoInRoom;
@@ -48,21 +50,50 @@ namespace KAP.ToolCreateMap
             get => _lstDecoBoxID;
             set => _lstDecoBoxID = value;
         }
-
+        private void Init()
+        {
+            var lstConfig = _configController.ConfigBubbleHomePosition.GetIndexField();
+            foreach (var config in lstConfig)
+            {
+                var roomId = config.Key;
+                var count = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId).GetLstBubblePositionVector3().Count;
+                for (var i = 0; i < count; i++)
+                {
+                    string bubbleId = roomId + "_" + i;
+                    Debug.LogError("bubbleId: " + bubbleId);
+                    if (!_toolBubbleDecoSetting.DctBubbleDecoItems.ContainsKey(bubbleId))
+                    {
+                        _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, new List<string>());
+                    }
+                }
+            }
+            _isInit = true;
+        }
         #region Bubble Id Item
         public void OnGenerateItem(string roomId)
         {
-            var count = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId).GetLstBubblePositionVector3().Count;
+            if (!_isInit)
+            {
+                Init();
+            }
+            int count = 0;
+            Debug.LogError("dict: " + _toolBubbleDecoSetting.DctBubbleDecoItems.Count);
+            foreach (var pair in _toolBubbleDecoSetting.DctBubbleDecoItems)
+            {
+                var lstID = SGUtils.ParseStringToListInt(pair.Key, '_');
+                Debug.LogError("checK: roomId " + lstID[0] + " " + roomId);
+                if (lstID[0].ToString() == roomId)
+                {
+                    count++;
+                }
+            }
+            Debug.LogError("count " + count);
             _lstCurBubbleIDItem = _generator.Setup<ToolCreateMapBubbleIDItems>(count);
             for (var i = 0; i < count; i++)
             {
-                var item = _lstCurBubbleIDItem[i];
                 string bubbleId = roomId + "_" + i;
+                var item = _lstCurBubbleIDItem[i];
                 item.SetBubbleID(bubbleId);
-                if (!_toolBubbleDecoSetting.DctBubbleDecoItems.ContainsKey(bubbleId))
-                {
-                    _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, new List<string>());
-                }
             }
             OnShowPanel();
         }

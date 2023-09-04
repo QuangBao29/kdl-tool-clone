@@ -104,6 +104,12 @@ namespace KAP.ToolCreateMap
                 Debug.LogError("deco null");
                 return;
             }
+            if (_editManager.Current != null)
+            {
+                var cur = _editManager.Current;
+                cur.deco.Remove();
+                _editManager.SetCurrent(null);
+            }
             var decoInfo = (DecoInfo)deco.Info;
             var curInfo = (DecoInfo)this.Info;
             if (_cam.orthographicSize > _editCameraZoom)
