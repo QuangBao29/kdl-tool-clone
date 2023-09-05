@@ -84,14 +84,14 @@ namespace KAP.ToolCreateMap
         private readonly List<ConfigBubblePlayPositionRecord> _lstConfigBubblePlayPositionRecords = new List<ConfigBubblePlayPositionRecord>();
         public ReadOnlyCollection<ConfigBubblePlayPositionRecord> ListConfigBubblePlayPositionRecords;
 
-        [HideInInspector]
-        public Dictionary<int, List<Vector3>> DctRoomIdPosition = new Dictionary<int, List<Vector3>>();    //roomId - position
-        [HideInInspector]
-        public Dictionary<string, string> DctBubbleIdStar = new Dictionary<string, string>();      //bubbleId - star
-        [HideInInspector]
-        public Dictionary<string, string> DctBubbleIdWD = new Dictionary<string, string>();        //BubbleId - world direct
-        [HideInInspector]
-        public Dictionary<string, List<int>> DctBubbleIdPrice = new Dictionary<string, List<int>>();     //bubbleId - price
+        private Dictionary<int, List<Vector3>> _dctRoomIdPosition = new Dictionary<int, List<Vector3>>();    //roomId - position
+        private Dictionary<string, string> _dctBubbleIdStar = new Dictionary<string, string>();     //bubbleId - star
+        private Dictionary<string, string> _dctBubbleIdWD = new Dictionary<string, string>();    //BubbleId - world direct
+        private Dictionary<string, List<int>> _dctBubbleIdPrice = new Dictionary<string, List<int>>();  //bubbleId - price
+        public Dictionary<int, List<Vector3>> DctRoomIdPosition { get => _dctRoomIdPosition; set => _dctRoomIdPosition = value; }
+        public Dictionary<string, string> DctBubbleIdStar { get => _dctBubbleIdStar; set => _dctBubbleIdStar = value; }
+        public Dictionary<string, string> DctBubbleIdWD { get => _dctBubbleIdWD; set => _dctBubbleIdWD = value; }
+        public Dictionary<string, List<int>> DctBubbleIdPrice { get => _dctBubbleIdPrice; set => _dctBubbleIdPrice = value; }
 
         private Dictionary<string, int> dctRoomIdNumBubble = new Dictionary<string, int>();         //RoomId - num of bubble
         private Dictionary<string, string> dctRoomIdPosition = new Dictionary<string, string>();    //roomId - position

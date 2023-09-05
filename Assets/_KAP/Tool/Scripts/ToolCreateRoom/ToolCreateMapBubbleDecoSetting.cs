@@ -105,6 +105,8 @@ namespace KAP.ToolCreateMap
             }
             if (decoEdit.EditStatus == KHHEditStatus.Valid) _editManager.SetCurrent(null);
             _toolBubbleSetting.DctDecoInRoom[_toolBubbleSetting.CurrentBubbleID] = newDeco;
+
+            _configController.DctBubbleIdWD[_toolBubbleSetting.CurrentBubbleID] = newDeco.WorldDirect.ToString();
         }
         public void OnSelectRootDecoItems()
         {
@@ -219,7 +221,7 @@ namespace KAP.ToolCreateMap
 
         public void OnGenerateItem(List<string> lstID, string bubbleId)
         {
-            if (isInit)
+            if (DctBubbleDecoItems[bubbleId].Count != 0)
             {
                 int count = 0;
                 var lstDecoID = DctBubbleDecoItems[bubbleId];
@@ -335,6 +337,11 @@ namespace KAP.ToolCreateMap
             {
                 item.SetStar(star);
             }
+            _configController.DctBubbleIdStar[_toolBubbleSetting.CurrentBubbleID] = star;
+        }
+        public void OnChangeInputPrice(string price, int itemIndex)
+        {
+            _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID][itemIndex] = int.Parse(price);
         }
     }
 }

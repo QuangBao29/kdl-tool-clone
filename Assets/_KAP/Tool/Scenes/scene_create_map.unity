@@ -449,7 +449,20 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1257150172}
+        m_TargetAssemblyTypeName: KAP.ToolCreateMap.ToolCreateMapBubbleDecoItems,
+          KAP
+        m_MethodName: OnChangeInputPrice
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
@@ -13214,7 +13227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -16, y: 1.0519}
+  m_AnchoredPosition: {x: -19.6, y: 1.0519}
   m_SizeDelta: {x: 39.811, y: 19.3289}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &831134302
@@ -18588,7 +18601,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 65.04498, y: -89.94571}
+  m_AnchoredPosition: {x: 65.11047, y: -90.03488}
   m_SizeDelta: {x: 100, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1257150172
@@ -18604,7 +18617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SortStep: 1
-  _position: {x: 4354, y: 474, z: 0}
+  _position: {x: 4992, y: 436, z: 0}
   _size: {x: 1, y: 1, z: 1}
   _alignment: 1
   _areaManager: {fileID: 184224760}
@@ -19765,7 +19778,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.1217003, y: 0.21685028}
+  m_AnchoredPosition: {x: 9.3, y: 0.21685028}
   m_SizeDelta: {x: -2.2435, y: -0.43364}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1339997773
@@ -19801,7 +19814,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: 00
 --- !u!222 &1339997774
 CanvasRenderer:
   m_ObjectHideFlags: 0

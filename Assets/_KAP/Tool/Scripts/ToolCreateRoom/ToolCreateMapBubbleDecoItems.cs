@@ -148,6 +148,20 @@ namespace KAP.ToolCreateMap
         {
             _toolBubbleDecoSetting.OnChangeInputStars(_inputStar.text);
         }
+        public void OnChangeInputPrice()
+        {
+            int idx = 0;
+            for (var i = 0; i < _toolBubbleDecoSetting.LstCurrentbubbleDeco.Count; i++)
+            {
+                if (_toolBubbleDecoSetting.LstCurrentbubbleDeco[i] == this)
+                {
+                    Debug.LogError("same item");
+                    idx = i;
+                    break;
+                }
+            }
+            _toolBubbleDecoSetting.OnChangeInputPrice(_inputPrice.text, idx);
+        }
         public void OnButtonRemoveItemClick()
         {
             var deco = _toolBubbleSetting.DctDecoInRoom[BubbleId];
