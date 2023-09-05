@@ -106,9 +106,8 @@ namespace KAP.ToolCreateMap
             }
             if (_editManager.Current != null)
             {
-                var cur = _editManager.Current;
-                cur.deco.Remove();
-                _editManager.SetCurrent(null);
+                if (_editManager.Current.EditStatus == KHHEditStatus.Valid) _editManager.SetCurrent(null);
+                else return;
             }
             var decoInfo = (DecoInfo)deco.Info;
             var curInfo = (DecoInfo)this.Info;

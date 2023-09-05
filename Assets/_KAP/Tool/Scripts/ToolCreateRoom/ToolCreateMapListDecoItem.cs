@@ -47,6 +47,7 @@ namespace KAP.ToolCreateMap
                 {
                     var deco = _toolBubbleSetting.DctDecoInRoom[_toolBubbleSetting.CurrentBubbleID];
                     _toolBubbleDecoSetting.SwapBubbleDeco(deco, record.Id, 0);
+                    _toolBubbleDecoSetting.OnGenerateMoreBubbleDeco(_toolBubbleSetting.CurrentBubbleID, record.Id + "_0");
                 }
             }
             else

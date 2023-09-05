@@ -433,7 +433,7 @@ namespace KAP.ToolCreateMap
             if (string.IsNullOrEmpty(_inputMapId.text))
                 return;
             _areaManager.ClearAllRooms();
-            _toolBubbleDecoSetting.OnClearDctRootDecoItems();
+            //_toolBubbleDecoSetting.OnClearDctRootDecoItems();
             string path = "";
             path = GetImportPath();
             var json = FileSaving.Load(path);
@@ -443,13 +443,9 @@ namespace KAP.ToolCreateMap
                 _importDecoController.Import(lstRooms);
             }
             
-            //foreach (var roomItem in _lstRoomItems)
-            //{
-            //    Destroy(roomItem.gameObject);
-            //    Debug.LogError("done");
-            //}
-            //_lstRoomItems.Clear();
             Setup();
+
+            _configController.InitDataConfig();
         }
         #endregion
         // ================================================================

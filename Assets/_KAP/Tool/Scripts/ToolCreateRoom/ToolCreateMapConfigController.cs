@@ -84,6 +84,15 @@ namespace KAP.ToolCreateMap
         private readonly List<ConfigBubblePlayPositionRecord> _lstConfigBubblePlayPositionRecords = new List<ConfigBubblePlayPositionRecord>();
         public ReadOnlyCollection<ConfigBubblePlayPositionRecord> ListConfigBubblePlayPositionRecords;
 
+        [HideInInspector]
+        public Dictionary<int, List<Vector3>> DctRoomIdPosition = new Dictionary<int, List<Vector3>>();    //roomId - position
+        [HideInInspector]
+        public Dictionary<string, string> DctBubbleIdStar = new Dictionary<string, string>();      //bubbleId - star
+        [HideInInspector]
+        public Dictionary<string, string> DctBubbleIdWD = new Dictionary<string, string>();        //BubbleId - world direct
+        [HideInInspector]
+        public Dictionary<string, List<int>> DctBubbleIdPrice = new Dictionary<string, List<int>>();     //bubbleId - price
+
         private Dictionary<string, int> dctRoomIdNumBubble = new Dictionary<string, int>();         //RoomId - num of bubble
         private Dictionary<string, string> dctRoomIdPosition = new Dictionary<string, string>();    //roomId - position
         private Dictionary<string, string> dctRoomIdIndex = new Dictionary<string, string>();       //roomId - Index
@@ -265,6 +274,32 @@ namespace KAP.ToolCreateMap
         #endregion
 
         #region Config KDL
+        public void InitDataConfig()
+        {
+            foreach (var room in _areaManager.ListRooms)
+            {
+                var info = (DecoInfo)room.Info;
+                if (!DctRoomIdPosition.ContainsKey(info.Id))
+                {
+                    DctRoomIdPosition.Add(info.Id, new List<Vector3>());
+                }
+            }
+            foreach (var item in ConfigBubbleHome.GetIndexField())
+            {
+                if (!DctBubbleIdStar.ContainsKey(item.Key))
+                {
+                    DctBubbleIdStar.Add(item.Key, item.Value[0].Star.ToString());
+                }
+                if (!DctBubbleIdPrice.ContainsKey(item.Key))
+                {
+                    DctBubbleIdPrice.Add(item.Key, item.Value[0].GetLstPrice());
+                }
+                if (!DctBubbleIdWD.ContainsKey(item.Key))
+                {
+                    DctBubbleIdWD.Add(item.Key, item.Value[0].WorldDirect);
+                }
+            }
+        }
         public void OnClickBuildConfig()
         {
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)

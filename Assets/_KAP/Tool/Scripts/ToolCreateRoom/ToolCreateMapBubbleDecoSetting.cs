@@ -29,6 +29,7 @@ namespace KAP.ToolCreateMap
 
         private List<ToolCreateMapBubbleDecoItems> _lstCurrentBubbleDeco = null;
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
+        private bool isInit = false;
 
         //BubbleId - list deco id
         [HideInInspector]
@@ -218,45 +219,86 @@ namespace KAP.ToolCreateMap
 
         public void OnGenerateItem(List<string> lstID, string bubbleId)
         {
-            _lstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstID.Count);
+            if (isInit)
+            {
+                int count = 0;
+                var lstDecoID = DctBubbleDecoItems[bubbleId];
+                _lstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstDecoID.Count);
+                
+                for (var i = 0; i < _lstCurrentBubbleDeco.Count; i++)
+                {
+                    var idcolor = lstDecoID[i];
+                    OnCreateDeco(_lstCurrentBubbleDeco[i], idcolor[0], idcolor[1], bubbleId, _configController.DctBubbleIdPrice[bubbleId][i]);
+                }
+            }
+            else
+            {
+                _lstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstID.Count);
+                var config = _configController.ConfigBubbleHome.GetById(bubbleId);
+                var lstPrice = config.GetLstPrice();
+                int roomId = SGUtils.ParseStringToListInt(bubbleId, '_')[0];
+                int idxBubble = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
+
+                for (var i = 0; i < lstID.Count; i++)
+                {
+                    if (!DctBubbleDecoItems[bubbleId].Contains(lstID[i]))
+                    {
+                        DctBubbleDecoItems[bubbleId].Add(lstID[i]);
+                    }
+                    int id = SGUtils.ParseStringToListInt(lstID[i], '_')[0];
+                    int color = SGUtils.ParseStringToListInt(lstID[i], '_')[1];
+                    OnCreateDeco(_lstCurrentBubbleDeco[i], id, color, bubbleId, lstPrice[i]);
+
+                    var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId.ToString());
+                    if (record == null)
+                    {
+                        Debug.LogError("rec bubble home pos null");
+                        return;
+                    }
+                    foreach (var room in _areaManager.ListRooms)
+                    {
+                        var infoRoot = (DecoInfo)room.Info;
+                        if (infoRoot.Id == roomId)
+                        {
+                            room.Foreach((deco) =>
+                            {
+                                var info = (DecoInfo)deco.Info;
+                                if (info.Id == id && info.Color == color && info.IsBubble && deco.Position == record.GetLstBubblePositionVector3()[idxBubble] + room.Position)
+                                {
+                                    if (!_toolBubbleSetting.DctDecoInRoom.ContainsKey(bubbleId))
+                                    {
+                                        _toolBubbleSetting.DctDecoInRoom.Add(bubbleId, deco);
+                                    }
+                                    else
+                                    {
+                                        _toolBubbleSetting.DctDecoInRoom[bubbleId] = deco;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+                isInit = true;
+            }
+        }
+        public void OnGenerateMoreBubbleDeco(string bubbleId, string decoId)
+        {
             var config = _configController.ConfigBubbleHome.GetById(bubbleId);
             var lstPrice = config.GetLstPrice();
-            int roomId = SGUtils.ParseStringToListInt(bubbleId, '_')[0];
-            int idxBubble = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
-            for (var i = 0; i < lstID.Count; i++)
+            int newPrice = 0;
+            DctBubbleDecoItems[bubbleId].Add(decoId);
+            _lstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(DctBubbleDecoItems[bubbleId].Count);
+            for (int i = 0; i < _lstCurrentBubbleDeco.Count; i++)
             {
-                DctBubbleDecoItems[bubbleId].Add(lstID[i]);
-                int id = SGUtils.ParseStringToListInt(lstID[i], '_')[0];
-                int color = SGUtils.ParseStringToListInt(lstID[i], '_')[1];
-                OnCreateDeco(_lstCurrentBubbleDeco[i], id, color, bubbleId, lstPrice[i]);
-
-                var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId.ToString());
-                if (record == null)
+                int id = SGUtils.ParseStringToListInt(DctBubbleDecoItems[bubbleId][i], '_')[0];
+                int color = SGUtils.ParseStringToListInt(DctBubbleDecoItems[bubbleId][i], '_')[1];
+                if (i == lstPrice.Count)
                 {
-                    Debug.LogError("rec bubble home pos null");
-                    return;
+                    OnCreateDeco(_lstCurrentBubbleDeco[i], id, color, bubbleId, newPrice);
                 }
-                foreach (var room in _areaManager.ListRooms)
+                else
                 {
-                    var infoRoot = (DecoInfo)room.Info;
-                    if (infoRoot.Id == roomId)
-                    {
-                        room.Foreach((deco) =>
-                        {
-                            var info = (DecoInfo)deco.Info;
-                            if (info.Id == id && info.Color == color && info.IsBubble && deco.Position == record.GetLstBubblePositionVector3()[idxBubble] + room.Position)
-                            {
-                                if (!_toolBubbleSetting.DctDecoInRoom.ContainsKey(bubbleId))
-                                {
-                                    _toolBubbleSetting.DctDecoInRoom.Add(bubbleId, deco);
-                                }
-                                else
-                                {
-                                    _toolBubbleSetting.DctDecoInRoom[bubbleId] = deco;
-                                }
-                            }
-                        });
-                    }
+                    OnCreateDeco(_lstCurrentBubbleDeco[i], id, color, bubbleId, lstPrice[i]);
                 }
             }
         }
