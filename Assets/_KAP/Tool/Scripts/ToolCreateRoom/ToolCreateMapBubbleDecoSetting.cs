@@ -29,7 +29,6 @@ namespace KAP.ToolCreateMap
 
         private List<ToolCreateMapBubbleDecoItems> _lstCurrentBubbleDeco = null;
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
-        private bool isInit = false;
 
         //BubbleId - list deco id
         [HideInInspector]
@@ -223,14 +222,19 @@ namespace KAP.ToolCreateMap
         {
             if (DctBubbleDecoItems[bubbleId].Count != 0)
             {
-                int count = 0;
                 var lstDecoID = DctBubbleDecoItems[bubbleId];
                 _lstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstDecoID.Count);
-                
-                for (var i = 0; i < _lstCurrentBubbleDeco.Count; i++)
+
+                for (var i = 0; i < lstDecoID.Count; i++)
                 {
-                    var idcolor = lstDecoID[i];
-                    OnCreateDeco(_lstCurrentBubbleDeco[i], idcolor[0], idcolor[1], bubbleId, _configController.DctBubbleIdPrice[bubbleId][i]);
+                    var idcolor = SGUtils.ParseStringToListInt(lstDecoID[i], '_');
+                    int id, color = 0;
+                    if (idcolor.Count > 1)
+                    {
+                        color = SGUtils.ParseStringToListInt(lstDecoID[i], '_')[1];
+                    }
+                    id = SGUtils.ParseStringToListInt(lstDecoID[i], '_')[0];
+                    OnCreateDeco(_lstCurrentBubbleDeco[i], id, color, bubbleId, _configController.DctBubbleIdPrice[bubbleId][i]);
                 }
             }
             else
@@ -280,7 +284,6 @@ namespace KAP.ToolCreateMap
                         }
                     }
                 }
-                isInit = true;
             }
         }
         public void OnGenerateMoreBubbleDeco(string bubbleId, string decoId)
@@ -303,6 +306,7 @@ namespace KAP.ToolCreateMap
                     OnCreateDeco(_lstCurrentBubbleDeco[i], id, color, bubbleId, lstPrice[i]);
                 }
             }
+            _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Add(newPrice);
         }
 
         public void OnCreateDeco(ToolCreateMapBubbleDecoItems item, int id, int color, string bubbleId, int price)
