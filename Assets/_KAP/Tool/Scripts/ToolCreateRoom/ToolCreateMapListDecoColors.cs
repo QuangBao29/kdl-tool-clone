@@ -16,6 +16,8 @@ namespace KAP.ToolCreateMap
         private ToolCreateMapConfigController _configController = null;
         [SerializeField]
         private InfinityScrollView _scrollItems = null;
+        [SerializeField]
+        private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
 
         private List<ConfigDecoColorRecord> _lstRecords;
         public int CurrentId { get; private set; }
@@ -74,6 +76,9 @@ namespace KAP.ToolCreateMap
             var cur = _editManager.Current;
             if (cur == null)
                 return;
+
+            int oldColor = CurrentColor;
+            int newColor = colorId;
             var deco = cur.deco;
             var info = (DecoInfo)deco.Info;
             info.Color = colorId;
@@ -84,6 +89,8 @@ namespace KAP.ToolCreateMap
             deco.WorldDirect = deco.WorldDirect;
             CurrentColor = colorId;
             _scrollItems.Setup(_lstRecords != null ? _lstRecords.Count : 0);
+
+            _toolBubbleDecoSetting.OnChangeColorDecos(oldColor, newColor);
         }
 
     }

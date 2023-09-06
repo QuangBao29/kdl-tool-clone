@@ -6666,6 +6666,7 @@ MonoBehaviour:
   _importDecoController: {fileID: 184224762}
   _configController: {fileID: 503449531}
   _scrollItems: {fileID: 155430026}
+  _toolBubbleDecoSetting: {fileID: 575354278}
 --- !u!114 &426943079
 MonoBehaviour:
   m_ObjectHideFlags: 0

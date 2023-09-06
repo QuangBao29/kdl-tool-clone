@@ -276,12 +276,11 @@ namespace KAP.ToolCreateMap
         #region Config KDL
         public void InitDataConfig()
         {
-            foreach (var room in _areaManager.ListRooms)
+            foreach (var item in ConfigBubbleHomePosition.GetIndexField())
             {
-                var info = (DecoInfo)room.Info;
-                if (!DctRoomIdPosition.ContainsKey(info.Id))
+                if (!DctRoomIdPosition.ContainsKey(int.Parse(item.Key)))
                 {
-                    DctRoomIdPosition.Add(info.Id, new List<Vector3>());
+                    DctRoomIdPosition.Add(int.Parse(item.Key), item.Value[0].GetLstBubblePositionVector3());
                 }
             }
             foreach (var item in ConfigBubbleHome.GetIndexField())
@@ -553,7 +552,7 @@ namespace KAP.ToolCreateMap
             txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n";
 
             //get position, num of bubble in room
-            //foreach (var r in _toolBubbleDecoSetting.DctRootDecoItems)
+            //foreach (var r in _toolBubbleDecoSetting.DctBubbleDecoItems)
             //{
             //    var count = r.Value.Count;
             //    if (!dctRoomIdPosition.ContainsKey(r.Key.RoomId.ToString()))
@@ -584,7 +583,7 @@ namespace KAP.ToolCreateMap
 
             //    if (!dctRoomIdNumBubble.ContainsKey(r.Key.RoomId.ToString()))
             //    {
-            //        dctRoomIdNumBubble.Add(r.Key.RoomId.ToString(), count);                
+            //        dctRoomIdNumBubble.Add(r.Key.RoomId.ToString(), count);
             //    }
             //}
 

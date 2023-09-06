@@ -151,9 +151,9 @@ namespace KAP.ToolCreateMap
         public void OnChangeInputPrice()
         {
             int idx = 0;
-            for (var i = 0; i < _toolBubbleDecoSetting.LstCurrentbubbleDeco.Count; i++)
+            for (var i = 0; i < _toolBubbleDecoSetting.LstCurrentBubbleDeco.Count; i++)
             {
-                if (_toolBubbleDecoSetting.LstCurrentbubbleDeco[i] == this)
+                if (_toolBubbleDecoSetting.LstCurrentBubbleDeco[i] == this)
                 {
                     Debug.LogError("same item");
                     idx = i;
@@ -164,51 +164,15 @@ namespace KAP.ToolCreateMap
         }
         public void OnButtonRemoveItemClick()
         {
-            var deco = _toolBubbleSetting.DctDecoInRoom[BubbleId];
-            if (deco == null)
+            if (_editManager.Current != null)
             {
-                Debug.LogError("deco null");
-                return;
+                if (_editManager.Current.EditStatus == KHHEditStatus.Valid)
+                {
+                    _editManager.SetCurrent(null);
+                }
+                else return;
             }
-            
-            //if (deco != null)
-            //{
-            //    var info = (DecoInfo)deco.Info;
-            //    info.IsBubble = false;
-            //    deco.Info = info;
-            //}
-            
-            _editManager.SetCurrent(null);
-            var curIdx = SGUtils.ParseStringToListInt(BubbleId, '_')[1];
-            Debug.LogError("cur Idx removed: " + curIdx);
-            //foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            //{
-            //    if (root.Key.RoomId == RoomId)
-            //    {
-            //        foreach (var item in root.Value)
-            //        {
-            //            var index = SGUtils.ParseStringToListInt(item.BubbleId, '_')[1];
-            //            if (index > curIdx)
-            //            {
-            //                index--;
-            //                item.BubbleId = item.RoomId + "_" + index;
-            //                item.SetIndex(index.ToString());
-            //            }
-            //        }
-            //    }
-            //}
-            //foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-            //{
-            //    if (root.Key.RoomId == RoomId)
-            //    {
-            //        if (root.Value.Contains(this))
-            //        {
-            //            root.Value.Remove(this);
-            //            Destroy(this.gameObject);
-            //            break;
-            //        }
-            //    }
-            //}
+            _toolBubbleDecoSetting.OnRemoveBubbleDecos(this);
         }
 
         
