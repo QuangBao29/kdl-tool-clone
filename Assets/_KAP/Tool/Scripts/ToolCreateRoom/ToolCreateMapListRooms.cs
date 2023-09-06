@@ -319,6 +319,10 @@ namespace KAP.ToolCreateMap
                 }
             }
             _init = true;
+            //foreach (var room in _lstRoomItems)
+            //{
+            //    room.OnClickRoomItem();
+            //}
         }
         
         public void OnButtonAddClick()
@@ -446,6 +450,8 @@ namespace KAP.ToolCreateMap
             Setup();
 
             _configController.InitDataConfig();
+
+            _toolBubbleSetting.Init();
         }
         #endregion
         // ================================================================

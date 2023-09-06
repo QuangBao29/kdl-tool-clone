@@ -587,7 +587,7 @@ namespace KAP.ToolCreateMap
             //get Indx Room
             foreach (var room in _toolLstRooms.GetLstRoomItem())
             {
-                Debug.LogError("check room: " + room.GetRoomId());
+                //Debug.LogError("check room: " + room.GetRoomId());
                 if (!_dctRoomIdIndex.ContainsKey(room.GetRoomId().ToString()))
                 {
                     _dctRoomIdIndex.Add(room.GetRoomId().ToString(), room.GetRoomOrder());
@@ -617,11 +617,16 @@ namespace KAP.ToolCreateMap
                 {
                     var bubbleId = roomId + "_" + j;
                     string bubbledecoids = "";
+                    string prices = "";
                     foreach (var decoid in _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId])
                     {
-                        bubbledecoids += decoid;
+                        bubbledecoids += decoid + ";";
                     }
-                    txt += bubbleId + "\t" + bubbledecoids + "\t" + idx + "\t" + DctBubbleIdPrice[bubbleId] + "\t" +
+                    foreach (var price in DctBubbleIdPrice[bubbleId])
+                    {
+                        prices += price + ";";
+                    }
+                    txt += bubbleId + "\t" + bubbledecoids + "\t" + idx + "\t" + prices + "\t" +
                         DctBubbleIdWD[bubbleId] + "\t" + DctBubbleIdStar[bubbleId] + "\n";
                     idx++;
                 }

@@ -306,25 +306,18 @@ namespace KAP.ToolCreateMap
         }
         public void OnGenerateMoreBubbleDeco(string bubbleId, string decoId)
         {
-            var config = _configController.ConfigBubbleHome.GetById(bubbleId);
-            var lstPrice = config.GetLstPrice();
             int newPrice = 0;
-            DctBubbleDecoItems[bubbleId].Add(decoId);
+            if (!DctBubbleDecoItems[bubbleId].Contains(decoId))
+                DctBubbleDecoItems[bubbleId].Add(decoId);
+            _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Add(newPrice);
             LstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(DctBubbleDecoItems[bubbleId].Count);
             for (int i = 0; i < LstCurrentBubbleDeco.Count; i++)
             {
                 int id = SGUtils.ParseStringToListInt(DctBubbleDecoItems[bubbleId][i], '_')[0];
                 int color = SGUtils.ParseStringToListInt(DctBubbleDecoItems[bubbleId][i], '_')[1];
-                if (i >= lstPrice.Count)
-                {
-                    OnCreateDeco(LstCurrentBubbleDeco[i], id, color, bubbleId, newPrice);
-                }
-                else
-                {
-                    OnCreateDeco(LstCurrentBubbleDeco[i], id, color, bubbleId, lstPrice[i]);
-                }
+                OnCreateDeco(LstCurrentBubbleDeco[i], id, color, bubbleId, _configController.DctBubbleIdPrice[bubbleId][i]);
             }
-            _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Add(newPrice);
+            
         }
 
         public void OnCreateDeco(ToolCreateMapBubbleDecoItems item, int id, int color, string bubbleId, int price)

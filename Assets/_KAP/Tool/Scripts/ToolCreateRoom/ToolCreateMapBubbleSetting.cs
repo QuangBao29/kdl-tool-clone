@@ -55,20 +55,50 @@ namespace KAP.ToolCreateMap
             get => _lstDecoBoxID;
             set => _lstDecoBoxID = value;
         }
-        private void Init()
+        public void Init()
         {
             var lstConfig = _configController.ConfigBubbleHomePosition.GetIndexField();
             foreach (var config in lstConfig)
             {
                 var roomId = config.Key;
-                var count = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId).GetLstBubblePositionVector3().Count;
+                var count = config.Value[0].GetLstBubblePositionVector3().Count;
                 for (var i = 0; i < count; i++)
                 {
                     string bubbleId = roomId + "_" + i;
+                    var rec = _configController.ConfigBubbleHome.GetById(bubbleId);
+
                     if (!_toolBubbleDecoSetting.DctBubbleDecoItems.ContainsKey(bubbleId))
                     {
-                        _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, new List<string>());
+                        _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, rec.GetLstBubbleDeco());
                     }
+                }
+            }
+            foreach (var room in _areaManager.ListRooms)
+            {
+                var roomInfo = (DecoInfo)room.Info;
+                var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
+                var lstPos = record.GetLstBubblePositionVector3();
+                var count = lstPos.Count;
+                for (var i = 0; i < count; i++)
+                {
+                    var bubbleId = roomInfo.Id + "_" + i;
+                    room.Foreach((deco) =>
+                    {
+                        var decoInfo = (DecoInfo)deco.Info;
+                        if (decoInfo.IsBubble && deco.Position == room.Position + lstPos[i])
+                        {
+                            if (!DctDecoInRoom.ContainsKey(bubbleId))
+                            {
+                                //Debug.LogError("roomId: " + roomInfo.Id + " decoId: " + decoInfo.Id);
+                                DctDecoInRoom.Add(bubbleId, deco);
+                            }
+                            else
+                            {
+                                Debug.LogError("wrong");
+                                DctDecoInRoom[bubbleId] = deco;
+                            }
+                        }
+                    });
                 }
             }
             _isInit = true;
@@ -76,10 +106,10 @@ namespace KAP.ToolCreateMap
         #region Bubble Id Item
         public void OnGenerateItem(string roomId)
         {
-            if (!_isInit)
-            {
-                Init();
-            }
+            //if (!_isInit)
+            //{
+            //    Init();
+            //}
             int count = 0;
             foreach (var pair in _toolBubbleDecoSetting.DctBubbleDecoItems)
             {
@@ -95,8 +125,9 @@ namespace KAP.ToolCreateMap
                 string bubbleId = roomId + "_" + i;
                 var item = _lstCurBubbleIDItem[i];
                 item.SetBubbleID(bubbleId);
+                //item.OnClickGenerateDecoItem();
             }
-            OnShowPanel();
+            OnClickBackToBubbleID();
         }
         
         public void OnHidePanel()
