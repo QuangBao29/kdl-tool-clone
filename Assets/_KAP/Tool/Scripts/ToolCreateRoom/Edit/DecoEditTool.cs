@@ -94,7 +94,6 @@ namespace KAP
                 }
                 
                 var newRoomIdx = current.deco.Root.ParseInfo<DecoInfo>().Id;
-                Debug.LogError("newRoomIdx: " + newRoomIdx);
             }
         }
 

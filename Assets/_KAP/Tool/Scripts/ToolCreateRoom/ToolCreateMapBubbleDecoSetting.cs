@@ -235,9 +235,9 @@ namespace KAP.ToolCreateMap
             return null;
         }
 
-        public void OnGenerateItem(List<string> lstID, string bubbleId)
+        public void OnGenerateItem(List<string> lstID, string bubbleId, ToolCreateMapBubbleIDItems item)
         {
-            if (DctBubbleDecoItems[bubbleId].Count != 0)
+            if (item.IsInit)
             {
                 var lstDecoID = DctBubbleDecoItems[bubbleId];
                 LstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstDecoID.Count);
@@ -301,6 +301,7 @@ namespace KAP.ToolCreateMap
                         }
                     }
                 }
+                item.IsInit = true;
             }
         }
         public void OnGenerateMoreBubbleDeco(string bubbleId, string decoId)
@@ -383,52 +384,35 @@ namespace KAP.ToolCreateMap
             }
             var curInfo = (DecoInfo)deco.Info;
             var info = (DecoInfo)item.Info;
-            if (curInfo.Id == info.Id && curInfo.Color == info.Color)
-            {
-                //neu cai current la cai can xoa thi thay cai current = cai bubble item dau tien neu so luong item > 1 va xoa item
-                if (LstCurrentBubbleDeco.Count > 1)
-                {
-                    var swapInfo = (DecoInfo)LstCurrentBubbleDeco[0].Info;
-                    SwapBubbleDeco(deco, swapInfo.Id, swapInfo.Color);
-                    item.gameObject.SetActive(false);
-                    LstCurrentBubbleDeco.Remove(item);
-                    _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Remove(int.Parse(item.GetPrice()));
-                    DctBubbleDecoItems[_toolBubbleSetting.CurrentBubbleID].Remove(info.Id + "_" + info.Color);
-                }
-                else
-                {
-                    //neu so luong item = 1 thi remove cur va cai bubble deco item luoon
-                    var allChilds = deco.GetAllChilds();
-                    if (allChilds != null)
-                    {
-                        foreach (var child in allChilds)
-                        {
-                            var childDecoInfo = child.ParseInfo<DecoInfo>();
-                            string childId = childDecoInfo.Id.ToString() + "_" + childDecoInfo.Color.ToString();
-                            if (childDecoInfo != null) _toolBubbleSetting.LstDecoBoxID.Add(childId);
-                            else Debug.LogError("child info not found");
-                        }
-                    }
-                    deco.Remove();
-                    var roomId = SGUtils.ParseStringToList(_toolBubbleSetting.CurrentBubbleID, '_')[0];
-                    _toolBubbleSetting.DctDecoInRoom[roomId] = null;
-                    //remove bubble deco item
-                    item.gameObject.SetActive(false);
-                    LstCurrentBubbleDeco.Remove(item);
-                    _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Remove(int.Parse(item.GetPrice()));
-                    _configController.DctBubbleIdStar[_toolBubbleSetting.CurrentBubbleID] = "";
-                    _configController.DctBubbleIdWD[_toolBubbleSetting.CurrentBubbleID] = "";
-                    DctBubbleDecoItems[_toolBubbleSetting.CurrentBubbleID].Remove(info.Id + "_" + info.Color);
+            item.gameObject.SetActive(false);
+            LstCurrentBubbleDeco.Remove(item);
+            _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Remove(int.Parse(item.GetPrice()));
+            DctBubbleDecoItems[_toolBubbleSetting.CurrentBubbleID].Remove(info.Id + "_" + info.Color);
 
-                }
+            if (LstCurrentBubbleDeco.Count > 0)
+            {
+                var swapInfo = (DecoInfo)LstCurrentBubbleDeco[0].Info;
+                SwapBubbleDeco(deco, swapInfo.Id, swapInfo.Color);
             }
             else
             {
-                //kiem tra cai current phai cai can remove k? neu ko phai thi xoa bubble deco item cua cai kia va remove khoi dictionay
-                item.gameObject.SetActive(false);
-                LstCurrentBubbleDeco.Remove(item);
-                _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Remove(int.Parse(item.GetPrice()));
-                DctBubbleDecoItems[_toolBubbleSetting.CurrentBubbleID].Remove(info.Id + "_" + info.Color);
+                var allChilds = deco.GetAllChilds();
+                if (allChilds != null)
+                {
+                    foreach (var child in allChilds)
+                    {
+                        var childDecoInfo = child.ParseInfo<DecoInfo>();
+                        string childId = childDecoInfo.Id.ToString() + "_" + childDecoInfo.Color.ToString();
+                        if (childDecoInfo != null) _toolBubbleSetting.LstDecoBoxID.Add(childId);
+                        else Debug.LogError("child info not found");
+                    }
+                }
+                deco.Remove();
+
+                var roomId = SGUtils.ParseStringToList(_toolBubbleSetting.CurrentBubbleID, '_')[0];
+                _toolBubbleSetting.DctDecoInRoom[roomId] = null;
+                _configController.DctBubbleIdStar[_toolBubbleSetting.CurrentBubbleID] = "";
+                _configController.DctBubbleIdWD[_toolBubbleSetting.CurrentBubbleID] = "";
             }
         }
 

@@ -24,6 +24,8 @@ public class ToolCreateMapBubbleIDItems : MonoBehaviour
     [HideInInspector]
     public Deco CurrentDeco = null;
     private string _bubbleId = "";
+    [HideInInspector]
+    public bool IsInit = false;
 
     private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
     public void OnClickGenerateDecoItem()
@@ -32,7 +34,7 @@ public class ToolCreateMapBubbleIDItems : MonoBehaviour
         var record = _configController.ConfigBubbleHome.GetById(_bubbleId);
         var lstID = record.GetLstBubbleDeco();
         _bubbleSetting.CurrentBubbleID = _bubbleId;
-        _bubbleDecoSetting.OnGenerateItem(lstID, _bubbleId);
+        _bubbleDecoSetting.OnGenerateItem(lstID, _bubbleId, this);
     }
     public void SetBubbleID(string bubbleID)
     {
