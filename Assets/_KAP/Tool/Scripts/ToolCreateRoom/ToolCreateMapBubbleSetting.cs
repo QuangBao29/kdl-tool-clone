@@ -94,7 +94,7 @@ namespace KAP.ToolCreateMap
                             }
                             else
                             {
-                                Debug.LogError("wrong");
+                                //Debug.LogError("wrong");
                                 DctDecoInRoom[bubbleId] = deco;
                             }
                         }
