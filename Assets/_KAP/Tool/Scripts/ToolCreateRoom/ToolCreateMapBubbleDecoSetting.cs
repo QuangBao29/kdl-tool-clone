@@ -237,6 +237,7 @@ namespace KAP.ToolCreateMap
 
         public void OnGenerateItem(string bubbleId, ToolCreateMapBubbleIDItems item)
         {
+            //Debug.LogError("bubbleID: " + bubbleId + " " + item.IsInit);
             if (item.IsInit)
             {
                 var lstDecoID = DctBubbleDecoItems[bubbleId];
@@ -257,17 +258,29 @@ namespace KAP.ToolCreateMap
             else
             {
                 List<string> lstID = new List<string>();
+                List<int> lstPrice = new List<int>();
                 var recordHome = _configController.ConfigBubbleHome.GetById(bubbleId);
                 if (recordHome == null)
                 {
                     var tempDeco = _toolBubbleSetting.DctDecoInRoom[bubbleId];
                     var info = (DecoInfo)tempDeco.Info;
                     lstID.Add(info.Id + "_" + info.Color);
+                    //Debug.LogError("bubbleID: " + bubbleId + " id: " + info.Id + "_" + info.Color);
                 }
-                lstID = recordHome.GetLstBubbleDeco();
+                else
+                {
+                    lstID = recordHome.GetLstBubbleDeco();
+                }
                 LstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstID.Count);
                 var config = _configController.ConfigBubbleHome.GetById(bubbleId);
-                var lstPrice = config.GetLstPrice();
+                if (config == null)
+                {
+                    lstPrice.Add(0);
+                }
+                else
+                {
+                    lstPrice = config.GetLstPrice();
+                }
                 int roomId = SGUtils.ParseStringToListInt(bubbleId, '_')[0];
                 int idxBubble = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
 
@@ -287,6 +300,13 @@ namespace KAP.ToolCreateMap
                         Debug.LogError("rec bubble home pos null");
                         return;
                     }
+                    bool _isInConfig = true;
+                    if (idxBubble >= record.GetLstBubblePositionVector3().Count)
+                    {
+                        _isInConfig = false;
+                    }
+                    if (!_isInConfig)
+                        continue;
                     foreach (var room in _areaManager.ListRooms)
                     {
                         var infoRoot = (DecoInfo)room.Info;
@@ -320,6 +340,7 @@ namespace KAP.ToolCreateMap
                 DctBubbleDecoItems[bubbleId].Add(decoId);
             _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Add(newPrice);
             LstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(DctBubbleDecoItems[bubbleId].Count);
+            //Debug.LogError("count: " + LstCurrentBubbleDeco.Count);
             for (int i = 0; i < LstCurrentBubbleDeco.Count; i++)
             {
                 int id = SGUtils.ParseStringToListInt(DctBubbleDecoItems[bubbleId][i], '_')[0];
@@ -337,6 +358,7 @@ namespace KAP.ToolCreateMap
             if (record == null)
                 return;
             int roomId = SGUtils.ParseStringToListInt(bubbleId, '_')[0];
+            int bubbleIdx = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
             var recordBubble = _configController.ConfigBubbleHome.GetById(bubbleId);
             KawaiiAtlas atlas = null;
 #if UNITY_EDITOR
@@ -346,9 +368,17 @@ namespace KAP.ToolCreateMap
 
             item.Image.sprite = FLSprite;
             item.RoomId = roomId;
-            item.SetIndex(recordBubble.Index);
+            if (recordBubble == null)
+            {
+                item.SetIndex(bubbleIdx.ToString());
+                item.SetStar("0");
+            }
+            else
+            {
+                item.SetIndex(recordBubble.Index);
+                item.SetStar(recordBubble.Star.ToString());
+            }
             item.SetPrice(price.ToString());
-            item.SetStar(recordBubble.Star.ToString());
             item.BubbleId = bubbleId;
             item.Info = new DecoInfo { Id = id, Color = color};
             item.Name.text = idPath;

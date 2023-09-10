@@ -118,7 +118,7 @@ namespace KAP.ToolCreateMap
                     count++;
                 }
             }
-            Debug.LogError("count check: " + count);
+            //Debug.LogError("count check: " + count);
             _lstCurBubbleIDItem = _generator.Setup<ToolCreateMapBubbleIDItems>(count);
             for (var i = 0; i < count; i++)
             {

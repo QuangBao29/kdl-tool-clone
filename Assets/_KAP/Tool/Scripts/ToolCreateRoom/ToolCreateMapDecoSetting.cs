@@ -151,7 +151,7 @@ namespace KAP.ToolCreateMap
                 string newBubbleID = rootInfo.Id + "_" + numOfBubble;
                 _toolBubbleDecoSetting.DctBubbleDecoItems.Add(newBubbleID, new List<string>());
                 _toolBubbleSetting.OnGenerateItem(rootInfo.Id.ToString());
-                _configController.DctBubbleIdPrice.Add(newBubbleID, new List<int>());
+                _configController.DctBubbleIdPrice.Add(newBubbleID, new List<int> { 0 });
                 if (!_toolBubbleSetting.DctDecoInRoom.ContainsKey(newBubbleID))
                 {
                     _toolBubbleSetting.DctDecoInRoom.Add(newBubbleID, cur.deco);
