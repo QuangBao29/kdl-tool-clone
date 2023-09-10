@@ -17,6 +17,10 @@ namespace KAP.ToolCreateMap
         [SerializeField]
         private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
         [SerializeField]
+        private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
+        [SerializeField]
+        private ToolCreateMapListRooms _lstRooms = null;
+        [SerializeField]
         private EditManager _editManager = null;
         [SerializeField]
         private ToolCreateMapConfigController _configController = null;
@@ -133,11 +137,30 @@ namespace KAP.ToolCreateMap
             info.IsBubble = _toggleIsBubble.isOn;
             if (info.IsBubble)
             {
-                //_toolBubbleDecoSetting.CreateBubbleDecoItems(info.Id, info.Color, rootInfo.Id, rootInfo.Id + "_" + numOfBubble, cur.deco);
+                foreach (var item in _lstRooms.GetLstRoomItem())
+                {
+                    if(item.GetRoomId() == rootInfo.Id && !item.IsSelect)
+                    {
+                        item.OnClickRoomItem();
+                        break;
+                    }
+                }
                 //tao 1 bubbleID item va tao deco bubble item cua no luon
+                numOfBubble = _toolBubbleSetting.LstCurBubbleIDItem.Count;
+                Debug.LogError("check count of bubble: " + numOfBubble);
+                string newBubbleID = rootInfo.Id + "_" + numOfBubble;
+                _toolBubbleDecoSetting.DctBubbleDecoItems.Add(newBubbleID, new List<string>());
+                _toolBubbleSetting.OnGenerateItem(rootInfo.Id.ToString());
+                _configController.DctBubbleIdPrice.Add(newBubbleID, new List<int>());
+                if (!_toolBubbleSetting.DctDecoInRoom.ContainsKey(newBubbleID))
+                {
+                    _toolBubbleSetting.DctDecoInRoom.Add(newBubbleID, cur.deco);
+                }
             }
             else
             {
+                //remove 1 bubbleIDItem and remove no khoi list data luon
+
                 //foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
                 //{
                 //    if (root.Key.RoomId == rootInfo.Id)

@@ -235,7 +235,7 @@ namespace KAP.ToolCreateMap
             return null;
         }
 
-        public void OnGenerateItem(List<string> lstID, string bubbleId, ToolCreateMapBubbleIDItems item)
+        public void OnGenerateItem(string bubbleId, ToolCreateMapBubbleIDItems item)
         {
             if (item.IsInit)
             {
@@ -256,6 +256,15 @@ namespace KAP.ToolCreateMap
             }
             else
             {
+                List<string> lstID = new List<string>();
+                var recordHome = _configController.ConfigBubbleHome.GetById(bubbleId);
+                if (recordHome == null)
+                {
+                    var tempDeco = _toolBubbleSetting.DctDecoInRoom[bubbleId];
+                    var info = (DecoInfo)tempDeco.Info;
+                    lstID.Add(info.Id + "_" + info.Color);
+                }
+                lstID = recordHome.GetLstBubbleDeco();
                 LstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstID.Count);
                 var config = _configController.ConfigBubbleHome.GetById(bubbleId);
                 var lstPrice = config.GetLstPrice();

@@ -25912,6 +25912,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _toolBubbleDecoSetting: {fileID: 575354278}
+  _toolBubbleSetting: {fileID: 809963052}
+  _lstRooms: {fileID: 976342555}
   _editManager: {fileID: 2035016587}
   _configController: {fileID: 503449531}
   _inputMapId: {fileID: 355543022}

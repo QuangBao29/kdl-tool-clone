@@ -40,6 +40,11 @@ namespace KAP.ToolCreateMap
         private Dictionary<string, Deco> _dctDecoInRoom = new Dictionary<string, Deco>();
         private string _bubbleId;
         private bool _isInit = false;
+        public List<ToolCreateMapBubbleIDItems> LstCurBubbleIDItem
+        {
+            set => _lstCurBubbleIDItem = value;
+            get => _lstCurBubbleIDItem;
+        }
         public string CurrentBubbleID
         {
             set => _bubbleId = value;
@@ -89,12 +94,10 @@ namespace KAP.ToolCreateMap
                         {
                             if (!DctDecoInRoom.ContainsKey(bubbleId))
                             {
-                                //Debug.LogError("roomId: " + roomInfo.Id + " decoId: " + decoInfo.Id);
                                 DctDecoInRoom.Add(bubbleId, deco);
                             }
                             else
                             {
-                                //Debug.LogError("wrong");
                                 DctDecoInRoom[bubbleId] = deco;
                             }
                         }
@@ -106,10 +109,6 @@ namespace KAP.ToolCreateMap
         #region Bubble Id Item
         public void OnGenerateItem(string roomId)
         {
-            //if (!_isInit)
-            //{
-            //    Init();
-            //}
             int count = 0;
             foreach (var pair in _toolBubbleDecoSetting.DctBubbleDecoItems)
             {
@@ -119,6 +118,7 @@ namespace KAP.ToolCreateMap
                     count++;
                 }
             }
+            Debug.LogError("count check: " + count);
             _lstCurBubbleIDItem = _generator.Setup<ToolCreateMapBubbleIDItems>(count);
             for (var i = 0; i < count; i++)
             {

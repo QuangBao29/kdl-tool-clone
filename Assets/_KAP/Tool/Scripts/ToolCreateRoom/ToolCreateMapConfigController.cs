@@ -95,7 +95,7 @@ namespace KAP.ToolCreateMap
 
         private Dictionary<string, string> _dctRoomIdIndex = new Dictionary<string, string>();       //roomId - Index
 
-        private Dictionary<string, int> dctRoomIdNumBubble = new Dictionary<string, int>();         //RoomId - num of bubble
+        //private Dictionary<string, int> dctRoomIdNumBubble = new Dictionary<string, int>();         //RoomId - num of bubble
         private Dictionary<string, string> _dctRoomIdStrPos = new Dictionary<string, string>();    //roomId - position
         
         private Dictionary<string, string> dctRoomIdUnpackDeco = new Dictionary<string, string>();  //roomId - unpack Deco
@@ -336,7 +336,7 @@ namespace KAP.ToolCreateMap
         private void BuildCurrentRoomPlay()
         {
             //clear cache data
-            dctRoomIdNumBubble.Clear();
+            //dctRoomIdNumBubble.Clear();
             dctRoomIdUnpackDeco.Clear();
             _dctRoomIdStrPos.Clear();
             _dctRoomIdIndex.Clear();
@@ -528,7 +528,7 @@ namespace KAP.ToolCreateMap
         private void BuildConfigFromCurrentMansion()
         {
             //clear cache data
-            dctRoomIdNumBubble.Clear();
+            //dctRoomIdNumBubble.Clear();
             _dctRoomIdStrPos.Clear();
             _dctRoomIdIndex.Clear();
             dctBubbleIdDecoIds.Clear();
