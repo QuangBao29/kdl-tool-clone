@@ -257,77 +257,70 @@ namespace KAP.ToolCreateMap
             }
             else
             {
-                List<string> lstID = new List<string>();
-                List<int> lstPrice = new List<int>();
-                var recordHome = _configController.ConfigBubbleHome.GetById(bubbleId);
-                if (recordHome == null)
+                if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                 {
-                    var tempDeco = _toolBubbleSetting.DctDecoInRoom[bubbleId];
-                    var info = (DecoInfo)tempDeco.Info;
-                    lstID.Add(info.Id + "_" + info.Color);
-                    //Debug.LogError("bubbleID: " + bubbleId + " id: " + info.Id + "_" + info.Color);
-                }
-                else
-                {
-                    lstID = recordHome.GetLstBubbleDeco();
-                }
-                LstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstID.Count);
-                var config = _configController.ConfigBubbleHome.GetById(bubbleId);
-                if (config == null)
-                {
-                    lstPrice.Add(0);
-                }
-                else
-                {
-                    lstPrice = config.GetLstPrice();
-                }
-                int roomId = SGUtils.ParseStringToListInt(bubbleId, '_')[0];
-                int idxBubble = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
+                    List<string> lstID = new List<string>();
+                    List<int> lstPrice = new List<int>();
+                    var recordHome = _configController.ConfigBubbleHome.GetById(bubbleId);
+                    if (recordHome == null)
+                    {
+                        var tempDeco = _toolBubbleSetting.DctDecoInRoom[bubbleId];
+                        var info = (DecoInfo)tempDeco.Info;
+                        lstID.Add(info.Id + "_" + info.Color);
+                        //Debug.LogError("bubbleID: " + bubbleId + " id: " + info.Id + "_" + info.Color);
+                    }
+                    else
+                    {
+                        lstID = recordHome.GetLstBubbleDeco();
+                    }
+                    LstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstID.Count);
+                    var config = _configController.ConfigBubbleHome.GetById(bubbleId);
+                    if (config == null)
+                    {
+                        lstPrice.Add(0);
+                    }
+                    else
+                    {
+                        lstPrice = config.GetLstPrice();
+                    }
 
-                for (var i = 0; i < lstID.Count; i++)
-                {
-                    if (!DctBubbleDecoItems[bubbleId].Contains(lstID[i]))
+                    for (var i = 0; i < lstID.Count; i++)
                     {
-                        DctBubbleDecoItems[bubbleId].Add(lstID[i]);
-                    }
-                    int id = SGUtils.ParseStringToListInt(lstID[i], '_')[0];
-                    int color = SGUtils.ParseStringToListInt(lstID[i], '_')[1];
-                    OnCreateDeco(LstCurrentBubbleDeco[i], id, color, bubbleId, lstPrice[i]);
-
-                    var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId.ToString());
-                    if (record == null)
-                    {
-                        Debug.LogError("rec bubble home pos null");
-                        return;
-                    }
-                    bool _isInConfig = true;
-                    if (idxBubble >= record.GetLstBubblePositionVector3().Count)
-                    {
-                        _isInConfig = false;
-                    }
-                    if (!_isInConfig)
-                        continue;
-                    foreach (var room in _areaManager.ListRooms)
-                    {
-                        var infoRoot = (DecoInfo)room.Info;
-                        if (infoRoot.Id == roomId)
+                        if (!DctBubbleDecoItems[bubbleId].Contains(lstID[i]))
                         {
-                            room.Foreach((deco) =>
-                            {
-                                var info = (DecoInfo)deco.Info;
-                                if (info.Id == id && info.Color == color && info.IsBubble && deco.Position == record.GetLstBubblePositionVector3()[idxBubble] + room.Position)
-                                {
-                                    if (!_toolBubbleSetting.DctDecoInRoom.ContainsKey(bubbleId))
-                                    {
-                                        _toolBubbleSetting.DctDecoInRoom.Add(bubbleId, deco);
-                                    }
-                                    else
-                                    {
-                                        _toolBubbleSetting.DctDecoInRoom[bubbleId] = deco;
-                                    }
-                                }
-                            });
+                            DctBubbleDecoItems[bubbleId].Add(lstID[i]);
                         }
+                        int id = SGUtils.ParseStringToListInt(lstID[i], '_')[0];
+                        int color = SGUtils.ParseStringToListInt(lstID[i], '_')[1];
+                        OnCreateDeco(LstCurrentBubbleDeco[i], id, color, bubbleId, lstPrice[i]);
+                    }
+                }
+                else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                {
+                    List<string> lstID = new List<string>();
+                    var recordHome = _configController.ConfigBubblePlay.GetById(bubbleId);
+                    if (recordHome == null)
+                    {
+                        var tempDeco = _toolBubbleSetting.DctDecoInRoom[bubbleId];
+                        var info = (DecoInfo)tempDeco.Info;
+                        lstID.Add(info.Id + "_" + info.Color);
+                        //Debug.LogError("bubbleID: " + bubbleId + " id: " + info.Id + "_" + info.Color);
+                    }
+                    else
+                    {
+                        lstID = recordHome.GetLstBubbleDeco();
+                    }
+                    LstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(lstID.Count);
+
+                    for (var i = 0; i < lstID.Count; i++)
+                    {
+                        if (!DctBubbleDecoItems[bubbleId].Contains(lstID[i]))
+                        {
+                            DctBubbleDecoItems[bubbleId].Add(lstID[i]);
+                        }
+                        int id = SGUtils.ParseStringToListInt(lstID[i], '_')[0];
+                        int color = SGUtils.ParseStringToListInt(lstID[i], '_')[1];
+                        OnCreateDeco(LstCurrentBubbleDeco[i], id, color, bubbleId);
                     }
                 }
                 item.IsInit = true;
@@ -350,7 +343,7 @@ namespace KAP.ToolCreateMap
             
         }
 
-        public void OnCreateDeco(ToolCreateMapBubbleDecoItems item, int id, int color, string bubbleId, int price)
+        public void OnCreateDeco(ToolCreateMapBubbleDecoItems item, int id, int color, string bubbleId, int price = -1)
         {
             var colorPath = color > 0 ? "_" + color : "";
             string idPath = id.ToString() + colorPath;
@@ -359,7 +352,7 @@ namespace KAP.ToolCreateMap
                 return;
             int roomId = SGUtils.ParseStringToListInt(bubbleId, '_')[0];
             int bubbleIdx = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
-            var recordBubble = _configController.ConfigBubbleHome.GetById(bubbleId);
+            
             KawaiiAtlas atlas = null;
 #if UNITY_EDITOR
             atlas = Kawaii.ResourceManager.Editor.ResourceManagerEditor.LoadAtlas(_textureAtlasPath + record.ThemeId + ".asset", record.ThemeId.ToString());
@@ -368,17 +361,22 @@ namespace KAP.ToolCreateMap
 
             item.Image.sprite = FLSprite;
             item.RoomId = roomId;
-            if (recordBubble == null)
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                item.SetIndex(bubbleIdx.ToString());
-                item.SetStar("0");
+                var recordBubble = _configController.ConfigBubbleHome.GetById(bubbleId);
+                if (recordBubble == null)
+                {
+                    item.SetIndex(bubbleIdx.ToString());
+                    item.SetStar("0");
+                }
+                else
+                {
+                    item.SetIndex(recordBubble.Index);
+                    item.SetStar(recordBubble.Star.ToString());
+                }
+                item.SetPrice(price.ToString());
             }
-            else
-            {
-                item.SetIndex(recordBubble.Index);
-                item.SetStar(recordBubble.Star.ToString());
-            }
-            item.SetPrice(price.ToString());
+            
             item.BubbleId = bubbleId;
             item.Info = new DecoInfo { Id = id, Color = color};
             item.Name.text = idPath;

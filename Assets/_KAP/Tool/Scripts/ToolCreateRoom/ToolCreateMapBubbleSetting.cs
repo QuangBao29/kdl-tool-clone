@@ -39,7 +39,6 @@ namespace KAP.ToolCreateMap
         //bubbleId - Deco in room
         private Dictionary<string, Deco> _dctDecoInRoom = new Dictionary<string, Deco>();
         private string _bubbleId;
-        private bool _isInit = false;
         public List<ToolCreateMapBubbleIDItems> LstCurBubbleIDItem
         {
             set => _lstCurBubbleIDItem = value;
@@ -62,49 +61,95 @@ namespace KAP.ToolCreateMap
         }
         public void Init()
         {
-            var lstConfig = _configController.ConfigBubbleHomePosition.GetIndexField();
-            foreach (var config in lstConfig)
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                var roomId = config.Key;
-                var count = config.Value[0].GetLstBubblePositionVector3().Count;
-                for (var i = 0; i < count; i++)
+                var lstConfig = _configController.ConfigBubbleHomePosition.GetIndexField();
+                foreach (var config in lstConfig)
                 {
-                    string bubbleId = roomId + "_" + i;
-                    var rec = _configController.ConfigBubbleHome.GetById(bubbleId);
-
-                    if (!_toolBubbleDecoSetting.DctBubbleDecoItems.ContainsKey(bubbleId))
+                    var roomId = config.Key;
+                    var count = config.Value[0].GetLstBubblePositionVector3().Count;
+                    for (var i = 0; i < count; i++)
                     {
-                        _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, rec.GetLstBubbleDeco());
+                        string bubbleId = roomId + "_" + i;
+                        var rec = _configController.ConfigBubbleHome.GetById(bubbleId);
+
+                        if (!_toolBubbleDecoSetting.DctBubbleDecoItems.ContainsKey(bubbleId))
+                        {
+                            _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, rec.GetLstBubbleDeco());
+                        }
+                    }
+                }
+                foreach (var room in _areaManager.ListRooms)
+                {
+                    var roomInfo = (DecoInfo)room.Info;
+                    var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
+                    var lstPos = record.GetLstBubblePositionVector3();
+                    var count = lstPos.Count;
+                    for (var i = 0; i < count; i++)
+                    {
+                        var bubbleId = roomInfo.Id + "_" + i;
+                        room.Foreach((deco) =>
+                        {
+                            var decoInfo = (DecoInfo)deco.Info;
+                            if (decoInfo.IsBubble && deco.Position == room.Position + lstPos[i])
+                            {
+                                if (!DctDecoInRoom.ContainsKey(bubbleId))
+                                {
+                                    DctDecoInRoom.Add(bubbleId, deco);
+                                }
+                                else
+                                {
+                                    DctDecoInRoom[bubbleId] = deco;
+                                }
+                            }
+                        });
                     }
                 }
             }
-            foreach (var room in _areaManager.ListRooms)
+            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
             {
-                var roomInfo = (DecoInfo)room.Info;
-                var record = _configController.ConfigBubbleHomePosition.GetByRoomId(roomInfo.Id.ToString());
-                var lstPos = record.GetLstBubblePositionVector3();
-                var count = lstPos.Count;
-                for (var i = 0; i < count; i++)
+                var rootInfo = (DecoInfo)_areaManager.ListRooms[0].Info;
+                var rec = _configController.ConfigBubblePlayPosition.GetByRoomId(rootInfo.Id.ToString());
+                var c = rec.GetLstBubblePositionVector3().Count;
+                for (var i = 0; i < c; i++)
                 {
-                    var bubbleId = roomInfo.Id + "_" + i;
-                    room.Foreach((deco) =>
+                    var bubbleId = rootInfo.Id + "_" + i;
+                    var config = _configController.ConfigBubblePlay.GetById(bubbleId);
+                    if (!_toolBubbleDecoSetting.DctBubbleDecoItems.ContainsKey(bubbleId))
                     {
-                        var decoInfo = (DecoInfo)deco.Info;
-                        if (decoInfo.IsBubble && deco.Position == room.Position + lstPos[i])
+                        _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, config.GetLstBubbleDeco());
+                    }
+                    //Debug.LogError("check count: " + _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId].Count);
+                }
+
+                foreach (var room in _areaManager.ListRooms)
+                {
+                    var roomInfo = (DecoInfo)room.Info;
+                    var record = _configController.ConfigBubblePlayPosition.GetByRoomId(roomInfo.Id.ToString());
+                    var lstPos = record.GetLstBubblePositionVector3();
+                    var count = lstPos.Count;
+                    for (var i = 0; i < count; i++)
+                    {
+                        var bubbleId = roomInfo.Id + "_" + i;
+                        room.Foreach((deco) =>
                         {
-                            if (!DctDecoInRoom.ContainsKey(bubbleId))
+                            var decoInfo = (DecoInfo)deco.Info;
+                            if (decoInfo.IsBubble && deco.Position == room.Position + lstPos[i])
                             {
-                                DctDecoInRoom.Add(bubbleId, deco);
+                                //Debug.LogError("found deco");
+                                if (!DctDecoInRoom.ContainsKey(bubbleId))
+                                {
+                                    DctDecoInRoom.Add(bubbleId, deco);
+                                }
+                                else
+                                {
+                                    DctDecoInRoom[bubbleId] = deco;
+                                }
                             }
-                            else
-                            {
-                                DctDecoInRoom[bubbleId] = deco;
-                            }
-                        }
-                    });
+                        });
+                    }
                 }
             }
-            _isInit = true;
         }
         #region Bubble Id Item
         public void OnGenerateItem(string roomId)

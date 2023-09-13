@@ -30,6 +30,14 @@ public class ToolCreateMapBubbleIDItems : MonoBehaviour
     private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
     public void OnClickGenerateDecoItem()
     {
+        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+        {
+
+        }
+        else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+        {
+
+        }
         _bubbleSetting.OnShowViewDecoBubble();
         var record = _configController.ConfigBubbleHome.GetById(_bubbleId);
         _bubbleSetting.CurrentBubbleID = _bubbleId;
