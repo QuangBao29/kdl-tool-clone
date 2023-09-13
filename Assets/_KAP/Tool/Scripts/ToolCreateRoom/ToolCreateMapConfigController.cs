@@ -303,6 +303,7 @@ namespace KAP.ToolCreateMap
         }
         public void OnClickBuildConfig()
         {
+            _toolLstRooms.ExportData();
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
                 var mess = string.Format("build config dua tren mansion hien tai?");

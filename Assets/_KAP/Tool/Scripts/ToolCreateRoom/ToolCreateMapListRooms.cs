@@ -495,10 +495,6 @@ namespace KAP.ToolCreateMap
             string mess = "";
             var targetEditMode = _dctEditModeData[ToolEditMode.Instance.CurrentEditMode];
             Debug.LogError("current Mode: " + targetEditMode.Mode);
-            //if (int.Parse(_inputMapId.text) < 1000000)
-            //{
-            //    _inputMapId.text = "2" + _inputMapId.text;
-            //}
             mess = string.Format("export {0}: {1}", targetEditMode.Mode, _inputMapId.text);
 
             UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
@@ -515,6 +511,15 @@ namespace KAP.ToolCreateMap
 
                 return true;
             });
+        }
+        public void ExportData()
+        {
+            var data = _areaManager.Export(null);
+            string path = GetExportPath();
+            Debug.Log("path: " + path);
+            Debug.Log("data: " + JsonWriter.Serialize(data));
+            FileSaving.Save(path, JsonWriter.Serialize(data));
+            Debug.LogError("Export new success");
         }
 
         public void OnExportSeparatedRoomsInTheme()
