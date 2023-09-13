@@ -118,7 +118,7 @@ namespace KAP.ToolCreateMap
             _sgPanZoom.FlyTo(flyWorldPos, true, 0.5f);
             if (decoInfo.Id == curInfo.Id && decoInfo.Color == curInfo.Color)
             {
-                Debug.LogError("dung deco");
+                //Debug.LogError("dung deco");
                 _editManager.SetCurrent(deco.GetComponent<DecoEditDemo>());
             }
             else
@@ -155,7 +155,7 @@ namespace KAP.ToolCreateMap
             {
                 if (_toolBubbleDecoSetting.LstCurrentBubbleDeco[i] == this)
                 {
-                    Debug.LogError("same item");
+                    //Debug.LogError("same item");
                     idx = i;
                     break;
                 }

@@ -52,7 +52,7 @@ namespace KAP.ToolCreateMap
         }
         public void SwapBubbleDeco(Deco curDeco, int id, int color)
         {
-            Debug.LogError("swap");
+            //Debug.LogError("swap");
             Vector3 pos = Vector3.one;
             int direct = 0;
             if (curDeco != null)

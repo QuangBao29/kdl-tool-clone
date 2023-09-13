@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 using KAP.Config;
 using Kawaii.ResourceManager;
 using KAP.Tools;
@@ -617,6 +618,7 @@ namespace KAP.ToolCreateMap
                 for (var j = 0; j < bubbleCount; j++)
                 {
                     var bubbleId = roomId + "_" + j;
+                    SortListBubbleDecoAndPrice(bubbleId);
                     string bubbledecoids = "";
                     string prices = "";
                     foreach (var decoid in _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId])
@@ -652,7 +654,21 @@ namespace KAP.ToolCreateMap
             FileSaving.Save(Application.dataPath + _configBubbleHomePositionFilePath, txtPos);
             Debug.LogError("Export Bubble Home success");
         }
+        private void SortListBubbleDecoAndPrice(string bubbleId)
+        {
+            List<int> numbers = new List<int> { 5, 2, 9, 3, 6, 1, 8, 4, 7 };
+            List<string> strings = new List<string> { "Five", "Two", "Nine", "Three", "Six", "One", "Eight", "Four", "Seven" };
 
+            List<Tuple<int, string>> pairs = DctBubbleIdPrice[bubbleId].Zip(_toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId], Tuple.Create).ToList();
+
+            pairs.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+
+            DctBubbleIdPrice[bubbleId] = pairs.Select(pair => pair.Item1).ToList();
+            _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId] = pairs.Select(pair => pair.Item2).ToList();
+
+            //Debug.LogError("price: " + string.Join(", ", DctBubbleIdPrice[bubbleId]));
+            //Debug.LogError("bubble deco: " + string.Join(", ", _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId]));
+        }
         public void LoadFileCsv()
         {
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
