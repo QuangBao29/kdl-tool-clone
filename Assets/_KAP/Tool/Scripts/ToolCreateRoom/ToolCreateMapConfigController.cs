@@ -359,61 +359,11 @@ namespace KAP.ToolCreateMap
             dctBubbleIdDeco.Clear();
             dctBubbleIdWD.Clear();
             dctBubbleIdPrice.Clear();
-            List<int> listID = new List<int>();
-            List<int> listAreas = new List<int>();
-            List<int> listVolumn = new List<int>();
-            string unpackingDeco = "";
-            var Root = _areaManager.ListRooms[0];
-            var infoRoot = (DecoInfo)Root.Info;
-            Root.Foreach((deco) =>
-            {
-                var info = (DecoInfo)deco.Info;
-                if (info.Id != infoRoot.Id && info.Id / 100000 < 22 && !info.IsBubble)
-                {
-                    listID.Add(info.Id);
-                    var rec = ConfigDeco.GetDecoById(info.Id);
-                    listAreas.Add(rec.CanInAreaFaces);
-                    listVolumn.Add(rec.SizeX * rec.SizeY);
-                    unpackingDeco += info.Id + "_" + info.Color + ";";
-                }
-            });
 
-            SortTwoListInt(listAreas, listID);
-
-            for (var i = 0; i < listAreas.Count; i++)
-            {
-                Debug.LogError("check: " + listAreas[i]);
-            }
             List<string> lstVariables = ConfigBubblePlayRecord.GetLstVariables();
             List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
             string txt = "";
             string txtPos = "";
-
-            foreach (var r in _toolBubbleDecoSetting.DctBubbleDecoItems)
-            {
-                if (!dctBubbleIdDeco.ContainsKey(r.Key))
-                {
-                    //var info = (DecoInfo)item.Deco.Info;
-                    //dctBubbleIdDeco.Add(r.Key, info.Id);
-                }
-                else Debug.LogError("error logic play 1");
-            }
-
-            //get bubbleDecoIds
-            foreach (var pair in dctBubbleIdDeco)
-            {
-                var listDecoColor = ConfigDecoColor.GetListDecoColorsByDecoId(pair.Value);
-                if (!dctBubbleIdDecoIds.ContainsKey(pair.Key))
-                {
-                    string bubbleDecoIds = "";
-                    int result = listDecoColor.Count >= 3 ? 3 : listDecoColor.Count;
-                    for (var j = 0; j < result; j++)
-                    {
-                        bubbleDecoIds += listDecoColor[j].Id + ";";
-                    }
-                    dctBubbleIdDecoIds.Add(pair.Key, bubbleDecoIds);
-                }
-            }
 
             //get position
             foreach (var pair in _toolBubbleSetting.DctDecoInRoom)
@@ -441,53 +391,59 @@ namespace KAP.ToolCreateMap
             }
 
             //get list unpacking deco
-            //sort deco cua cai list nay tu largest to smallest
-            //List<int> listID = new List<int>();
-            //List<int> listAreas = new List<int>();
-            //List<int> listVolumn = new List<int>();
-            //string unpackingDeco = "";
-            //var Root = _areaManager.ListRooms[0];
-            //var infoRoot = (DecoInfo)Root.Info;
-            //Root.Foreach((deco) =>
-            //{
-            //    var info = (DecoInfo)deco.Info;
-            //    if (info.Id != infoRoot.Id && info.Id / 100000 < 22 && !info.IsBubble)
-            //    {
-            //        listID.Add(info.Id);
-            //        var rec = ConfigDeco.GetDecoById(info.Id);
-            //        listAreas.Add(rec.CanInAreaFaces);
-            //        listVolumn.Add(rec.SizeX * rec.SizeY);
-            //        unpackingDeco += info.Id + "_" + info.Color + ";";
-            //    }
-            //});
+            List<string> listID = new List<string>();
+            List<int> listAreas = new List<int>();
+            List<int> listVolumn = new List<int>();
+            string unpackingDeco = "";
+            var Root = _areaManager.ListRooms[0];
+            var infoRoot = (DecoInfo)Root.Info;
+            Root.Foreach((deco) =>
+            {
+                var info = (DecoInfo)deco.Info;
+                if (info.Id != infoRoot.Id && info.Id / 100000 < 22 && !info.IsBubble)
+                {
+                    listID.Add(info.Id + "_" + info.Color);
+                    var rec = ConfigDeco.GetDecoById(info.Id);
+                    listAreas.Add(rec.CanInAreaFaces);
+                    listVolumn.Add(rec.SizeX * rec.SizeY);
+                }
+            });
 
-            //SortTwoListInt(listAreas, listID);
+            SortLists(listID, listAreas, listVolumn);
 
-            //for (var i = 0; i < listAreas.Count; i++)
-            //{
-            //    Debug.LogError("check: " + listAreas[i]);
-            //}
-
+            for (var i = 0; i < listID.Count; i++)
+            {
+                unpackingDeco += listID[i] + ";";
+            }
+            Debug.LogError("unpack str: " + unpackingDeco);
             if (!dctRoomIdUnpackDeco.ContainsKey(infoRoot.Id.ToString()))
                 dctRoomIdUnpackDeco.Add(infoRoot.Id.ToString(), unpackingDeco);
 
             //Build ConfigBubblePlay
-            foreach (var pair in dctBubbleIdDecoIds)
+            foreach (var pair in _toolBubbleDecoSetting.DctBubbleDecoItems)
             {
                 var record = ConfigBubblePlay.GetById(pair.Key);
+                string bubbledecoids = "";
+                for (var i = 0; i < pair.Value.Count; i++)
+                {
+                    bubbledecoids += pair.Value[i] + ";";
+                }
                 if (record != null)
                 {
                     foreach (var rec in _lstConfigBubblePlayRecords)
                     {
                         if (rec.BubbleId == pair.Key)
-                            rec.BubbleDecoIds = pair.Value;
+                        {
+                            rec.BubbleDecoIds = bubbledecoids;
+                            break;
+                        }
                     }
                 }
                 else
                 {
                     ConfigBubblePlayRecord newConfig = new ConfigBubblePlayRecord();
                     newConfig.BubbleId = pair.Key;
-                    newConfig.BubbleDecoIds = pair.Value;
+                    newConfig.BubbleDecoIds = bubbledecoids;
                     _lstConfigBubblePlayRecords.Add(newConfig);
                 }
             }
@@ -510,6 +466,7 @@ namespace KAP.ToolCreateMap
                             rec.LstBubblePosition = pair.Value;
                             rec.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
                             rec.BaseGem = _toolBubbleDecoSetting.BaseGem.text;
+                            break;
                         }
                     }
                 }
@@ -699,18 +656,50 @@ namespace KAP.ToolCreateMap
 
             DctBubbleIdPrice[bubbleId] = pairs.Select(pair => pair.Item1).ToList();
             _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId] = pairs.Select(pair => pair.Item2).ToList();
-
-            //Debug.LogError("price: " + string.Join(", ", DctBubbleIdPrice[bubbleId]));
-            //Debug.LogError("bubble deco: " + string.Join(", ", _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId]));
         }
-        private void SortTwoListInt(List<int> lst1, List<int> lst2)
+        private void SortTwoListInt(List<int> list1, List<int> list2)
         {
-            List<Tuple<int, int>> pairs = lst1.Zip(lst2, Tuple.Create).ToList();
+            List<Tuple<int, int>> pairs = new List<Tuple<int, int>>();
+
+            for (int i = 0; i < list1.Count; i++)
+            {
+                pairs.Add(Tuple.Create(list1[i], list2[i]));
+            }
 
             pairs.Sort((x, y) => x.Item1.CompareTo(y.Item1));
 
-            lst1 = pairs.Select(pair => pair.Item1).ToList();
-            lst2 = pairs.Select(pair => pair.Item2).ToList();
+            for (int i = 0; i < pairs.Count; i++)
+            {
+                list1[i] = pairs[i].Item1;
+                list2[i] = pairs[i].Item2;
+            }
+        }
+        public static void SortLists(List<string> list1, List<int> list2, List<int> list3)
+        {
+            List<Tuple<string, int, int>> combinedList = new List<Tuple<string, int, int>>();
+            for (int i = 0; i < list1.Count; i++)
+            {
+                combinedList.Add(Tuple.Create(list1[i], list2[i], list3[i]));
+            }
+
+            combinedList.Sort((x, y) =>
+            {
+                if (x.Item2 != y.Item2)
+                {
+                    return x.Item2.CompareTo(y.Item2);
+                }
+                else
+                {
+                    return y.Item3.CompareTo(x.Item3);
+                }
+            });
+
+            for (int i = 0; i < list1.Count; i++)
+            {
+                list1[i] = combinedList[i].Item1;
+                list2[i] = combinedList[i].Item2;
+                list3[i] = combinedList[i].Item3;
+            }
         }
         public void LoadFileCsv()
         {
