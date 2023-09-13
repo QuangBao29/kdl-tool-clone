@@ -351,8 +351,6 @@ namespace KAP.ToolCreateMap
         
         private void BuildCurrentRoomPlay()
         {
-            //clear cache data
-            //dctRoomIdNumBubble.Clear();
             dctRoomIdUnpackDeco.Clear();
             _dctRoomIdStrPos.Clear();
             _dctRoomIdIndex.Clear();
@@ -361,7 +359,31 @@ namespace KAP.ToolCreateMap
             dctBubbleIdDeco.Clear();
             dctBubbleIdWD.Clear();
             dctBubbleIdPrice.Clear();
+            List<int> listID = new List<int>();
+            List<int> listAreas = new List<int>();
+            List<int> listVolumn = new List<int>();
+            string unpackingDeco = "";
+            var Root = _areaManager.ListRooms[0];
+            var infoRoot = (DecoInfo)Root.Info;
+            Root.Foreach((deco) =>
+            {
+                var info = (DecoInfo)deco.Info;
+                if (info.Id != infoRoot.Id && info.Id / 100000 < 22 && !info.IsBubble)
+                {
+                    listID.Add(info.Id);
+                    var rec = ConfigDeco.GetDecoById(info.Id);
+                    listAreas.Add(rec.CanInAreaFaces);
+                    listVolumn.Add(rec.SizeX * rec.SizeY);
+                    unpackingDeco += info.Id + "_" + info.Color + ";";
+                }
+            });
 
+            SortTwoListInt(listAreas, listID);
+
+            for (var i = 0; i < listAreas.Count; i++)
+            {
+                Debug.LogError("check: " + listAreas[i]);
+            }
             List<string> lstVariables = ConfigBubblePlayRecord.GetLstVariables();
             List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
             string txt = "";
@@ -393,58 +415,59 @@ namespace KAP.ToolCreateMap
                 }
             }
 
-            //foreach (var r in _toolBubbleDecoSetting.DctRootDecoItems)
-            //{
-            //    if (!_dctRoomIdStrPos.ContainsKey(r.Key.RoomId.ToString()))
-            //    {
-            //        var strPos = "";
-            //        Vector3 pos;
-            //        foreach (var root in _areaManager.ListRooms)
-            //        {
-            //            var rootInfo = (DecoInfo)root.Info;
-            //            //Debug.LogError("root pos: " + root.Position);
-            //            if (rootInfo.Id == r.Key.RoomId)
-            //            {
-            //                //foreach (var item in r.Value)
-            //                //{
-            //                //    pos = item.Deco.Position - root.Position;
-            //                //    strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
-            //                //}
-            //                for (var i = 0; i < r.Value.Count; i++)
-            //                {
-            //                    var item = _toolBubbleDecoSetting.OnGetBubbleDecoItemWithIndex(r.Key.RoomId, i);
-            //                    pos = item.Deco.Position - root.Position;
-            //                    strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
-            //                }
-            //                break;
-            //            }
-            //        }
-            //        _dctRoomIdStrPos.Add(r.Key.RoomId.ToString(), strPos);
-            //    }
-            //}
+            //get position
+            foreach (var pair in _toolBubbleSetting.DctDecoInRoom)
+            {
+                var bubbleId = pair.Key;
+                var roomId = SGUtils.ParseStringToListInt(bubbleId, '_')[0];
+                var bubbleIndex = SGUtils.ParseStringToListInt(bubbleId, '_')[1];
+                var deco = pair.Value;
+                var strPos = "";
+                Vector3 pos = Vector3.one;
+                var root = _areaManager.ListRooms[0];
+                var rootInfo = (DecoInfo)root.Info;
+                if (rootInfo.Id == roomId)
+                {
+                    pos = deco.Position - root.Position;
+                    strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
+                    if (!_dctRoomIdStrPos.ContainsKey(roomId.ToString()))
+                    {
+                        _dctRoomIdStrPos.Add(roomId.ToString(), strPos);
+                    }
+                    else _dctRoomIdStrPos[roomId.ToString()] += strPos;
+                    break;
+                }
+                DctRoomIdPosition[roomId][bubbleIndex] = pos;
+            }
 
             //get list unpacking deco
-            List<Deco> listBubble = new List<Deco>();
-            string unpackingDeco = "";
-            foreach (var r in _toolBubbleDecoSetting.DctBubbleDecoItems)
-            {
-                foreach (var item in r.Value)
-                {
-                    //if (!listBubble.Contains(item.Deco))
-                    //    listBubble.Add(item.Deco);
-                }
-            }
-            var Root = _areaManager.ListRooms[0];
-            var infoRoot = (DecoInfo)Root.Info;
-            Root.Foreach((deco) =>
-            {
-                if (!listBubble.Contains(deco))
-                {
-                    var info = (DecoInfo)deco.Info;
-                    if (info.Id != infoRoot.Id && info.Id / 100000 < 22)
-                        unpackingDeco += info.Id + "_" + info.Color + ";";
-                }
-            });
+            //sort deco cua cai list nay tu largest to smallest
+            //List<int> listID = new List<int>();
+            //List<int> listAreas = new List<int>();
+            //List<int> listVolumn = new List<int>();
+            //string unpackingDeco = "";
+            //var Root = _areaManager.ListRooms[0];
+            //var infoRoot = (DecoInfo)Root.Info;
+            //Root.Foreach((deco) =>
+            //{
+            //    var info = (DecoInfo)deco.Info;
+            //    if (info.Id != infoRoot.Id && info.Id / 100000 < 22 && !info.IsBubble)
+            //    {
+            //        listID.Add(info.Id);
+            //        var rec = ConfigDeco.GetDecoById(info.Id);
+            //        listAreas.Add(rec.CanInAreaFaces);
+            //        listVolumn.Add(rec.SizeX * rec.SizeY);
+            //        unpackingDeco += info.Id + "_" + info.Color + ";";
+            //    }
+            //});
+
+            //SortTwoListInt(listAreas, listID);
+
+            //for (var i = 0; i < listAreas.Count; i++)
+            //{
+            //    Debug.LogError("check: " + listAreas[i]);
+            //}
+
             if (!dctRoomIdUnpackDeco.ContainsKey(infoRoot.Id.ToString()))
                 dctRoomIdUnpackDeco.Add(infoRoot.Id.ToString(), unpackingDeco);
 
@@ -670,9 +693,6 @@ namespace KAP.ToolCreateMap
         }
         private void SortListBubbleDecoAndPrice(string bubbleId)
         {
-            List<int> numbers = new List<int> { 5, 2, 9, 3, 6, 1, 8, 4, 7 };
-            List<string> strings = new List<string> { "Five", "Two", "Nine", "Three", "Six", "One", "Eight", "Four", "Seven" };
-
             List<Tuple<int, string>> pairs = DctBubbleIdPrice[bubbleId].Zip(_toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId], Tuple.Create).ToList();
 
             pairs.Sort((x, y) => x.Item1.CompareTo(y.Item1));
@@ -682,6 +702,15 @@ namespace KAP.ToolCreateMap
 
             //Debug.LogError("price: " + string.Join(", ", DctBubbleIdPrice[bubbleId]));
             //Debug.LogError("bubble deco: " + string.Join(", ", _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId]));
+        }
+        private void SortTwoListInt(List<int> lst1, List<int> lst2)
+        {
+            List<Tuple<int, int>> pairs = lst1.Zip(lst2, Tuple.Create).ToList();
+
+            pairs.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+
+            lst1 = pairs.Select(pair => pair.Item1).ToList();
+            lst2 = pairs.Select(pair => pair.Item2).ToList();
         }
         public void LoadFileCsv()
         {

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Kawaii.ResourceManager;
 using Kawaii.IsoTools.DecoSystem;
+using KAP.Tools;
 
 namespace KAP.ToolCreateMap
 {
@@ -150,12 +151,16 @@ namespace KAP.ToolCreateMap
                 string newBubbleID = rootInfo.Id + "_" + numOfBubble;
                 _toolBubbleDecoSetting.DctBubbleDecoItems.Add(newBubbleID, new List<string>());
                 _toolBubbleSetting.OnGenerateItem(rootInfo.Id.ToString());
-                _configController.DctBubbleIdPrice.Add(newBubbleID, new List<int>());
-                _configController.DctBubbleIdPrice[newBubbleID].Add(0);
-                _configController.DctBubbleIdStar.Add(newBubbleID, "0");
-                _configController.DctBubbleIdWD.Add(newBubbleID, cur.deco.WorldDirect.ToString());
+                if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                {
+                    _configController.DctBubbleIdPrice.Add(newBubbleID, new List<int>());
+                    _configController.DctBubbleIdPrice[newBubbleID].Add(0);
+                    _configController.DctBubbleIdStar.Add(newBubbleID, "0");
+                    _configController.DctBubbleIdWD.Add(newBubbleID, cur.deco.WorldDirect.ToString());
+                }
                 if (!_toolBubbleSetting.DctDecoInRoom.ContainsKey(newBubbleID))
                 {
+                    Debug.LogError("check");
                     _toolBubbleSetting.DctDecoInRoom.Add(newBubbleID, cur.deco);
                 }
                 _configController.DctRoomIdPosition[rootInfo.Id].Add(cur.deco.Position);
