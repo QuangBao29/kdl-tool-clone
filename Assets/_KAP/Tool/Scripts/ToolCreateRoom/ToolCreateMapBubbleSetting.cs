@@ -36,6 +36,7 @@ namespace KAP.ToolCreateMap
 
         private List<string> _lstDecoBoxID = new List<string>();
         private List<ToolCreateMapBubbleIDItems> _lstCurBubbleIDItem = new List<ToolCreateMapBubbleIDItems>();
+
         //bubbleId - Deco in room
         private Dictionary<string, Deco> _dctDecoInRoom = new Dictionary<string, Deco>();
         private string _bubbleId;
@@ -207,7 +208,7 @@ namespace KAP.ToolCreateMap
                 int color = listId[1];
                 if (listId.Count > 1) color = listId[1];
                 var deco = _importDeco.CreateDeco(id, color);
-                deco.Info = new DecoInfo { Id = id, Color = color, IsBubble = false };
+                deco.Info = new DecoInfo { Id = id, Color = color, IsBubble = false, IsFromBox = true };
                 deco.Position = IsoWorld.WorldToIso(Camera.main.transform.position, 0);
                 var decoEdit = deco.GetComponent<DecoEditDemo>();
                 if (_editManager.SetCurrent(decoEdit))
@@ -218,6 +219,10 @@ namespace KAP.ToolCreateMap
                 }
                 LstDecoBoxID.Remove(idPath);
             }
+        }
+        public void AddBackToBox(string idColor)
+        {
+            LstDecoBoxID.Insert(0, idColor);
         }
     }
 }

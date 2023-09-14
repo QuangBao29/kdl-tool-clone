@@ -56,14 +56,13 @@ namespace KAP
                     {
                         var current = _editManager.Current;
                         var info = (DecoInfo)current.deco.Info;
-                        if (info.IsBubble)
+                        //if (info.IsBubble)
+                        //{
+
+                        //}
+                        if (info.IsFromBox)
                         {
-                            var currentBubble = current.gameObject.GetComponent<Bubble>();
-                            if (currentBubble != null)
-                            {
-                                if (currentBubble.Prefab != null)
-                                currentBubble.Prefab.UnActiveImgCheck();
-                            }
+                            _toolBubbleSetting.AddBackToBox(info.Id + "_" + info.Color);
                         }
                         _editManager.SetCurrent(null);
                         current.deco.Remove();
@@ -92,8 +91,6 @@ namespace KAP
                     case KHHEditStatus.CanSwap:
                         break;
                 }
-                
-                var newRoomIdx = current.deco.Root.ParseInfo<DecoInfo>().Id;
             }
         }
 

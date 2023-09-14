@@ -167,6 +167,7 @@ namespace KAP
         public string ShadowColor;
         public bool IsBubble;
         public bool IsUnpacking;
+        public bool IsFromBox;
 
         public string ExportToJson(object param)
         {
