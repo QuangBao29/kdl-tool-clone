@@ -365,6 +365,8 @@ namespace KAP.ToolCreateMap
             string txt = "";
             string txtPos = "";
 
+            var Root = _areaManager.ListRooms[0];
+            var infoRoot = (DecoInfo)Root.Info;
             //get position
             foreach (var pair in _toolBubbleSetting.DctDecoInRoom)
             {
@@ -374,18 +376,23 @@ namespace KAP.ToolCreateMap
                 var deco = pair.Value;
                 var strPos = "";
                 Vector3 pos = Vector3.one;
-                var root = _areaManager.ListRooms[0];
-                var rootInfo = (DecoInfo)root.Info;
-                if (rootInfo.Id == roomId)
+
+                if (infoRoot.Id == roomId)
                 {
-                    pos = deco.Position - root.Position;
+                    pos = deco.Position - Root.Position;
                     strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
                     if (!_dctRoomIdStrPos.ContainsKey(roomId.ToString()))
                     {
+                        //Debug.LogError("check 1");
                         _dctRoomIdStrPos.Add(roomId.ToString(), strPos);
+                        //Debug.LogError(_dctRoomIdStrPos[infoRoot.Id.ToString()]);
                     }
-                    else _dctRoomIdStrPos[roomId.ToString()] += strPos;
-                    break;
+                    else
+                    {
+                        //Debug.LogError("check 2");
+                        _dctRoomIdStrPos[roomId.ToString()] += strPos;
+                        //Debug.LogError(_dctRoomIdStrPos[infoRoot.Id.ToString()]);
+                    }
                 }
                 DctRoomIdPosition[roomId][bubbleIndex] = pos;
             }
@@ -395,8 +402,6 @@ namespace KAP.ToolCreateMap
             List<int> listAreas = new List<int>();
             List<int> listVolumn = new List<int>();
             string unpackingDeco = "";
-            var Root = _areaManager.ListRooms[0];
-            var infoRoot = (DecoInfo)Root.Info;
             Root.Foreach((deco) =>
             {
                 var info = (DecoInfo)deco.Info;
@@ -415,7 +420,6 @@ namespace KAP.ToolCreateMap
             {
                 unpackingDeco += listID[i] + ";";
             }
-            Debug.LogError("unpack str: " + unpackingDeco);
             if (!dctRoomIdUnpackDeco.ContainsKey(infoRoot.Id.ToString()))
                 dctRoomIdUnpackDeco.Add(infoRoot.Id.ToString(), unpackingDeco);
 
@@ -428,6 +432,7 @@ namespace KAP.ToolCreateMap
                 {
                     bubbledecoids += pair.Value[i] + ";";
                 }
+                
                 if (record != null)
                 {
                     foreach (var rec in _lstConfigBubblePlayRecords)
@@ -435,6 +440,7 @@ namespace KAP.ToolCreateMap
                         if (rec.BubbleId == pair.Key)
                         {
                             rec.BubbleDecoIds = bubbledecoids;
+                            //Debug.LogError("bubbledecoids: " + rec.BubbleId + " " + bubbledecoids);
                             break;
                         }
                     }
@@ -451,7 +457,12 @@ namespace KAP.ToolCreateMap
             {
                 txt += lstVariables[i] + "\t";
             }
+            //foreach (var config in _lstConfigBubblePlayRecords)
+            //{
+            //    Debug.LogError(config.BubbleId + " " + config.BubbleDecoIds);
+            //}
             txt += lstVariables[lstVariables.Count - 1] + "\n" + ConvertConfigBubblePlayRecordToStringCsv(_lstConfigBubblePlayRecords);
+            //Debug.LogError(txt);
 
             //Build ConfigBubblePlayPosition
             foreach (var pair in _dctRoomIdStrPos)
