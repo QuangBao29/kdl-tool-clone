@@ -52,7 +52,6 @@ namespace KAP.ToolCreateMap
         }
         public void SwapBubbleDeco(Deco curDeco, int id, int color)
         {
-            //Debug.LogError("swap");
             Vector3 pos = Vector3.one;
             int direct = 0;
             if (curDeco != null)
@@ -111,9 +110,12 @@ namespace KAP.ToolCreateMap
                         child.Remove();
                     }
                     var itemInfo = current.ParseInfo<DecoInfo>();
-                    string itemId = itemInfo.Id.ToString() + "_" + itemInfo.Color.ToString();
-                    _toolBubbleSetting.LstDecoBoxID.Add(itemId);
-                    current.Remove();
+                    if (itemInfo.Id / 100000 < 22)
+                    {
+                        string itemId = itemInfo.Id.ToString() + "_" + itemInfo.Color.ToString();
+                        _toolBubbleSetting.LstDecoBoxID.Add(itemId);
+                        current.Remove();
+                    }
                 }
             }
 
