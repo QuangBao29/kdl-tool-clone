@@ -83,6 +83,11 @@ namespace KAP.ToolCreateMap
                     direct = int.Parse(record.WorldDirect);
                     pos = recordPos.GetLstBubblePositionVector3()[bubbleIdx];
                 }
+                else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                {
+                    var recordPos = _configController.ConfigBubblePlayPosition.GetByRoomId(roomId.ToString());
+                    pos = recordPos.GetLstBubblePositionVector3()[bubbleIdx];
+                }
             }
             var newDeco = _importDecoController.CreateDeco(id, color);
             newDeco.Info = new DecoInfo { Id = id, Color = color, IsBubble = true };
