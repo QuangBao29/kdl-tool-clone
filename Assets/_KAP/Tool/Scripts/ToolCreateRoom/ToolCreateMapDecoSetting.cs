@@ -160,7 +160,7 @@ namespace KAP.ToolCreateMap
                 }
                 if (!_toolBubbleSetting.DctDecoInRoom.ContainsKey(newBubbleID))
                 {
-                    Debug.LogError("check");
+                    //Debug.LogError("check");
                     _toolBubbleSetting.DctDecoInRoom.Add(newBubbleID, cur.deco);
                 }
                 _configController.DctRoomIdPosition[rootInfo.Id].Add(cur.deco.Position);

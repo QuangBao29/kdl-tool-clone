@@ -297,7 +297,7 @@ namespace KAP.ToolCreateMap
             for (; roomItemIndex < roomItemCount; ++roomItemIndex)
             {
                 _transGridRoom.GetChild(roomItemIndex).gameObject.SetActive(false);
-                Debug.LogError("check idx: " + roomItemIndex);
+                //Debug.LogError("check idx: " + roomItemIndex);
             }
 
             if (_init)

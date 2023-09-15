@@ -29,6 +29,8 @@ namespace KAP.ToolCreateMap
 
         private List<ToolCreateMapBubbleDecoItems> _lstCurrentBubbleDeco = null;
         private string _textureAtlasPath = "Assets/_KAP/_GameResources/Atlas/Decos/";
+        private int _oldDirect;
+        private Vector3 _oldPos = Vector3.one;
 
         //BubbleId - list deco id
         [HideInInspector]
@@ -52,8 +54,6 @@ namespace KAP.ToolCreateMap
         }
         public void SwapBubbleDeco(Deco curDeco, int id, int color)
         {
-            Vector3 pos = Vector3.one;
-            int direct = 0;
             if (curDeco != null)
             {
                 var allChilds = curDeco.GetAllChilds();
@@ -68,31 +68,30 @@ namespace KAP.ToolCreateMap
                     }
                 }
                 curDeco.Remove();
-                pos = curDeco.Position;
-                direct = curDeco.WorldDirect;
+                _oldPos = curDeco.Position;
+                _oldDirect = curDeco.WorldDirect;
             }
-            else
-            {
-                var bubbldeId = _toolBubbleSetting.CurrentBubbleID;
-                var roomId = SGUtils.ParseStringToListInt(bubbldeId, '_')[0];
-                var bubbleIdx = SGUtils.ParseStringToListInt(bubbldeId, '_')[1];
-                if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                {
-                    var record = _configController.ConfigBubbleHome.GetById(bubbldeId);
-                    var recordPos = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId.ToString());
-                    direct = int.Parse(record.WorldDirect);
-                    pos = recordPos.GetLstBubblePositionVector3()[bubbleIdx];
-                }
-                else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
-                {
-                    var recordPos = _configController.ConfigBubblePlayPosition.GetByRoomId(roomId.ToString());
-                    pos = recordPos.GetLstBubblePositionVector3()[bubbleIdx];
-                }
-            }
+            //else
+            //{
+            //    var bubbldeId = _toolBubbleSetting.CurrentBubbleID;
+            //    var roomId = SGUtils.ParseStringToListInt(bubbldeId, '_')[0];
+            //    var bubbleIdx = SGUtils.ParseStringToListInt(bubbldeId, '_')[1];
+            //    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+            //    {
+            //        var record = _configController.ConfigBubbleHome.GetById(bubbldeId);
+            //        var recordPos = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId.ToString());
+            //    }
+            //    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+            //    {
+            //        var recordPos = _configController.ConfigBubblePlayPosition.GetByRoomId(roomId.ToString());
+            //    }
+            //}
             var newDeco = _importDecoController.CreateDeco(id, color);
             newDeco.Info = new DecoInfo { Id = id, Color = color, IsBubble = true };
-            newDeco.Position = pos;
-            newDeco.WorldDirect = direct;
+            //newDeco.Position = pos;
+            //newDeco.WorldDirect = direct;
+            newDeco.Position = _oldPos;
+            newDeco.WorldDirect = _oldDirect;
             var decoEdit = newDeco.GetComponent<DecoEditDemo>();
 
             var moveData = _areaManager.Move(newDeco);
@@ -396,12 +395,6 @@ namespace KAP.ToolCreateMap
         public void OnRemoveBubbleDecos(ToolCreateMapBubbleDecoItems item)
         {
             var deco = _toolBubbleSetting.DctDecoInRoom[_toolBubbleSetting.CurrentBubbleID];
-            if (deco == null)
-            {
-                Debug.LogError("deco null");
-                return;
-            }
-            var curInfo = (DecoInfo)deco.Info;
             var info = (DecoInfo)item.Info;
             item.gameObject.SetActive(false);
             LstCurrentBubbleDeco.Remove(item);
@@ -418,25 +411,26 @@ namespace KAP.ToolCreateMap
             }
             else
             {
-                var allChilds = deco.GetAllChilds();
-                if (allChilds != null)
+                if (deco != null)
                 {
-                    foreach (var child in allChilds)
+                    var allChilds = deco.GetAllChilds();
+                    if (allChilds != null)
                     {
-                        var childDecoInfo = child.ParseInfo<DecoInfo>();
-                        string childId = childDecoInfo.Id.ToString() + "_" + childDecoInfo.Color.ToString();
-                        if (childDecoInfo != null) _toolBubbleSetting.LstDecoBoxID.Add(childId);
-                        else Debug.LogError("child info not found");
+                        foreach (var child in allChilds)
+                        {
+                            var childDecoInfo = child.ParseInfo<DecoInfo>();
+                            string childId = childDecoInfo.Id.ToString() + "_" + childDecoInfo.Color.ToString();
+                            if (childDecoInfo != null) _toolBubbleSetting.LstDecoBoxID.Add(childId);
+                            else Debug.LogError("child info not found");
+                        }
                     }
-                }
-                deco.Remove();
-
-                var roomId = SGUtils.ParseStringToList(_toolBubbleSetting.CurrentBubbleID, '_')[0];
-                _toolBubbleSetting.DctDecoInRoom[roomId] = null;
-                if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                {
-                    _configController.DctBubbleIdStar[_toolBubbleSetting.CurrentBubbleID] = "";
-                    _configController.DctBubbleIdWD[_toolBubbleSetting.CurrentBubbleID] = "";
+                    deco.Remove();
+                    _toolBubbleSetting.DctDecoInRoom[_toolBubbleSetting.CurrentBubbleID] = null;
+                    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+                    {
+                        _configController.DctBubbleIdStar[_toolBubbleSetting.CurrentBubbleID] = "";
+                        _configController.DctBubbleIdWD[_toolBubbleSetting.CurrentBubbleID] = "";
+                    }
                 }
             }
         }

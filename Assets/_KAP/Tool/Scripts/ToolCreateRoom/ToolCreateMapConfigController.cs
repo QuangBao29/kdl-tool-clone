@@ -586,10 +586,10 @@ namespace KAP.ToolCreateMap
                 }
                 DctRoomIdPosition[roomId][bubbleIndex] = pos;
             }
-            foreach (var pair in _dctRoomIdStrPos)
-            {
-                Debug.LogError("roomId strPos: " + pair.Key + " " + pair.Value);
-            }
+            //foreach (var pair in _dctRoomIdStrPos)
+            //{
+            //    Debug.LogError("roomId strPos: " + pair.Key + " " + pair.Value);
+            //}
 
             //get Indx Room
             foreach (var room in _toolLstRooms.GetLstRoomItem())

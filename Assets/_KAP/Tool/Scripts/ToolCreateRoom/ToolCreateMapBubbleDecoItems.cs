@@ -99,31 +99,34 @@ namespace KAP.ToolCreateMap
         public void OnClickTargetDecoItem()
         {
             var deco = _toolBubbleSetting.DctDecoInRoom[BubbleId];
-            if (deco == null)
-            {
-                Debug.LogError("deco null");
-                return;
-            }
             if (_editManager.Current != null)
             {
                 if (_editManager.Current.EditStatus == KHHEditStatus.Valid) _editManager.SetCurrent(null);
                 else return;
             }
-            var decoInfo = (DecoInfo)deco.Info;
-            var curInfo = (DecoInfo)this.Info;
-            if (_cam.orthographicSize > _editCameraZoom)
-                _sgPanZoom.ZoomSmooth(_cam.orthographicSize, _editCameraZoom, 0.5f, null);
-            var centerPos = deco.Position;
-            var flyWorldPos = IsoWorld.IsoToWorld(centerPos);
-            _sgPanZoom.FlyTo(flyWorldPos, true, 0.5f);
-            if (decoInfo.Id == curInfo.Id && decoInfo.Color == curInfo.Color)
+            if (deco == null)
             {
-                //Debug.LogError("dung deco");
-                _editManager.SetCurrent(deco.GetComponent<DecoEditDemo>());
+                var curInfo = (DecoInfo)this.Info;
+                _toolBubbleDecoSetting.SwapBubbleDeco(deco, curInfo.Id, curInfo.Color);
             }
             else
             {
-                _toolBubbleDecoSetting.SwapBubbleDeco(deco, curInfo.Id, curInfo.Color);
+                var decoInfo = (DecoInfo)deco.Info;
+                var curInfo = (DecoInfo)this.Info;
+                if (_cam.orthographicSize > _editCameraZoom)
+                    _sgPanZoom.ZoomSmooth(_cam.orthographicSize, _editCameraZoom, 0.5f, null);
+                var centerPos = deco.Position;
+                var flyWorldPos = IsoWorld.IsoToWorld(centerPos);
+                _sgPanZoom.FlyTo(flyWorldPos, true, 0.5f);
+                if (decoInfo.Id == curInfo.Id && decoInfo.Color == curInfo.Color)
+                {
+                    //Debug.LogError("dung deco");
+                    _editManager.SetCurrent(deco.GetComponent<DecoEditDemo>());
+                }
+                else
+                {
+                    _toolBubbleDecoSetting.SwapBubbleDeco(deco, curInfo.Id, curInfo.Color);
+                }
             }
         }
         
