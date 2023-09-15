@@ -415,6 +415,7 @@ namespace KAP.ToolCreateMap
             });
 
             SortLists(listID, listAreas, listVolumn);
+            Debug.LogError("count after: " + listID.Count);
 
             for (var i = 0; i < listID.Count; i++)
             {

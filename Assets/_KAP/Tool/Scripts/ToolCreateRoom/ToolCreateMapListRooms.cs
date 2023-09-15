@@ -452,6 +452,8 @@ namespace KAP.ToolCreateMap
             _configController.InitDataConfig();
 
             _toolBubbleSetting.Init();
+
+            CountDecoUnpack();
         }
         #endregion
         // ================================================================
@@ -543,27 +545,22 @@ namespace KAP.ToolCreateMap
 
         #endregion
 
-        //public void OnTempCreateBubbleItem()
-        //{
-        //    var listRooms = _areaManager.ListRooms;
-
-        //    foreach (var room in listRooms)
-        //    {
-        //        var roomInfo = (DecoInfo)room.Info;
-        //        if (roomInfo.Id != 120001 && roomInfo.Id != 120002)
-        //        {
-        //            var idx = 0;
-        //            room.Foreach((deco) => {
-        //                var info = (DecoInfo)deco.Info;
-        //                if (info.IsBubble)
-        //                {
-        //                    Debug.LogError(string.Format("idx: {0}, Room: {1}", idx, roomInfo.Id));
-        //                    _toolBubbleDecoSetting.CreateBubbleDecoItemsAtBeginningTemp(deco, info.Id, info.Color, roomInfo.Id, roomInfo + "_" + idx);
-        //                    idx++;
-        //                }
-        //            });
-        //        }
-        //    }
-        //}
+        private void CountDecoUnpack()
+        {
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+            {
+                int count = 0;
+                var root = _areaManager.ListRooms[0];
+                var infoRoot = (DecoInfo)root.Info;
+                root.Foreach((deco) => {
+                    var info = (DecoInfo)deco.Info;
+                    if (!info.IsBubble && info.Id / 100000 < 22 && info.Id != infoRoot.Id)
+                    {
+                        count++;
+                    }
+                });
+                Debug.LogError("count before: " + count);
+            }
+        }
     }
 }
