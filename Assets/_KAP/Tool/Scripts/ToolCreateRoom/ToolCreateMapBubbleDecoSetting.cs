@@ -71,25 +71,9 @@ namespace KAP.ToolCreateMap
                 _oldPos = curDeco.Position;
                 _oldDirect = curDeco.WorldDirect;
             }
-            //else
-            //{
-            //    var bubbldeId = _toolBubbleSetting.CurrentBubbleID;
-            //    var roomId = SGUtils.ParseStringToListInt(bubbldeId, '_')[0];
-            //    var bubbleIdx = SGUtils.ParseStringToListInt(bubbldeId, '_')[1];
-            //    if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-            //    {
-            //        var record = _configController.ConfigBubbleHome.GetById(bubbldeId);
-            //        var recordPos = _configController.ConfigBubbleHomePosition.GetByRoomId(roomId.ToString());
-            //    }
-            //    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
-            //    {
-            //        var recordPos = _configController.ConfigBubblePlayPosition.GetByRoomId(roomId.ToString());
-            //    }
-            //}
+
             var newDeco = _importDecoController.CreateDeco(id, color);
             newDeco.Info = new DecoInfo { Id = id, Color = color, IsBubble = true };
-            //newDeco.Position = pos;
-            //newDeco.WorldDirect = direct;
             newDeco.Position = _oldPos;
             newDeco.WorldDirect = _oldDirect;
             var decoEdit = newDeco.GetComponent<DecoEditDemo>();
@@ -135,71 +119,7 @@ namespace KAP.ToolCreateMap
                 _configController.DctBubbleIdWD[_toolBubbleSetting.CurrentBubbleID] = newDeco.WorldDirect.ToString();
             }
         }
-        public void OnSelectRootDecoItems()
-        {
-            var selectedItem = _toolLstRooms.GetSelectedItem();
-            if (selectedItem == null)
-            {
-                Debug.LogError("selectedItem = null");
-                return;
-            }
-            else
-            {
-                if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
-                {
-                    var curRoomId = selectedItem.GetRoomId();
-                    var lstRecs = _configController.ListConfigBubbleHomeRecords;
-                    var check = false;
-                    foreach (var rec in lstRecs)
-                    {
-                        var roomId = SGUtils.ParseStringToListInt(rec.BubbleId, '_')[0];
-                        if (roomId == curRoomId)
-                        {
-                            check = true;
-                            var decoId = SGUtils.ParseStringToList(rec.BubbleDecoIds, ';')[0];
-                            var lst = SGUtils.ParseStringToListInt(decoId, '_');
-                            //CreateBubbleDecoItemsAtBeginning(lst[0], lst[1], roomId, rec.BubbleId);
-                        }
-                    }
-                    if (!check)
-                    {
-                        var rootDecoItem = SGUtils.InstantiateObject<ToolCreateMapBubbleDecoItems>(_prefabRootDeco, _content);
-                        rootDecoItem.RoomId = curRoomId;
-                        rootDecoItem.gameObject.name = rootDecoItem.RoomId.ToString();
-                        rootDecoItem.gameObject.SetActive(true);
-                    }
-                }
-                if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
-                {
-                    var curRoomId = selectedItem.GetRoomId();
-                    var lstRecs = _configController.ListConfigBubblePlayRecords;
-                    var check = false;
-                    foreach (var rec in lstRecs)
-                    {
-                        var roomId = SGUtils.ParseStringToListInt(rec.BubbleId, '_')[0];
-                        if (roomId == curRoomId)
-                        {
-                            var bubbledecoids = SGUtils.ParseStringToList(rec.BubbleDecoIds, ';');
-                            string decoId = "";
-                            if (bubbledecoids.Count > 0)
-                            {
-                                decoId = bubbledecoids[0];
-                                check = true;
-                                var lst = SGUtils.ParseStringToListInt(decoId, '_');
-                                //CreateBubbleDecoItemsAtBeginning(lst[0], lst[1], roomId, rec.BubbleId);
-                            }
-                        }
-                    }
-                    if (!check)
-                    {
-                        var rootDecoItem = SGUtils.InstantiateObject<ToolCreateMapBubbleDecoItems>(_prefabRootDeco, _content);
-                        rootDecoItem.RoomId = curRoomId;
-                        rootDecoItem.gameObject.name = rootDecoItem.RoomId.ToString();
-                        rootDecoItem.gameObject.SetActive(true);
-                    }
-                }
-            }
-        }
+        
         public void OnClearDctRootDecoItems()
         {
             DctBubbleDecoItems.Clear();
@@ -207,7 +127,6 @@ namespace KAP.ToolCreateMap
 
         public void OnGenerateItem(string bubbleId, ToolCreateMapBubbleIDItems item)
         {
-            //Debug.LogError("bubbleID: " + bubbleId + " " + item.IsInit);
             if (item.IsInit)
             {
                 var lstDecoID = DctBubbleDecoItems[bubbleId];
@@ -363,6 +282,10 @@ namespace KAP.ToolCreateMap
                     item.SetStar(recordBubble.Star.ToString());
                 }
                 item.SetPrice(price.ToString());
+            }
+            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+            {
+                item.SetIndex(bubbleIdx.ToString());
             }
             
             item.BubbleId = bubbleId;
