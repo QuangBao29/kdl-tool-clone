@@ -31,8 +31,8 @@ namespace KAP.Tools
 
         void Awake()
         {
-            //CreateBlackAndWhiteCameras();
-            //HideBlackAndWhiteCameras();
+            CreateBlackAndWhiteCameras();
+            HideBlackAndWhiteCameras();
             CacheAndInitialiseFields();
         }
 
@@ -157,8 +157,14 @@ namespace KAP.Tools
         {
             ActionSetupScreenShoot?.Invoke();
             ShowBlackAndWhiteCameras();
+
+            //_mainCam.gameObject.transform.position = new Vector3(0, 3, 0);
+            //_mainCam.orthographicSize = 3.5f;
+
             _whiteCam.orthographicSize = _mainCam.orthographicSize;
             _blackCam.orthographicSize = _mainCam.orthographicSize;
+
+            
         }
 
         private void SetupFinishScreenShot()
@@ -226,9 +232,9 @@ namespace KAP.Tools
         private void CalculateOutputTexture()
         {
             Color color;
-            for (int y = 0; y < _textureTransparentBackground.height; ++y)
+            for (int y = 0; y < _textureTransparentBackground.height; y++)
             {
-                for (int x = 0; x < _textureTransparentBackground.width; ++x)
+                for (int x = 0; x < _textureTransparentBackground.width; x++)
                 {
                     // each column
                     float alpha = _textureWhite.GetPixel(x, y).r - _textureBlack.GetPixel(x, y).r;
@@ -257,7 +263,9 @@ namespace KAP.Tools
         {
             string saveFolder = Path.Combine(Application.dataPath, _saveFolderPath);
             string nameWithURL =  Path.Combine(saveFolder, GetScreenShootName());
-            var pngShot = _textureTransparentBackground.EncodeToPNG();
+            //var pngShot = _textureTransparentBackground.EncodeToPNG();
+            var croppedTexture = CropToSquare(_textureTransparentBackground);
+            var pngShot = croppedTexture.EncodeToPNG();
 
             Debug.LogError(string.Format("Saving screenshot: {0}", nameWithURL));
             File.WriteAllBytes(nameWithURL, pngShot);
@@ -276,6 +284,20 @@ namespace KAP.Tools
             var pngShot = _textureTransparentBackground.EncodeToPNG();
 
             File.WriteAllBytes(nameWithURL, pngShot);
+        }
+        private Texture2D CropToSquare(Texture2D original)
+        {
+            int size = Mathf.Min(original.width, original.height) - 1;
+            int startX = (original.width - size) / 2 + 1;
+            int startY = (original.height - size) / 2 + 1;
+
+            Color[] pixels = original.GetPixels(startX, startY, size, size);
+
+            // Create a new texture and set its pixels
+            Texture2D croppedTexture = new Texture2D(size, size);
+            croppedTexture.SetPixels(pixels);
+            croppedTexture.Apply();
+            return croppedTexture;
         }
 
         #endregion

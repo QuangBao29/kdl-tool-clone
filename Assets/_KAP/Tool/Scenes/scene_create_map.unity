@@ -2304,7 +2304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &149566613
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2624,7 +2624,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &156766604
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6981,7 +6981,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -204, y: -126}
+  m_AnchoredPosition: {x: -74, y: -670}
   m_SizeDelta: {x: 102, y: 79}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &444407873
@@ -7030,7 +7030,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1752511465}
         m_TargetAssemblyTypeName: KAP.Tools.ToolScreenShotRemoveBG, KAP
-        m_MethodName: OnClickScreenShotKDL
+        m_MethodName: OnScreenShotClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14982,7 +14982,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &999932044
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15692,7 +15692,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1044306754
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20253,7 +20253,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1372382317
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21449,7 +21449,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1431728196
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23048,7 +23048,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1534731898
 RectTransform:
   m_ObjectHideFlags: 0
