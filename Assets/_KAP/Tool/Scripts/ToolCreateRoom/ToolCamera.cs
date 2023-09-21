@@ -34,7 +34,7 @@ namespace KAP.Tools
         [Header("Camera Size")]
         [SerializeField] private Slider _sldCameraSize = null;
         [SerializeField] private Text _txtCameraSizeValue = null;
-        [SerializeField] private float _zoomMin = 3;
+        [SerializeField] private float _zoomMin = 0.001f;
         [SerializeField] private float _zoomMax = 10;
         private float _cameraSizeValue;
         public float CameraSizeValue

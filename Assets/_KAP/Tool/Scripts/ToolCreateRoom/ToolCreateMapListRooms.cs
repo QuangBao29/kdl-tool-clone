@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +12,7 @@ using Pathfinding.Serialization.JsonFx;
 using KAP.Tools;
 using Imba.UI;
 using Imba.Utils;
+using UnityEngine.PlayerLoop;
 
 namespace KAP.ToolCreateMap
 {
@@ -44,6 +47,7 @@ namespace KAP.ToolCreateMap
         [SerializeField] private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] private ToolCreateMapConfigController _configController = null;
         [SerializeField] private ToolCreateMapBubbleDecoSetting _toolBubbleDecoSetting = null;
+        [SerializeField] private ToolScreenBound _toolScreenBound = null;
 
         [Space]
         [SerializeField] private Transform _transGridRoom = null;
@@ -399,6 +403,14 @@ namespace KAP.ToolCreateMap
             return Path.Combine(targetEditMode.ImportPath, mapName);
         }
 
+        public string GetImportPath(string roomId)
+        {
+            var targetEditMode = _dctEditModeData[ToolEditMode.Instance.CurrentEditMode];
+
+            string mapName = roomId + ".json";
+            return Path.Combine(targetEditMode.ImportPath, mapName);
+        }
+
         public void OnButtonImportClick()
         {
 #if UNITY_EDITOR
@@ -436,6 +448,7 @@ namespace KAP.ToolCreateMap
         {
             if (string.IsNullOrEmpty(_inputMapId.text))
                 return;
+            int roomId = Int32.Parse(_inputMapId.text);
             _areaManager.ClearAllRooms();
             //_toolBubbleDecoSetting.OnClearDctRootDecoItems();
             string path = "";
@@ -454,6 +467,30 @@ namespace KAP.ToolCreateMap
             _toolBubbleSetting.Init();
 
             CountDecoUnpack();
+            string txt = _txtCurEditMode.text.Substring(0, _txtCurEditMode.text.Length - 4);
+            Debug.LogError("tool: " + txt + " " + EditMode.Play.ToString());
+            if (txt == EditMode.Play.ToString())
+                _toolScreenBound.InitRoomPlay(roomId);
+            else
+                _toolScreenBound.Init();
+        }
+        public void OnClickScreenshotAllPlayRoom()
+        {
+            StartCoroutine("OnButtonScreenShotMultiRoomClick");
+        }
+        IEnumerator OnButtonScreenShotMultiRoomClick()
+        {
+            foreach(var record in _configController.ConfigBubblePlayPosition.Records)
+            {
+                Debug.LogError("record Id: " + record.RoomId);
+                _inputMapId.text = record.RoomId;
+
+                OnButtonImportNewClick();
+
+                _toolScreenShot.OnScreenShotClick();
+
+                yield return new WaitForSeconds(3);
+            }
         }
         #endregion
         // ================================================================

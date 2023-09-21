@@ -31,10 +31,14 @@ namespace Fingers
             CalcMinMax();
         }
 
-        void CalcMinMax()
+        public void SetCenter(Vector2 centerPos)
         {
-            Vector3 mi = new Vector3(roomSize.x * -0.5f, roomSize.y * -0.5f, 0);
-            Vector3 mx = new Vector3(roomSize.x * 0.5f, roomSize.y * 0.5f, 0);
+            transform.position = centerPos;
+        }
+        public void CalcMinMax()
+        {
+            Vector3 mi = new Vector3(roomSize.x * -0.5f, roomSize.y * -0.5f + 1, 0);
+            Vector3 mx = new Vector3(roomSize.x * 0.5f, roomSize.y * 0.5f + 1, 0);
 #if UNITY_EDITOR
             if (!tranformMin)
                 tranformMin = transform.Find("Min");

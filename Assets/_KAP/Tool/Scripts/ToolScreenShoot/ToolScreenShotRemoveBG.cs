@@ -11,6 +11,7 @@ namespace KAP.Tools
     public class ToolScreenShotRemoveBG : MonoBehaviour
     {
         public Action ActionSetupScreenShoot;
+        public Action ActionSetupMultiScreenShoot;
         public Action ActionSetupFinishScreenShoot;
 
         [SerializeField] private string _saveFolderPath = "Screenshots";

@@ -41,6 +41,22 @@ namespace Fingers
         [HideInInspector]
         public bool IsLockedPan = false;
 
+        private float _originalPanSmooth = 0;
+        private float _originalZoom = 0;
+
+        public float Zoom
+        {
+            get
+            {
+                return _cam.orthographicSize;
+            }
+            set
+            {
+                _cam.orthographicSize = value;
+                UpdateSubCams();
+            }
+        }
+
         private void Start()
         {
             if (_cam == null)
@@ -75,7 +91,7 @@ namespace Fingers
 
         private void Update()
         {
-            Zoom(Input.GetAxis("Mouse ScrollWheel"));
+            DoZoom(Input.GetAxis("Mouse ScrollWheel"));
         }
 #endif
 
@@ -90,7 +106,7 @@ namespace Fingers
 #endif
         }
 
-        void Zoom(float increment)
+        void DoZoom(float increment)
         {
             var orthoSize = Mathf.Clamp(_cam.orthographicSize - increment, _zoomOutMin, _zoomOutMax);
             _cam.orthographicSize = orthoSize;
@@ -143,6 +159,13 @@ namespace Fingers
         {
             _cam.orthographicSize = value;
             UpdateSubCams();
+        }
+
+        public float GetZoomFromBoudSize(Vector2 boundSize)
+        {
+            var vertical = boundSize.y / 2;
+            var horiz = boundSize.x * Screen.height / Screen.width * 0.5f;
+            return Mathf.Min(vertical, horiz);
         }
 
         public void ZoomSmooth(float from, float to, float time, System.Action cb)
