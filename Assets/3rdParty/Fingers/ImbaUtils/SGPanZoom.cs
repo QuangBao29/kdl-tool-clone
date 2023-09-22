@@ -98,12 +98,13 @@ namespace Fingers
         public void ScaleGestureCallback(GestureRecognizer gesture)
         {
 #if !UNITY_EDITOR
-            if (gesture.State == GestureRecognizerState.Executing)
-            {
-                var scaleGesture = (ScaleGestureRecognizer)gesture;
-                Zoom((scaleGesture.ScaleMultiplier-1)*_zoomSmooth);
-            }
+            
 #endif
+            //if (gesture.State == GestureRecognizerState.Executing)
+            //{
+            //    var scaleGesture = (ScaleGestureRecognizer)gesture;
+            //    Zoom((scaleGesture.ScaleMultiplier - 1) * _zoomSmooth);
+            //}
         }
 
         void DoZoom(float increment)

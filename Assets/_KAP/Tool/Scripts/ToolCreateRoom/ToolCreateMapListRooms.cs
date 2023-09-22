@@ -468,7 +468,6 @@ namespace KAP.ToolCreateMap
 
             CountDecoUnpack();
             string txt = _txtCurEditMode.text.Substring(0, _txtCurEditMode.text.Length - 4);
-            Debug.LogError("tool: " + txt + " " + EditMode.Play.ToString());
             if (txt == EditMode.Play.ToString())
                 _toolScreenBound.InitRoomPlay(roomId);
             else
@@ -489,7 +488,7 @@ namespace KAP.ToolCreateMap
 
                 _toolScreenShot.OnScreenShotClick();
 
-                yield return new WaitForSeconds(3);
+                yield return new WaitForSeconds(2);
             }
         }
         #endregion

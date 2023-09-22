@@ -62,7 +62,6 @@ namespace KAP
             _sgPanZoom.ZoomMax = _sgPanZoom.GetZoomFromBoudSize(_screenBounding.roomSize) + 3f;
 
             FitCameraSize = _sgPanZoom.GetZoomFromBoudSize(_screenBounding.roomSize) + 1f;
-            Debug.LogError("how many time su run?");
             _sgPanZoom.Zoom = FitCameraSize;
             _sgPanZoom.FlyTo(_worldCenterPos + new Vector2(0, 3f), flySmooth);
         }

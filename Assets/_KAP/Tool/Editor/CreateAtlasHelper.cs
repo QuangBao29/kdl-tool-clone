@@ -42,7 +42,8 @@ namespace KAP.Tools
             CreateAtlasUtils.CreateAtlasFromATexture(_textureFolderPath + @"CommonIcons/common.png", _atlasFolderPath + "commonicons.asset", _cloudSettingPath);
             CreateAtlasUtils.CreateAtlasFromATexture(_textureFolderPath + @"CommonIcons/deco_theme.png", _atlasFolderPath + "deco_theme.asset", _cloudSettingPath);
             CreateAtlasUtils.CreateAtlasFromATexture(_textureFolderPath + @"Shop/shop.png", _atlasFolderPath + "shop.asset", _cloudSettingPath);
-            CreateRoomAtlas();
+            //CreateRoomAtlas();
+            CreateRoomKDLAtlas();
             CreateRoomThemeAtlas();
             CreateWonderAtlas();
             CreateHiveDefaultAtlas();
@@ -109,6 +110,51 @@ namespace KAP.Tools
             if (!Directory.Exists(targetFolderPath))
                 Directory.CreateDirectory(targetFolderPath);
             var textureFolderPath = Application.dataPath + @"/_KAP/_GameResources/Textures/Rooms/";
+            var jsonFolderPath = Application.dataPath + @"/_KAP/_GameResources/Maps/Rooms/";
+            if (!Directory.Exists(textureFolderPath))
+                return;
+            if (!Directory.Exists(jsonFolderPath))
+                return;
+            var textureFolder = new DirectoryInfo(textureFolderPath);
+            FileInfo[] allTextures = textureFolder.GetFiles("*.png", SearchOption.AllDirectories);
+            foreach (var file in allTextures)
+            {
+                KawaiiAtlas atlas = CreateInstance<KawaiiAtlas>();
+                //texture
+                atlas.LstSprites = new List<Sprite>();
+                var objSprites = AssetDatabase.LoadAllAssetRepresentationsAtPath(FileUtil.GetProjectRelativePath(file.FullName.Replace('\\', '/')));
+                foreach (var obj in objSprites)
+                {
+                    var sprite = (Sprite)obj;
+                    if (sprite.rect.width > 512 || sprite.rect.height > 512)
+                    {
+                        Debug.LogError(string.Format("width or height so long: {0}", file.Name));
+                        continue;
+                    }
+                    if (!atlas.LstSprites.Contains(sprite))
+                        atlas.LstSprites.Add(sprite);
+                }
+                //json
+                var jsonFilePath = jsonFolderPath + file.Name.Replace(".png", ".json");
+
+                atlas.LstTexts = new List<TextAsset>();
+                var textAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(FileUtil.GetProjectRelativePath(jsonFilePath.Replace('\\', '/')));
+                if (textAsset != null)
+                    atlas.LstTexts.Add(textAsset);
+                else
+                {
+                    Debug.LogError("Not found Json File: " + file.Name);
+                    continue;
+                }
+                CreateAtlasUtils.CreateAtlas(atlas, targetFolderPath + file.Name.Replace(".png", "") + ".asset", _cloudSettingPath);
+            }
+        }
+        static void CreateRoomKDLAtlas()
+        {
+            string targetFolderPath = _atlasFolderPath + "Rooms/";
+            if (!Directory.Exists(targetFolderPath))
+                Directory.CreateDirectory(targetFolderPath);
+            var textureFolderPath = Application.dataPath + @"/_KDL/_GameResources/Textures/RoomPlay/";
             var jsonFolderPath = Application.dataPath + @"/_KAP/_GameResources/Maps/Rooms/";
             if (!Directory.Exists(textureFolderPath))
                 return;
