@@ -477,6 +477,7 @@ namespace KAP.ToolCreateMap
                         {
                             rec.LstBubblePosition = pair.Value;
                             rec.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
+                            rec.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
                             rec.BaseGem = _toolBubbleDecoSetting.BaseGem.text;
                             break;
                         }
