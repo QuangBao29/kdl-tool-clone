@@ -353,12 +353,6 @@ namespace KAP.ToolCreateMap
         {
             dctRoomIdUnpackDeco.Clear();
             _dctRoomIdStrPos.Clear();
-            _dctRoomIdIndex.Clear();
-            dctBubbleIdDecoIds.Clear();
-            dctBubbleIdStar.Clear();
-            dctBubbleIdDeco.Clear();
-            dctBubbleIdWD.Clear();
-            dctBubbleIdPrice.Clear();
 
             List<string> lstVariables = ConfigBubblePlayRecord.GetLstVariables();
             List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
@@ -415,7 +409,7 @@ namespace KAP.ToolCreateMap
             });
 
             SortLists(listID, listAreas, listVolumn);
-            Debug.LogError("count after: " + listID.Count);
+            Debug.LogError(infoRoot.Id + " count after: " + listID.Count);
 
             for (var i = 0; i < listID.Count; i++)
             {

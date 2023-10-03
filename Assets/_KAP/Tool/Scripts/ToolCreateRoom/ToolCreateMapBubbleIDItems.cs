@@ -39,7 +39,7 @@ public class ToolCreateMapBubbleIDItems : MonoBehaviour
 
         }
         _bubbleSetting.OnShowViewDecoBubble();
-        var record = _configController.ConfigBubbleHome.GetById(_bubbleId);
+        //var record = _configController.ConfigBubbleHome.GetById(_bubbleId);
         _bubbleSetting.CurrentBubbleID = _bubbleId;
         _bubbleDecoSetting.OnGenerateItem(_bubbleId, this);
     }
