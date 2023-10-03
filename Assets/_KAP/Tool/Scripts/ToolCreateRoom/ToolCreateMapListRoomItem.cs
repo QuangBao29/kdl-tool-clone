@@ -210,7 +210,6 @@ namespace KAP.ToolCreateMap
                 };
                 piece.Setup(_room, piece.Container, parameters);
             }
-            //Debug.LogError("check");
             _room.Apply(null, null);
             _areaManager.SortRoom();
         }

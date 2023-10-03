@@ -119,11 +119,6 @@ namespace KAP.ToolCreateMap
                 _configController.DctBubbleIdWD[_toolBubbleSetting.CurrentBubbleID] = newDeco.WorldDirect.ToString();
             }
         }
-        
-        public void OnClearDctRootDecoItems()
-        {
-            DctBubbleDecoItems.Clear();
-        }
 
         public void OnGenerateItem(string bubbleId, ToolCreateMapBubbleIDItems item)
         {

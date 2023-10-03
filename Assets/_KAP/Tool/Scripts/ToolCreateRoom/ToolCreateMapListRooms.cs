@@ -595,7 +595,7 @@ namespace KAP.ToolCreateMap
                         count++;
                     }
                 });
-                Debug.LogError("count before: " + count);
+                Debug.LogError(infoRoot.Id + " count before: " + count);
             }
         }
     }
