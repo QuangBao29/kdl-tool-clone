@@ -56,11 +56,11 @@ namespace KAP
                     {
                         var current = _editManager.Current;
                         var info = (DecoInfo)current.deco.Info;
-                        //if (info.IsBubble)
-                        //{
-
-                        //}
-                        if (info.IsFromBox)
+                        if (info.IsBubble)
+                        {
+                            _toolBubbleSetting.OnRemoveBubbleId(current, current.deco.Root);
+                        }
+                        else if (info.IsFromBox)
                         {
                             _toolBubbleSetting.AddBackToBox(info.Id + "_" + info.Color);
                         }

@@ -167,27 +167,7 @@ namespace KAP.ToolCreateMap
             }
             else
             {
-                //remove 1 bubbleIDItem and remove no khoi list data luon
-
-                //foreach (var root in _toolBubbleDecoSetting.DctRootDecoItems)
-                //{
-                //    if (root.Key.RoomId == rootInfo.Id)
-                //    {
-                //        ToolCreateMapBubbleDecoItems temp = null;
-                //        foreach (var child in root.Value)
-                //        {
-                //            if (child.Deco == cur.deco)
-                //            {
-                //                temp = child;
-                //                Destroy(child.gameObject);
-                //                _editManager.SetCurrent(null);
-                //                break;
-                //            }
-                //        }
-                //        root.Value.Remove(temp);
-                //        break;
-                //    }
-                //}
+                _toolBubbleSetting.OnRemoveBubbleId(cur, cur.deco.Root);
             }
             ShowBubbleKDL();
         }

@@ -175,6 +175,33 @@ namespace KAP.ToolCreateMap
             }
             OnClickBackToBubbleID();
         }
+
+        public void OnRemoveBubbleId(DecoEditDemo current, DecoRoot root)
+        {
+            string removedBubbleId = "";
+            var rootInfo = (DecoInfo)root.Info;
+            foreach (var pair in DctDecoInRoom)
+            {
+                if (pair.Value == current.deco)
+                {
+                    removedBubbleId = pair.Key;
+                    break;
+                }
+            }
+            _toolBubbleDecoSetting.DctBubbleDecoItems.Remove(removedBubbleId);
+            OnGenerateItem(rootInfo.Id.ToString());
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
+            {
+                _configController.DctBubbleIdPrice.Remove(removedBubbleId);
+                _configController.DctBubbleIdStar.Remove(removedBubbleId);
+                _configController.DctBubbleIdWD.Remove(removedBubbleId);
+            }
+            if (DctDecoInRoom.ContainsKey(removedBubbleId))
+            {
+                DctDecoInRoom.Remove(removedBubbleId);
+            }
+            _configController.DctRoomIdPosition[rootInfo.Id].Remove(current.deco.Position);
+        }
         
         public void OnHidePanel()
         {
