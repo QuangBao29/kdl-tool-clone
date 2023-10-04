@@ -36,7 +36,7 @@ public class ToolCreateMapBubbleIDItems : MonoBehaviour
         }
         else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
         {
-
+            this.IsInit = true;
         }
         _bubbleSetting.OnShowViewDecoBubble();
         //var record = _configController.ConfigBubbleHome.GetById(_bubbleId);

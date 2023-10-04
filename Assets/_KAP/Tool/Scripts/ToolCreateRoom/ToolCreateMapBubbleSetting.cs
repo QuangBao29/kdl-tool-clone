@@ -188,21 +188,63 @@ namespace KAP.ToolCreateMap
                     break;
                 }
             }
-            _toolBubbleDecoSetting.DctBubbleDecoItems.Remove(removedBubbleId);
             OnGenerateItem(rootInfo.Id.ToString());
+            OnShiftDictionary<List<string>>(removedBubbleId, _toolBubbleDecoSetting.DctBubbleDecoItems);
+            //_toolBubbleDecoSetting.DctBubbleDecoItems.Remove(removedBubbleId);
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                _configController.DctBubbleIdPrice.Remove(removedBubbleId);
-                _configController.DctBubbleIdStar.Remove(removedBubbleId);
-                _configController.DctBubbleIdWD.Remove(removedBubbleId);
+                OnShiftDictionary<List<int>>(removedBubbleId, _configController.DctBubbleIdPrice);
+                OnShiftDictionary<string>(removedBubbleId, _configController.DctBubbleIdStar);
+                OnShiftDictionary<string>(removedBubbleId, _configController.DctBubbleIdWD);
+                //_configController.DctBubbleIdPrice.Remove(removedBubbleId);
+                //_configController.DctBubbleIdStar.Remove(removedBubbleId);
+                //_configController.DctBubbleIdWD.Remove(removedBubbleId);
             }
             if (DctDecoInRoom.ContainsKey(removedBubbleId))
             {
-                DctDecoInRoom.Remove(removedBubbleId);
+                //DctDecoInRoom.Remove(removedBubbleId);
+                OnShiftDictionary<Deco>(removedBubbleId, DctDecoInRoom);
             }
             _configController.DctRoomIdPosition[rootInfo.Id].Remove(current.deco.Position);
+            OnGenerateItem(rootInfo.Id.ToString());
         }
-        
+        public Dictionary<string, T> OnShiftDictionary<T>(string removedID, Dictionary<string, T> dict)
+        {
+            int removedRoomID = SGUtils.ParseStringToListInt(removedID, '_')[0];
+            int removedIndex = SGUtils.ParseStringToListInt(removedID, '_')[1];
+            int numOfBubble = _lstCurBubbleIDItem.Count;
+
+            int count = 0;
+            foreach (var pair in dict)
+            {
+                if (SGUtils.ParseStringToListInt(pair.Key, '_')[0] == removedRoomID)
+                {
+                    Debug.LogError(pair.Key);
+                    count++;
+                }
+            }
+            Debug.LogError("count bubble in room before remove: " + count);
+            count = 0;
+            for (var i = removedIndex + 1; i < numOfBubble; i++)
+            {
+                Debug.LogError(removedRoomID + "_" + (i - 1) + " " + removedRoomID + "_" + i);
+                dict[removedRoomID + "_" + (i - 1)] = dict[removedRoomID + "_" + i];
+            }
+
+            dict.Remove(removedRoomID + "_" + (numOfBubble - 1));
+
+            foreach (var pair in dict)
+            {
+                if (SGUtils.ParseStringToListInt(pair.Key, '_')[0] == removedRoomID)
+                {
+                    Debug.LogError(pair.Key);
+                    count++;
+                }
+            }
+            Debug.LogError("count bubble in room after remove: " + count);
+
+            return dict;
+        }
         public void OnHidePanel()
         {
             _panelBubbleID.SetActive(false);

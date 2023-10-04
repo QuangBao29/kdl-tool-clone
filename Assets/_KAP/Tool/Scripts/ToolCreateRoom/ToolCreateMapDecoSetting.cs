@@ -150,6 +150,7 @@ namespace KAP.ToolCreateMap
                 //Debug.LogError("check count of bubble: " + numOfBubble);
                 string newBubbleID = rootInfo.Id + "_" + numOfBubble;
                 _toolBubbleDecoSetting.DctBubbleDecoItems.Add(newBubbleID, new List<string>());
+                _toolBubbleDecoSetting.DctBubbleDecoItems[newBubbleID].Add(info.Id + "_" + info.Color);
                 _toolBubbleSetting.OnGenerateItem(rootInfo.Id.ToString());
                 if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                 {
