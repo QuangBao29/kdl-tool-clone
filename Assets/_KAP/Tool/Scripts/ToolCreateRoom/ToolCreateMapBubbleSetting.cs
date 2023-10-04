@@ -219,11 +219,11 @@ namespace KAP.ToolCreateMap
             {
                 if (SGUtils.ParseStringToListInt(pair.Key, '_')[0] == removedRoomID)
                 {
-                    Debug.LogError(pair.Key);
+                    //Debug.LogError(pair.Key);
                     count++;
                 }
             }
-            Debug.LogError("count bubble in room before remove: " + count);
+            //Debug.LogError("count bubble in room before remove: " + count);
             count = 0;
             for (var i = removedIndex + 1; i < numOfBubble; i++)
             {
@@ -237,11 +237,11 @@ namespace KAP.ToolCreateMap
             {
                 if (SGUtils.ParseStringToListInt(pair.Key, '_')[0] == removedRoomID)
                 {
-                    Debug.LogError(pair.Key);
+                    //Debug.LogError(pair.Key);
                     count++;
                 }
             }
-            Debug.LogError("count bubble in room after remove: " + count);
+            //Debug.LogError("count bubble in room after remove: " + count);
 
             return dict;
         }
