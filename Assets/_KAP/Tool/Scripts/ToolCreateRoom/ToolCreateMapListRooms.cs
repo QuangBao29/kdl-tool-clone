@@ -468,10 +468,10 @@ namespace KAP.ToolCreateMap
 
             CountDecoUnpack();
             string txt = _txtCurEditMode.text.Substring(0, _txtCurEditMode.text.Length - 4);
-            if (txt == EditMode.Play.ToString())
-                _toolScreenBound.InitRoomPlay(roomId);
-            else
-                _toolScreenBound.Init();
+            //if (txt == EditMode.Play.ToString())
+            //    _toolScreenBound.InitRoomPlay(roomId);
+            //else
+            //    _toolScreenBound.Init();
         }
         public void OnClickScreenshotAllPlayRoom()
         {
