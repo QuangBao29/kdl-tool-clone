@@ -585,34 +585,33 @@ namespace KAP.ToolCreateMap
         {
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
             {
-                int count8 = 0;     //can put another on it
-                int count4 = 0;     //thamr
+                int count8 = 0;     //can put another on it + thamr
                 int count24 = 0;    //can put on another deco
                 int count32 = 0;    //wall hang
+                int total = 0;
                 var root = _areaManager.ListRooms[0];
                 var infoRoot = (DecoInfo)root.Info;
                 root.Foreach((deco) => {
                     var info = (DecoInfo)deco.Info;
                     if (!info.IsBubble && info.Id / 100000 < 22 && info.Id != infoRoot.Id)
                     {
-                        switch (deco.CanInFaces)
+                        total++;
+                        var parentInfo = (DecoInfo)deco.PieceParent.DecoParent.Info;
+                        if (parentInfo.Id == infoRoot.Id)
                         {
-                            case 4:
-                                count4++;
-                                break;
-                            case 8:
-                                count8++;
-                                break;
-                            case 24:
-                                count24++;
-                                break;
-                            case 32:
-                                count32++;
-                                break;
+                            count8++;
+                        }
+                        else if (parentInfo.Id / 100000 > 22)
+                        {
+                            count32++;
+                        }
+                        else if (parentInfo.Id / 100000 < 22)
+                        {
+                            count24++;
                         }
                     }
                 });
-                Debug.LogError(infoRoot.Id + ": On floor: " + (count4 + count8) + 
+                Debug.LogError(infoRoot.Id + ": On floor: " + count8 + 
                     "; On decos: " + count24 + "; Wallhang: " + count32);
             }
         }
