@@ -116,6 +116,10 @@ namespace KAP.ToolCreateMap
                 {
                     var bubbleId = rootInfo.Id + "_" + i;
                     var config = _configController.ConfigBubblePlay.GetById(bubbleId);
+                    if (config == null)
+                    {
+                        Debug.LogError("id ko co trong config: " + bubbleId);
+                    }
                     if (!_toolBubbleDecoSetting.DctBubbleDecoItems.ContainsKey(bubbleId))
                     {
                         _toolBubbleDecoSetting.DctBubbleDecoItems.Add(bubbleId, config.GetLstBubbleDeco());

@@ -154,7 +154,7 @@ namespace Imba.UI
                 b.onClick.AddListener(() =>
                 {
                     UIManager.DebugLog("Close by click Overlay", this);
-                    AudioManager.Instance.PlaySFX("Back");
+                    //AudioManager.Instance.PlaySFX("Back");
                     Hide();
                 });
             }

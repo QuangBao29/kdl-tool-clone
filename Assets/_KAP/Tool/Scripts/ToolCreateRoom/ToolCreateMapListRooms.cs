@@ -557,7 +557,7 @@ namespace KAP.ToolCreateMap
             Debug.Log("path: " + path);
             Debug.Log("data: " + JsonWriter.Serialize(data));
             FileSaving.Save(path, JsonWriter.Serialize(data));
-            Debug.LogError("Export new success");
+            Debug.LogError("Export Json success");
         }
 
         public void OnExportSeparatedRoomsInTheme()
