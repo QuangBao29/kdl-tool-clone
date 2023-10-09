@@ -139,6 +139,23 @@ namespace KAP.ToolCreateMap
                         room.Foreach((deco) =>
                         {
                             var decoInfo = (DecoInfo)deco.Info;
+                            //if (decoInfo.IsBubble)
+                            //{
+                            //    if (bubbleId == "101034_0" && decoInfo.Id == 1490007 ||
+                            //        bubbleId == "101034_1" && decoInfo.Id == 1500006 ||
+                            //        bubbleId == "101034_2" && decoInfo.Id == 1530003 ||
+                            //        bubbleId == "101034_3" && decoInfo.Id == 1190002)
+                            //    {
+                            //        if (!DctDecoInRoom.ContainsKey(bubbleId))
+                            //        {
+                            //            DctDecoInRoom.Add(bubbleId, deco);
+                            //        }
+                            //        else
+                            //        {
+                            //            DctDecoInRoom[bubbleId] = deco;
+                            //        }
+                            //    }
+                            //}
                             if (decoInfo.IsBubble && deco.Position == room.Position + lstPos[i])
                             {
                                 //Debug.LogError("found deco");
