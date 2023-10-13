@@ -472,7 +472,7 @@ namespace KAP.ToolCreateMap
                         {
                             rec.LstBubblePosition = pair.Value;
                             rec.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
-                            rec.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
+                            //rec.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
                             rec.BaseGem = _toolBubbleDecoSetting.BaseGem.text;
                             break;
                         }
@@ -484,7 +484,7 @@ namespace KAP.ToolCreateMap
                     newConfig.RoomId = pair.Key;
                     newConfig.LstBubblePosition = pair.Value;
                     newConfig.LstUnpackingDeco = dctRoomIdUnpackDeco[pair.Key];
-                    newConfig.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
+                    //newConfig.LstDecoReward = dctRoomIdUnpackDeco[pair.Key];
                     newConfig.BaseGem = _toolBubbleDecoSetting.BaseGem.text;
                     _lstConfigBubblePlayPositionRecords.Add(newConfig);
                 }
@@ -806,7 +806,7 @@ namespace KAP.ToolCreateMap
             for (var i = 0; i < configRecords.Count; i++)
             {
                 txt += (i + 1).ToString() + "\t" + configRecords[i].RoomId + "\t" + configRecords[i].LstBubblePosition + "\t" + 
-                    configRecords[i].LstUnpackingDeco + "\t" + configRecords[i].LstDecoReward + "\t" + configRecords[i].BaseGem + "\n";
+                    configRecords[i].LstUnpackingDeco + "\t" + configRecords[i].BaseGem + "\n";
             }
             return txt;
         }
@@ -1073,7 +1073,6 @@ namespace KAP.ToolCreateMap
                 txtPos += rec.RoomId + "\t";
                 txtPos += rec.LstBubblePosition + "\t";
                 txtPos += rec.LstUnpackingDeco + "\t";
-                txtPos += rec.LstDecoReward + "\t";
                 txtPos += "100" + "\n";
             }
 

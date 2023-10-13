@@ -11,7 +11,6 @@ namespace KAP.Config
         public string RoomId;
         public string LstBubblePosition;
         public string LstUnpackingDeco;
-        public string LstDecoReward;
         public string BaseGem;
 
         private List<string> _lstUnpackingDeco;
@@ -46,7 +45,6 @@ namespace KAP.Config
                                     , "RoomId"
                                     , "LstBubblePosition"
                                     , "LstUnpackingDeco"
-                                    , "LstDecoReward"
                                     , "BaseGem"
             };
         }
