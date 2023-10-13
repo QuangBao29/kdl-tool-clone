@@ -576,7 +576,7 @@ namespace KAP.ToolCreateMap
                 {
                     _dctRoomIdDecoReward[roomInfo.Id.ToString()] += lstDecoReward[i] + ";";
                 }
-                Debug.LogError(roomInfo.Id + " " + _dctRoomIdDecoReward[roomInfo.Id.ToString()]);
+                //Debug.LogError(roomInfo.Id + " " + _dctRoomIdDecoReward[roomInfo.Id.ToString()]);
             }
             //get position bubble in room
             foreach (var pair in _toolBubbleSetting.DctDecoInRoom)
