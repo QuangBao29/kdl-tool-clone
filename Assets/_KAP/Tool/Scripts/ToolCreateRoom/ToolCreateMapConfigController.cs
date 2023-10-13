@@ -344,6 +344,7 @@ namespace KAP.ToolCreateMap
                         _toolLstRooms.ExportData();
                         BuildCurrentRoomPlay();
                         SortConfigPlayRecords();
+                        //OnRemoveDecoUnpackFromConfigPlayPos();
                     }
                     return true;
                 });
@@ -1076,6 +1077,24 @@ namespace KAP.ToolCreateMap
                 txtPos += "100" + "\n";
             }
 
+            FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
+            Debug.LogError("Export Bubble Play success");
+        }
+        public void OnRemoveDecoUnpackFromConfigPlayPos()
+        {
+            LoadFileCsv();
+            List<string> lstVariablesPos = ConfigBubblePlayPositionRecord.GetLstVariables();
+            string txtPos = "";
+            for (var i = 0; i < lstVariablesPos.Count - 1; i++)
+            {
+                txtPos += lstVariablesPos[i] + "\t";
+            }
+            txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n";
+            foreach (var config in _lstConfigBubblePlayPositionRecords)
+            {
+                txtPos += config.Id + "\t" + config.RoomId + "\t" + config.LstBubblePosition + "\t" +
+                    config.LstUnpackingDeco + "\t" + config.BaseGem + "\n";
+            }
             FileSaving.Save(Application.dataPath + _configBubblePlayPositionFilePath, txtPos);
             Debug.LogError("Export Bubble Play success");
         }
