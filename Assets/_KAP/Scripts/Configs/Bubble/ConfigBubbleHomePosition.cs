@@ -11,6 +11,7 @@ namespace KAP.Config
         public string LstBubblePosition;
         public int Index;
         public int Exp;
+        public string LstDecoReward;
 
         public List<Vector3> GetLstBubblePositionVector3()
         {
@@ -34,6 +35,7 @@ namespace KAP.Config
                                     , "LstBubblePosition"
                                     , "Index"
                                     ,"Exp"
+                                    ,"LstDecoReward"
             };
         }
     }

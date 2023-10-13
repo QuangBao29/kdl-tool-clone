@@ -97,10 +97,10 @@ namespace KAP.ToolCreateMap
         private Dictionary<string, string> _dctRoomIdIndex = new Dictionary<string, string>();       //roomId - Index
 
         //private Dictionary<string, int> dctRoomIdNumBubble = new Dictionary<string, int>();         //RoomId - num of bubble
-        private Dictionary<string, string> _dctRoomIdStrPos = new Dictionary<string, string>();    //roomId - position
-        
+        private Dictionary<string, string> _dctRoomIdStrPos = new Dictionary<string, string>();     //roomId - position
+        private Dictionary<string, string> _dctRoomIdDecoReward = new Dictionary<string, string>(); //roomid - decoreward
         private Dictionary<string, string> dctRoomIdUnpackDeco = new Dictionary<string, string>();  //roomId - unpack Deco
-        private Dictionary<string, string> dctBubbleIdDecoIds = new Dictionary<string, string>();   //bubbleid - decoids
+        //private Dictionary<string, string> dctBubbleIdDecoIds = new Dictionary<string, string>();   //bubbleid - decoids
         private Dictionary<string, string> dctBubbleIdStar = new Dictionary<string, string>();      //bubbleId - star
         private Dictionary<string, int> dctBubbleIdDeco = new Dictionary<string, int>();            //bubbleId - decoId
         private Dictionary<string, string> dctBubbleIdWD = new Dictionary<string, string>();        //BubbleId - world direct
@@ -535,11 +535,12 @@ namespace KAP.ToolCreateMap
             //dctRoomIdNumBubble.Clear();
             _dctRoomIdStrPos.Clear();
             _dctRoomIdIndex.Clear();
-            dctBubbleIdDecoIds.Clear();
+            //dctBubbleIdDecoIds.Clear();
             dctBubbleIdStar.Clear();
             dctBubbleIdDeco.Clear();
             dctBubbleIdWD.Clear();
             dctBubbleIdPrice.Clear();
+            _dctRoomIdDecoReward.Clear();
 
             List<string> lstVariables = ConfigBubbleHomeRecord.GetLstVariables();
             List<string> lstVariablesPos = ConfigBubbleHomePositionRecord.GetLstVariables();
@@ -556,7 +557,27 @@ namespace KAP.ToolCreateMap
                 txtPos += lstVariablesPos[i] + "\t";
             }
             txtPos += lstVariablesPos[lstVariablesPos.Count - 1] + "\n";
-
+            foreach (var room in _areaManager.ListRooms)
+            {
+                var roomInfo = (DecoInfo)room.Info;
+                if (!_dctRoomIdDecoReward.ContainsKey(roomInfo.Id.ToString()))
+                {
+                    _dctRoomIdDecoReward.Add(roomInfo.Id.ToString(), "");
+                }
+                List<string> lstDecoReward = new List<string>();
+                room.Foreach((deco) => {
+                    var decoInfo = (DecoInfo)deco.Info;
+                    if (decoInfo.Id != roomInfo.Id && decoInfo.Id / 100000 < 22 && !decoInfo.IsBubble)
+                    {
+                        lstDecoReward.Add(decoInfo.Id + "_" + decoInfo.Color);
+                    }
+                });
+                for (var i = 0; i < lstDecoReward.Count; i++)
+                {
+                    _dctRoomIdDecoReward[roomInfo.Id.ToString()] += lstDecoReward[i] + ";";
+                }
+                Debug.LogError(roomInfo.Id + " " + _dctRoomIdDecoReward[roomInfo.Id.ToString()]);
+            }
             //get position bubble in room
             foreach (var pair in _toolBubbleSetting.DctDecoInRoom)
             {
@@ -645,7 +666,7 @@ namespace KAP.ToolCreateMap
                 {
                     if (pair.Value == i.ToString())
                     {
-                        txtPos += pair.Key + "\t" + _dctRoomIdStrPos[pair.Key] + "\t" + pair.Value + "\t" + exp + "\n";
+                        txtPos += pair.Key + "\t" + _dctRoomIdStrPos[pair.Key] + "\t" + pair.Value + "\t" + exp + "\t" + _dctRoomIdDecoReward[pair.Key] + "\n";
                         exp += DctRoomIdPosition[int.Parse(pair.Key)].Count;
                         break;
                     }
