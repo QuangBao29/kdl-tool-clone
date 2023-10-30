@@ -645,6 +645,7 @@ namespace KAP.ToolCreateMap
                     SortListBubbleDecoAndPrice(bubbleId);
                     string bubbledecoids = "";
                     string prices = "";
+                    OnAddDecoEvent(bubbleId);
                     foreach (var decoid in _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId])
                     {
                         bubbledecoids += decoid + ";";
@@ -653,6 +654,7 @@ namespace KAP.ToolCreateMap
                     {
                         prices += price + ";";
                     }
+                    prices += "event;";
                     txt += bubbleId + "\t" + bubbledecoids + "\t" + idx + "\t" + prices + "\t" +
                         DctBubbleIdWD[bubbleId] + "\t" + DctBubbleIdStar[bubbleId] + "\n";
                     idx++;
@@ -677,6 +679,13 @@ namespace KAP.ToolCreateMap
             FileSaving.Save(Application.dataPath + _configBubbleHomeFilePath, txt);
             FileSaving.Save(Application.dataPath + _configBubbleHomePositionFilePath, txtPos);
             Debug.LogError("Export Bubble Home success");
+        }
+        public void OnAddDecoEvent(string bubbleId)
+        {
+            string decoid = _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId][2];
+            string newDecoId = SGUtils.ParseStringToListInt(decoid, '_')[0].ToString() +
+                "_" + (SGUtils.ParseStringToListInt(decoid, '_')[1] + 1).ToString();
+            _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId].Add(newDecoId);
         }
         private void SortListBubbleDecoAndPrice(string bubbleId)
         {
