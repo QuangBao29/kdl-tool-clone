@@ -152,7 +152,7 @@ namespace KAP.ToolCreateMap
                 if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                 {
                     List<string> lstID = new List<string>();
-                    List<int> lstPrice = new List<int>();
+                    List<string> lstPrice = new List<string>();
                     var recordHome = _configController.ConfigBubbleHome.GetById(bubbleId);
                     if (recordHome == null)
                     {
@@ -169,7 +169,7 @@ namespace KAP.ToolCreateMap
                     var config = _configController.ConfigBubbleHome.GetById(bubbleId);
                     if (config == null)
                     {
-                        lstPrice.Add(0);
+                        lstPrice.Add(0.ToString());
                     }
                     else
                     {
@@ -225,7 +225,7 @@ namespace KAP.ToolCreateMap
                 DctBubbleDecoItems[bubbleId].Add(decoId);
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Add(newPrice);
+                _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Add(newPrice.ToString());
             }
             LstCurrentBubbleDeco = _generator.Setup<ToolCreateMapBubbleDecoItems>(DctBubbleDecoItems[bubbleId].Count);
             //Debug.LogError("count: " + LstCurrentBubbleDeco.Count);
@@ -245,7 +245,7 @@ namespace KAP.ToolCreateMap
             
         }
 
-        public void OnCreateDeco(ToolCreateMapBubbleDecoItems item, int id, int color, string bubbleId, int price = -1)
+        public void OnCreateDeco(ToolCreateMapBubbleDecoItems item, int id, int color, string bubbleId, string price = "-1")
         {
             var colorPath = color > 0 ? "_" + color : "";
             string idPath = id.ToString() + colorPath;
@@ -300,7 +300,7 @@ namespace KAP.ToolCreateMap
                     var info = (DecoInfo)item.Info;
                     if (info.Id == curInfo.Id && info.Color == oldColor)
                     {
-                        OnCreateDeco(LstCurrentBubbleDeco[i], info.Id, newColor, item.BubbleId, int.Parse(item.GetPrice()));
+                        OnCreateDeco(LstCurrentBubbleDeco[i], info.Id, newColor, item.BubbleId, item.GetPrice());
                         //Debug.LogError("name: " + item.gameObject.name);
                         var curId = DctBubbleDecoItems[item.BubbleId][i];
                         DctBubbleDecoItems[item.BubbleId][i] = SGUtils.ParseStringToList(curId, '_')[0] + "_" + newColor;
@@ -318,7 +318,7 @@ namespace KAP.ToolCreateMap
             LstCurrentBubbleDeco.Remove(item);
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Remove(int.Parse(item.GetPrice()));
+                _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID].Remove(item.GetPrice());
             }
             DctBubbleDecoItems[_toolBubbleSetting.CurrentBubbleID].Remove(info.Id + "_" + info.Color);
 
@@ -368,7 +368,7 @@ namespace KAP.ToolCreateMap
         {
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID][itemIndex] = int.Parse(price);
+                _configController.DctBubbleIdPrice[_toolBubbleSetting.CurrentBubbleID][itemIndex] = price;
             }
         }
     }

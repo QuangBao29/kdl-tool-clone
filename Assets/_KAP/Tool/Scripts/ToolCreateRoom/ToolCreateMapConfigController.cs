@@ -88,11 +88,11 @@ namespace KAP.ToolCreateMap
         private Dictionary<int, List<Vector3>> _dctRoomIdPosition = new Dictionary<int, List<Vector3>>();    //roomId - position
         private Dictionary<string, string> _dctBubbleIdStar = new Dictionary<string, string>();     //bubbleId - star
         private Dictionary<string, string> _dctBubbleIdWD = new Dictionary<string, string>();    //BubbleId - world direct
-        private Dictionary<string, List<int>> _dctBubbleIdPrice = new Dictionary<string, List<int>>();  //bubbleId - price
+        private Dictionary<string, List<string>> _dctBubbleIdPrice = new Dictionary<string, List<string>>();  //bubbleId - price
         public Dictionary<int, List<Vector3>> DctRoomIdPosition { get => _dctRoomIdPosition; set => _dctRoomIdPosition = value; }
         public Dictionary<string, string> DctBubbleIdStar { get => _dctBubbleIdStar; set => _dctBubbleIdStar = value; }
         public Dictionary<string, string> DctBubbleIdWD { get => _dctBubbleIdWD; set => _dctBubbleIdWD = value; }
-        public Dictionary<string, List<int>> DctBubbleIdPrice { get => _dctBubbleIdPrice; set => _dctBubbleIdPrice = value; }
+        public Dictionary<string, List<string>> DctBubbleIdPrice { get => _dctBubbleIdPrice; set => _dctBubbleIdPrice = value; }
 
         private Dictionary<string, string> _dctRoomIdIndex = new Dictionary<string, string>();       //roomId - Index
 
@@ -645,7 +645,7 @@ namespace KAP.ToolCreateMap
                     SortListBubbleDecoAndPrice(bubbleId);
                     string bubbledecoids = "";
                     string prices = "";
-                    OnAddDecoEvent(bubbleId);
+                    //OnAddDecoEvent(bubbleId);
                     foreach (var decoid in _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId])
                     {
                         bubbledecoids += decoid + ";";
@@ -654,7 +654,8 @@ namespace KAP.ToolCreateMap
                     {
                         prices += price + ";";
                     }
-                    prices += "event;";
+                    if (DctBubbleIdPrice[bubbleId].Count == 3)
+                        prices += "event;";
                     txt += bubbleId + "\t" + bubbledecoids + "\t" + idx + "\t" + prices + "\t" +
                         DctBubbleIdWD[bubbleId] + "\t" + DctBubbleIdStar[bubbleId] + "\n";
                     idx++;
@@ -689,12 +690,42 @@ namespace KAP.ToolCreateMap
         }
         private void SortListBubbleDecoAndPrice(string bubbleId)
         {
-            List<Tuple<int, string>> pairs = DctBubbleIdPrice[bubbleId].Zip(_toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId], Tuple.Create).ToList();
+            List<string> lstDecoItems = _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId];
+            List<int> lstPrices = new List<int>();
+            string strEvent = "event";
+            foreach (var item in DctBubbleIdPrice[bubbleId])
+            {
+                if (int.TryParse(item, out int result))
+                {
+                    lstPrices.Add(result);
+                }
+            }
+
+            int i = 0;
+            for (i = 0; i < DctBubbleIdPrice[bubbleId].Count; i++)
+            {
+                if (DctBubbleIdPrice[bubbleId][i] == strEvent)
+                {
+                    break;
+                }
+            }
+            string tempBubbleId = lstDecoItems[i];
+            lstDecoItems.Remove(tempBubbleId);
+
+            List<Tuple<int, string>> pairs = lstPrices.Zip(lstDecoItems, Tuple.Create).ToList();
 
             pairs.Sort((x, y) => x.Item1.CompareTo(y.Item1));
 
-            DctBubbleIdPrice[bubbleId] = pairs.Select(pair => pair.Item1).ToList();
+            DctBubbleIdPrice[bubbleId] = pairs.Select(pair => pair.Item1.ToString()).ToList();
+            if (DctBubbleIdPrice[bubbleId].Count == 3)
+            {
+                DctBubbleIdPrice[bubbleId].Add(strEvent);
+            }
             _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId] = pairs.Select(pair => pair.Item2).ToList();
+            if (_toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId].Count == 3)
+            {
+                _toolBubbleDecoSetting.DctBubbleDecoItems[bubbleId].Add(tempBubbleId);
+            }
         }
         private void SortTwoListInt(List<int> list1, List<int> list2)
         {

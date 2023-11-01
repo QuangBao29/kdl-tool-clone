@@ -154,8 +154,8 @@ namespace KAP.ToolCreateMap
                 _toolBubbleSetting.OnGenerateItem(rootInfo.Id.ToString());
                 if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
                 {
-                    _configController.DctBubbleIdPrice.Add(newBubbleID, new List<int>());
-                    _configController.DctBubbleIdPrice[newBubbleID].Add(0);
+                    _configController.DctBubbleIdPrice.Add(newBubbleID, new List<string>());
+                    _configController.DctBubbleIdPrice[newBubbleID].Add(0.ToString());
                     _configController.DctBubbleIdStar.Add(newBubbleID, "0");
                     _configController.DctBubbleIdWD.Add(newBubbleID, cur.deco.WorldDirect.ToString());
                 }

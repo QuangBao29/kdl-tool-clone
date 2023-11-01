@@ -214,7 +214,7 @@ namespace KAP.ToolCreateMap
             //_toolBubbleDecoSetting.DctBubbleDecoItems.Remove(removedBubbleId);
             if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             {
-                OnShiftDictionary<List<int>>(removedBubbleId, _configController.DctBubbleIdPrice);
+                OnShiftDictionary<List<string>>(removedBubbleId, _configController.DctBubbleIdPrice);
                 OnShiftDictionary<string>(removedBubbleId, _configController.DctBubbleIdStar);
                 OnShiftDictionary<string>(removedBubbleId, _configController.DctBubbleIdWD);
                 //_configController.DctBubbleIdPrice.Remove(removedBubbleId);

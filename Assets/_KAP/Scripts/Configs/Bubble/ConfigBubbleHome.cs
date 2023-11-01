@@ -41,9 +41,9 @@ namespace KAP.Config
             return _dctBubbleIdColor;
         }
 
-        public List<int> GetLstPrice()
+        public List<string> GetLstPrice()
         {
-            return SGUtils.ParseStringToListInt(Price, ';');
+            return SGUtils.ParseStringToList(Price, ';');
         }
 
         public static List<string> GetLstVariables()
