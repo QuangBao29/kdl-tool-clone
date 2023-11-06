@@ -65,7 +65,14 @@ namespace KAP.ToolCreateMap
 #endif
             Hide();
         }
-
+        public Toggle GetToggleIsStatic()
+        {
+            return _toggleIsStatic;
+        }
+        public Toggle GetToggleIsBubble()
+        {
+            return _toggleIsBubble;
+        }
         public void Show()
         {
             var cur = _editManager.Current;

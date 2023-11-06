@@ -52,6 +52,8 @@ namespace KAP.ToolCreateMap
         [Space]
         [SerializeField] private Transform _transGridRoom = null;
         [SerializeField] private ToolCreateMapListRoomItem _prefabRoomItem = null;
+        [SerializeField]
+        private Deco _prefabDeco = null;
 
         [Space]
         [SerializeField] private InputField _inputMapId = null;
@@ -103,10 +105,18 @@ namespace KAP.ToolCreateMap
             string _importOldRoomsPath = "Assets/_KAP/_GameResources/Maps/OldRooms/";
             string _exportOldRoomsPath = "/_KAP/_GameResources/Maps/OldRooms/";
 
+            string _importEventRoomPath = "Assets/_KAP/_GameResources/Maps/Event/";
+            string _exportEventRoomPath = "/_KAP/_GameResources/Maps/Event/";
+
+            string _importPoolDecoPath = "Assets/_KAP/_GameResources/Maps/PoolDeco/";
+            string _exportPoolDecoPath = "/_KAP/_GameResources/Maps/PoolDeco/";
+
             _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultMansionID));
             _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPath, _exportRoomPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.SeparatedRoom, new EditModeData(EditMode.SeparatedRoom, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.OldRoom, new EditModeData(EditMode.OldRoom, _importOldRoomsPath, _exportOldRoomsPath, "", Color.gray, KAPDefine.DefaultOldMansionID));
+            _dctEditModeData.Add(EditMode.Event, new EditModeData(EditMode.Event, _importEventRoomPath, _exportEventRoomPath, "", Color.green, KAPDefine.DefaultEventRoomID));
+            _dctEditModeData.Add(EditMode.PoolDeco, new EditModeData(EditMode.PoolDeco, _importPoolDecoPath, _exportPoolDecoPath, "", Color.cyan, KAPDefine.DefaultPoolDecoID));
         }
 
         private void OnTogglEditThemeChange(EditMode editMode)
@@ -137,11 +147,10 @@ namespace KAP.ToolCreateMap
 
             _lstRoomItems = new List<ToolCreateMapListRoomItem>();
 
-
             if (lstRooms != null)
             {
                 int i = 0;
-                foreach(var room in lstRooms)
+                foreach (var room in lstRooms)
                 {
                     var roomInfo = (DecoInfo)room.Info;
                     int roomId = 0;
@@ -162,6 +171,17 @@ namespace KAP.ToolCreateMap
                     else if (ToolEditMode.Instance.CurrentEditMode == EditMode.OldRoom)
                     {
                         roomId = roomInfo.Id;
+                    }
+                    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Event)
+                    {
+                        roomId = int.Parse(_inputMapId.text);
+                        room.Info = new DecoInfo { Id = roomId };
+                        //Debug.LogError("check info");
+                    }
+                    else if (ToolEditMode.Instance.CurrentEditMode == EditMode.PoolDeco)
+                    {
+                        roomId = KAPDefine.DefaultPoolDecoID;
+                        room.Info = new DecoInfo { Id = roomId };
                     }
 
                     //Debug.LogError("roomId: " + roomId);
@@ -184,14 +204,17 @@ namespace KAP.ToolCreateMap
                                 idx = record.Index;
                             }
 
-                            item.gameObject.SetActive(true);
                             item.Setup(room, i, idx);
                         }
-                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
+                        else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
                         {
-                            item.gameObject.SetActive(true);
                             item.Setup(room, i, 0);
                         }
+                        else
+                        {
+                            item.Setup(room, i, 0);
+                        }
+                        item.gameObject.SetActive(true);
                     }
                     else
                     {
@@ -233,7 +256,8 @@ namespace KAP.ToolCreateMap
                                             lstRoomDecoId.Add(id);
                                         }
                                     }
-                                    room.Foreach((deco) => {
+                                    room.Foreach((deco) =>
+                                    {
                                         var info = (DecoInfo)deco.Info;
                                         if (lstRoomDecoId.Contains(info.Id.ToString()))
                                         {
@@ -291,17 +315,27 @@ namespace KAP.ToolCreateMap
                                 }
                             }
                         }
+                        if (ToolEditMode.Instance.CurrentEditMode == EditMode.Event)
+                        {
+                            var lstRec = _configController.ListConfigRoomCloserBetterRecords;
+                            foreach (var rec in lstRec)
+                            {
+                                if (rec.RoomId == roomId.ToString())
+                                {
+                                    _toolBubbleDecoSetting.BaseGem.text = rec.BaseGem;
+                                    break;
+                                }
+                            }
+                        }
                     }
                     //Debug.LogError("count: " + _lstRoomItems.Count);
                     OnUnselectAllItems();
                     //_toolBubbleDecoSetting.OnHideAllItems();
                 }
             }
-            //Debug.LogError(roomItemIndex + " " + roomItemCount);
             for (; roomItemIndex < roomItemCount; ++roomItemIndex)
             {
                 _transGridRoom.GetChild(roomItemIndex).gameObject.SetActive(false);
-                //Debug.LogError("check idx: " + roomItemIndex);
             }
 
             if (_init)
@@ -323,10 +357,6 @@ namespace KAP.ToolCreateMap
                 }
             }
             _init = true;
-            //foreach (var room in _lstRoomItems)
-            //{
-            //    room.OnClickRoomItem();
-            //}
         }
         
         public void OnButtonAddClick()
@@ -334,19 +364,37 @@ namespace KAP.ToolCreateMap
             var room = _importDecoController.CreateARoom(_areaManager.ListRooms.Count, Vector3.zero, Vector3.one);
             Setup();
             //var item = SGUtils.InstantiateObject<ToolCreateMapListRoomItem>(_prefabRoomItem, _transGridRoom);
-            //int roomId = KAPDefine.DefaultRoomPlayId;
-            //room.Info = new DecoInfo { Id = roomId };
+            
             //if (ToolEditMode.Instance.CurrentEditMode == EditMode.Home)
             //{
+            //    int roomId = KAPDefine.DefaultRoomId;
+            //    room.Info = new DecoInfo { Id = roomId };
             //    int idx = _areaManager.ListRooms.Count;
             //    item.gameObject.SetActive(true);
-            //    item.Setup(room, i, idx);
+            //    item.Setup(room, roomId, idx);
             //}
             //if (ToolEditMode.Instance.CurrentEditMode == EditMode.Play)
             //{
+            //    int roomId = KAPDefine.DefaultRoomPlayId;
+            //    room.Info = new DecoInfo { Id = roomId };
             //    item.gameObject.SetActive(true);
-            //    item.Setup(room, i, 0);
+            //    item.Setup(room, roomId, 0);
             //}
+            //if (ToolEditMode.Instance.CurrentEditMode == EditMode.Event)
+            //{
+            //    int roomId = KAPDefine.DefaultEventRoomID;
+            //    room.Info = new DecoInfo { Id = roomId };
+            //    item.gameObject.SetActive(true);
+            //    item.Setup(room, roomId, 0);
+            //}
+            //if (ToolEditMode.Instance.CurrentEditMode == EditMode.PoolDeco)
+            //{
+            //    int roomId = KAPDefine.DefaultPoolDecoID;
+            //    room.Info = new DecoInfo { Id = roomId };
+            //    item.gameObject.SetActive(true);
+            //    item.Setup(room, roomId, 0);
+            //}
+            //Setup();
         }
 
         public void RemoveARoom(DecoRoot room)
@@ -579,6 +627,88 @@ namespace KAP.ToolCreateMap
             }
         }
 
+        public void OnExportJsonPoolDeco()
+        {
+            //get list old decos
+            List<int> lstOldDecos = new List<int>();
+            var path = Path.Combine(_dctEditModeData[EditMode.OldRoom].ImportPath, "2520031.json");
+            var json = FileSaving.Load(path);
+            if (!string.IsNullOrEmpty(json))
+            {
+                var lstRooms = JsonReader.Deserialize<Dictionary<string, DecoDataArray[]>>(json);
+                var lstLevels = new List<int>();
+                foreach (var iter in lstRooms)
+                {
+                    int level = 0;
+                    if (int.TryParse(iter.Key, out level))
+                        lstLevels.Add(level);
+                }
+
+                SGUtils.BubbleSort<int>(lstLevels, (l1, l2) => { return l1 < l2; });
+                foreach (var level in lstLevels)
+                {
+                    var lstDecos = lstRooms[level.ToString()];
+                    foreach (var deco in lstDecos)
+                    {
+                        if (!string.IsNullOrEmpty(deco.Info))
+                        {
+                            var info = JsonReader.Deserialize<DecoInfo>(deco.Info);
+                            if (!lstOldDecos.Contains(info.Id) && info.Id / 100000 < 22)
+                                lstOldDecos.Add(info.Id);
+                        }
+                    }
+                }
+            }
+
+            //get list current deco reward
+            List<int> lstDecoReward = new List<int>();
+            var recordsReward = _configController.ConfigBubbleHomePosition.GetIndexField();
+            foreach (var rec in recordsReward)
+            {
+                var strReward = rec.Value[0].LstDecoReward;
+                var lst = SGUtils.ParseStringToList(strReward, ';');
+                foreach (var item in lst)
+                {
+                    var id = SGUtils.ParseStringToListInt(item, '_')[0];
+                    if (!lstDecoReward.Contains(id))
+                    {
+                        lstDecoReward.Add(id);
+                    }
+                }
+            }
+
+            //export json Pool Deco
+            List<Deco> lstDeco = new List<Deco>();
+            var dataResult = new Dictionary<int, List<Dictionary<string, object>>>();
+            var records = _configController.ConfigDeco.GetIndexField<int>("Id");
+            int count = 0;
+            foreach (var rec in records)
+            {
+                int x = rec.Value[0].SizeX;
+                int y = rec.Value[0].SizeY;
+                int z = rec.Value[0].SizeZ;
+                if (rec.Key / 100000 < 22 && (!lstOldDecos.Contains(rec.Key)) && (!lstDecoReward.Contains(rec.Key)) && x*y*z < 27)
+                {
+                    count++;
+                    //Deco deco = new Deco();
+                    var deco = SGUtils.InstantiateObject<Deco>(_prefabDeco, null);
+                    deco.Info = new DecoInfo { Id = rec.Key };
+                    if (deco == null)
+                        Debug.LogError("deco null");
+                    _toolExportData.ExportDataPoolDeco(dataResult, deco);
+                }
+            }
+            Debug.LogError("count: " + count);
+            var exportPath = Application.dataPath + Path.Combine(_dctEditModeData[EditMode.PoolDeco].ExportPath, KAPDefine.DefaultPoolDecoID.ToString() + ".json");
+            var data = _toolExportData.ExportPoolDeco(dataResult);
+            string newJson = JsonWriter.Serialize(data);
+            FileSaving.Save(exportPath, newJson);
+
+            Debug.LogError("new json: " + newJson);
+
+            Debug.LogError("Export Json success");
+        }
+
         #endregion
 
         private void CountDecoUnpack()
@@ -589,6 +719,8 @@ namespace KAP.ToolCreateMap
                 int count24 = 0;    //can put on another deco
                 int count32 = 0;    //wall hang
                 int total = 0;
+                if (_areaManager.ListRooms.Count == 0)
+                    return;
                 var root = _areaManager.ListRooms[0];
                 var infoRoot = (DecoInfo)root.Info;
                 root.Foreach((deco) => {
@@ -612,6 +744,39 @@ namespace KAP.ToolCreateMap
                     }
                 });
                 Debug.LogError(infoRoot.Id + ": On floor: " + count8 + 
+                    "; On decos: " + count24 + "; Wallhang: " + count32);
+            }
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Event)
+            {
+                int count8 = 0;     //can put another on it + thamr
+                int count24 = 0;    //can put on another deco
+                int count32 = 0;    //wall hang
+                int total = 0;
+                if (_areaManager.ListRooms.Count == 0)
+                    return;
+                var root = _areaManager.ListRooms[0];
+                var infoRoot = (DecoInfo)root.Info;
+                root.Foreach((deco) => {
+                    var info = (DecoInfo)deco.Info;
+                    if (!info.IsStatic && info.Id / 100000 < 22 && info.Id != infoRoot.Id)
+                    {
+                        total++;
+                        var parentInfo = (DecoInfo)deco.PieceParent.DecoParent.Info;
+                        if (parentInfo.Id == infoRoot.Id)
+                        {
+                            count8++;
+                        }
+                        else if (parentInfo.Id / 100000 > 22)
+                        {
+                            count32++;
+                        }
+                        else if (parentInfo.Id / 100000 < 22)
+                        {
+                            count24++;
+                        }
+                    }
+                });
+                Debug.LogError(infoRoot.Id + ": On floor: " + count8 +
                     "; On decos: " + count24 + "; Wallhang: " + count32);
             }
         }

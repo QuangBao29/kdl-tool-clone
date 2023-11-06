@@ -139,12 +139,14 @@ namespace KAP.ToolCreateMap
                         room.Foreach((deco) =>
                         {
                             var decoInfo = (DecoInfo)deco.Info;
+                            //hardcode for hotfix
                             //if (decoInfo.IsBubble)
                             //{
-                            //    if (bubbleId == "101034_0" && decoInfo.Id == 1490007 ||
-                            //        bubbleId == "101034_1" && decoInfo.Id == 1500006 ||
-                            //        bubbleId == "101034_2" && decoInfo.Id == 1530003 ||
-                            //        bubbleId == "101034_3" && decoInfo.Id == 1190002)
+                            //    if (bubbleId == "101003_0" && decoInfo.Id == 1583004 ||
+                            //        bubbleId == "101003_1" && decoInfo.Id == 1014001 ||
+                            //        bubbleId == "101003_2" && decoInfo.Id == 1713001 ||
+                            //        bubbleId == "101003_3" && decoInfo.Id == 1373001 ||
+                            //        bubbleId == "101003_4" && decoInfo.Id == 1474001)
                             //    {
                             //        if (!DctDecoInRoom.ContainsKey(bubbleId))
                             //        {
@@ -156,6 +158,7 @@ namespace KAP.ToolCreateMap
                             //        }
                             //    }
                             //}
+
                             if (decoInfo.IsBubble && deco.Position == room.Position + lstPos[i])
                             {
                                 //Debug.LogError("found deco");

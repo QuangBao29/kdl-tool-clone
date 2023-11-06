@@ -82,6 +82,8 @@ namespace KAP
         public const int DefaultRoomPlayKDLID = 101005;
         public const int DefaultMansionID = 520031;
         public const int DefaultOldMansionID = 2520031;
+        public const int DefaultEventRoomID = 290000;
+        public const int DefaultPoolDecoID = 300000;
         public const string RoomMapURL = "Maps/Rooms/";
 
         #endregion

@@ -39,6 +39,8 @@ namespace KAP.ToolCreateMap
 
         private string _configBubblePlayPositionFilePath = "/_KDL/_GameResources/Configs/Bubble/ConfigBubblePlayPosition.csv";
 
+        private string _configRoomCloserBetterFilePath = "/_KDL/_GameResources/Configs/Bubble/ConfigRoomCloserBetter.csv";
+
         [SerializeField]
         private ToolCreateMapBubbleSetting _toolBubbleSetting = null;
         [SerializeField] 
@@ -62,6 +64,7 @@ namespace KAP.ToolCreateMap
         private readonly ConfigBubbleHomePosition _configBubbleHomePosition = new ConfigBubbleHomePosition();
         private readonly ConfigBubblePlay _configBubblePlay = new ConfigBubblePlay();
         private readonly ConfigBubblePlayPosition _configBubblePlayPosition = new ConfigBubblePlayPosition();
+        private readonly ConfigRoomCloserBetter _configRoomCloserBetter = new ConfigRoomCloserBetter();
 
         private readonly List<ConfigRoomRecord> _lstConfigRoomRecords = new List<ConfigRoomRecord>();
         public ReadOnlyCollection<ConfigRoomRecord> ListConfigRoomRecords;
@@ -84,6 +87,9 @@ namespace KAP.ToolCreateMap
         public ReadOnlyCollection<ConfigBubbleHomePositionRecord> ListConfigBubbleHomePositionRecords;
         private readonly List<ConfigBubblePlayPositionRecord> _lstConfigBubblePlayPositionRecords = new List<ConfigBubblePlayPositionRecord>();
         public ReadOnlyCollection<ConfigBubblePlayPositionRecord> ListConfigBubblePlayPositionRecords;
+
+        private readonly List<ConfigRoomCloserBetterRecord> _lstConfigRoomCloserBetterRecords = new List<ConfigRoomCloserBetterRecord>();
+        public ReadOnlyCollection<ConfigRoomCloserBetterRecord> ListConfigRoomCloserBetterRecords;
 
         private Dictionary<int, List<Vector3>> _dctRoomIdPosition = new Dictionary<int, List<Vector3>>();    //roomId - position
         private Dictionary<string, string> _dctBubbleIdStar = new Dictionary<string, string>();     //bubbleId - star
@@ -159,6 +165,11 @@ namespace KAP.ToolCreateMap
             _configBubblePlayPosition.LoadFromString(txtBubblePlayPosition);
             _lstConfigBubblePlayPositionRecords.AddRange(_configBubblePlayPosition.Records);
             ListConfigBubblePlayPositionRecords = _lstConfigBubblePlayPositionRecords.AsReadOnly();
+
+            var txtRoomCloserBetter = FileSaving.Load(Application.dataPath + _configRoomCloserBetterFilePath);
+            _configRoomCloserBetter.LoadFromString(txtRoomCloserBetter);
+            _lstConfigRoomCloserBetterRecords.AddRange(_configRoomCloserBetter.Records);
+            ListConfigRoomCloserBetterRecords = _lstConfigRoomCloserBetterRecords.AsReadOnly();
         }
 
 
@@ -349,6 +360,35 @@ namespace KAP.ToolCreateMap
                     return true;
                 });
             }
+            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Event)
+            {
+                var info = (DecoInfo)_areaManager.ListRooms[0].Info;
+                var mess = string.Format("export json cho room event: " + info.Id);
+
+                UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
+                {
+                    if (result == UIMessageBox.MessageBoxAction.Accept)
+                    {
+                        _toolLstRooms.ExportData();
+                        BuildConfigRoomCloserBetter();
+                    }
+                    return true;
+                });
+            }
+            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.PoolDeco)
+            {
+                var info = (DecoInfo)_areaManager.ListRooms[0].Info;
+                var mess = string.Format("export json cho pool deco");
+
+                UIManager.ShowMessage("", mess, UIMessageBox.MessageBoxType.OK_Cancel, (result) =>
+                {
+                    if (result == UIMessageBox.MessageBoxAction.Accept)
+                    {
+                        _toolLstRooms.OnExportJsonPoolDeco();
+                    }
+                    return true;
+                });
+            }
         }
         
         private void BuildCurrentRoomPlay()
@@ -376,6 +416,11 @@ namespace KAP.ToolCreateMap
                 if (infoRoot.Id == roomId)
                 {
                     pos = deco.Position - Root.Position;
+                    //Debug.LogError("pos: " + pos);
+                    if (pos.z == 0)
+                    {
+                        pos = new Vector3(pos.x - 1, pos.y - 1, 1);
+                    }
                     strPos += "[" + pos.x + "," + pos.y + "," + pos.z + "];";
                     if (!_dctRoomIdStrPos.ContainsKey(roomId.ToString()))
                     {
@@ -533,10 +578,8 @@ namespace KAP.ToolCreateMap
         private void BuildConfigFromCurrentMansion()
         {
             //clear cache data
-            //dctRoomIdNumBubble.Clear();
             _dctRoomIdStrPos.Clear();
             _dctRoomIdIndex.Clear();
-            //dctBubbleIdDecoIds.Clear();
             dctBubbleIdStar.Clear();
             dctBubbleIdDeco.Clear();
             dctBubbleIdWD.Clear();
@@ -605,10 +648,6 @@ namespace KAP.ToolCreateMap
                 }
                 DctRoomIdPosition[roomId][bubbleIndex] = pos;
             }
-            //foreach (var pair in _dctRoomIdStrPos)
-            //{
-            //    Debug.LogError("roomId strPos: " + pair.Key + " " + pair.Value);
-            //}
 
             //get Indx Room
             foreach (var room in _toolLstRooms.GetLstRoomItem())
@@ -680,6 +719,73 @@ namespace KAP.ToolCreateMap
             FileSaving.Save(Application.dataPath + _configBubbleHomeFilePath, txt);
             FileSaving.Save(Application.dataPath + _configBubbleHomePositionFilePath, txtPos);
             Debug.LogError("Export Bubble Home success");
+        }
+
+        public void BuildConfigRoomCloserBetter()
+        {
+            LoadFileCsv();
+            List<string> lstVariables = ConfigRoomCloserBetterRecord.GetLstVariables();
+            string txt = "";
+
+            foreach (var room in _areaManager.ListRooms)
+            {
+                var roomInfo = (DecoInfo)room.Info;
+
+                //get string unpack
+                List<string> listID = new List<string>();
+                List<int> listAreas = new List<int>();
+                List<int> listVolumn = new List<int>();
+                string unpackingDeco = "";
+                room.Foreach((deco) =>
+                {
+                    var info = (DecoInfo)deco.Info;
+                    if (info.Id != roomInfo.Id && info.Id / 100000 < 22 && !info.IsStatic)
+                    {
+                        listID.Add(info.Id + "_" + info.Color);
+                        var rec = ConfigDeco.GetDecoById(info.Id);
+                        listAreas.Add(rec.CanInAreaFaces);
+                        listVolumn.Add(rec.SizeX * rec.SizeY);
+                    }
+                });
+
+                SortLists(listID, listAreas, listVolumn);
+                Debug.LogError(roomInfo.Id + " count after: " + listID.Count);
+                for (var i = 0; i < listID.Count; i++)
+                {
+                    unpackingDeco += listID[i] + ";";
+                }
+                var record = ConfigRoomCloserBetter.GetByRoomId(roomInfo.Id.ToString());
+                if (record != null)
+                {
+                    foreach (var rec in _lstConfigRoomCloserBetterRecords)
+                    {
+                        if (rec.RoomId == roomInfo.Id.ToString())
+                        {
+                            rec.LstUnpackingDeco = unpackingDeco;
+                            rec.BaseGem = _toolBubbleDecoSetting.BaseGem.text;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    ConfigRoomCloserBetterRecord newConfig = new ConfigRoomCloserBetterRecord();
+                    newConfig.Id = _lstConfigRoomCloserBetterRecords.Count + 1;
+                    newConfig.RoomId = roomInfo.Id.ToString();
+                    newConfig.LstUnpackingDeco = unpackingDeco;
+                    newConfig.BaseGem = _toolBubbleDecoSetting.BaseGem.text;
+                    _lstConfigRoomCloserBetterRecords.Add(newConfig);
+                }
+            }
+
+            for (var i = 0; i < lstVariables.Count - 1; i++)
+            {
+                txt += lstVariables[i] + "\t";
+            }
+            txt += lstVariables[lstVariables.Count - 1] + "\n" + ConvertConfigRoomCloserBetterRecordToStringCsv(_lstConfigRoomCloserBetterRecords);
+
+            FileSaving.Save(Application.dataPath + _configRoomCloserBetterFilePath, txt);
+            Debug.LogError("Export Room Closer Better success");
         }
         public void OnAddDecoEvent(string bubbleId)
         {
@@ -804,6 +910,15 @@ namespace KAP.ToolCreateMap
                 _lstConfigBubblePlayPositionRecords.AddRange(_configBubblePlayPosition.Records);
                 ListConfigBubblePlayPositionRecords = _lstConfigBubblePlayPositionRecords.AsReadOnly();
             }
+            else if (ToolEditMode.Instance.CurrentEditMode == EditMode.Event)
+            {
+                var txtRoomCloserBetter = FileSaving.Load(Application.dataPath + _configRoomCloserBetterFilePath);
+                _lstConfigRoomCloserBetterRecords.Clear();
+                var _configRoomCloserBetter = new ConfigRoomCloserBetter();
+                _configRoomCloserBetter.LoadFromString(txtRoomCloserBetter);
+                _lstConfigRoomCloserBetterRecords.AddRange(_configRoomCloserBetter.Records);
+                ListConfigRoomCloserBetterRecords = _lstConfigRoomCloserBetterRecords.AsReadOnly();
+            }
         }
         #endregion
 
@@ -837,6 +952,18 @@ namespace KAP.ToolCreateMap
                 }
                     
                 txt += configRecords[i].BubbleId + "\t" + configRecords[i].BubbleDecoIds + "\n";
+            }
+            return txt;
+        }
+        public string ConvertConfigRoomCloserBetterRecordToStringCsv(List<ConfigRoomCloserBetterRecord> configRecords)
+        {
+            string txt = "";
+            for (var i = 0; i < configRecords.Count; i++)
+            {
+                //Debug.LogError("check: " + configRecords[i].BubbleId);
+
+                txt += configRecords[i].Id + "\t" + configRecords[i].RoomId + "\t" + configRecords[i].LstUnpackingDeco + 
+                    "\t" + configRecords[i].BaseGem + "\n";
             }
             return txt;
         }
@@ -1205,6 +1332,10 @@ namespace KAP.ToolCreateMap
         public ConfigBubblePlayPosition ConfigBubblePlayPosition
         {
             get => _configBubblePlayPosition;
+        }
+        public ConfigRoomCloserBetter ConfigRoomCloserBetter
+        {
+            get => _configRoomCloserBetter;
         }
     }
 
