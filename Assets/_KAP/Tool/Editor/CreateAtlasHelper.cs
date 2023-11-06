@@ -49,6 +49,8 @@ namespace KAP.Tools
             CreateHiveDefaultAtlas();
             CreateRoomChallengeAtlas();
             CreateSeparatedRoomAtlas();
+            CreateRoomEventAtlas();
+            CreatePoolDecoAtlas();
             if (!Directory.Exists(_atlasFolderPath + "RoomTypes/"))
                 Directory.CreateDirectory(_atlasFolderPath + "RoomTypes/");
             CreateAtlasUtils.CreateAtlasFromATexture(_textureFolderPath + @"RoomTypes/roomtypeicons.png", _atlasFolderPath + @"RoomTypes/roomtypeicons.asset", _cloudSettingPath);
@@ -377,6 +379,64 @@ namespace KAP.Tools
                 Directory.CreateDirectory(targetFolderPath);
 
             var jsonFolderPath = Application.dataPath + @"/_KAP/_GameResources/Maps/SeparatedRooms/";
+            if (!Directory.Exists(jsonFolderPath))
+                return;
+            var jsonsFolder = new DirectoryInfo(jsonFolderPath);
+            FileInfo[] allJsons = jsonsFolder.GetFiles("*.json", SearchOption.AllDirectories);
+            foreach (var file in allJsons)
+            {
+                KawaiiAtlas atlas = CreateInstance<KawaiiAtlas>();
+                //json
+                var jsonFilePath = jsonFolderPath + file.Name;
+
+                atlas.LstTexts = new List<TextAsset>();
+                var textAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(FileUtil.GetProjectRelativePath(jsonFilePath.Replace('\\', '/')));
+                if (textAsset != null)
+                    atlas.LstTexts.Add(textAsset);
+                else
+                {
+                    Debug.LogError("Not found Json File: " + file.Name);
+                    continue;
+                }
+                CreateAtlasUtils.CreateAtlas(atlas, targetFolderPath + file.Name.Replace(".json", "") + ".asset", _cloudSettingPath);
+            }
+        }
+        static void CreateRoomEventAtlas()
+        {
+            string targetFolderPath = _atlasFolderPath + "Event/";
+            if (!Directory.Exists(targetFolderPath))
+                Directory.CreateDirectory(targetFolderPath);
+
+            var jsonFolderPath = Application.dataPath + @"/_KAP/_GameResources/Maps/Event/";
+            if (!Directory.Exists(jsonFolderPath))
+                return;
+            var jsonsFolder = new DirectoryInfo(jsonFolderPath);
+            FileInfo[] allJsons = jsonsFolder.GetFiles("*.json", SearchOption.AllDirectories);
+            foreach (var file in allJsons)
+            {
+                KawaiiAtlas atlas = CreateInstance<KawaiiAtlas>();
+                //json
+                var jsonFilePath = jsonFolderPath + file.Name;
+
+                atlas.LstTexts = new List<TextAsset>();
+                var textAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(FileUtil.GetProjectRelativePath(jsonFilePath.Replace('\\', '/')));
+                if (textAsset != null)
+                    atlas.LstTexts.Add(textAsset);
+                else
+                {
+                    Debug.LogError("Not found Json File: " + file.Name);
+                    continue;
+                }
+                CreateAtlasUtils.CreateAtlas(atlas, targetFolderPath + file.Name.Replace(".json", "") + ".asset", _cloudSettingPath);
+            }
+        }
+        static void CreatePoolDecoAtlas()
+        {
+            string targetFolderPath = _atlasFolderPath + "PoolDeco/";
+            if (!Directory.Exists(targetFolderPath))
+                Directory.CreateDirectory(targetFolderPath);
+
+            var jsonFolderPath = Application.dataPath + @"/_KAP/_GameResources/Maps/PoolDeco/";
             if (!Directory.Exists(jsonFolderPath))
                 return;
             var jsonsFolder = new DirectoryInfo(jsonFolderPath);
