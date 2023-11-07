@@ -56,9 +56,21 @@ namespace KAP.Tools
 
         private void OnShowBaseGemInput(EditMode mode)
         {
+            if (mode == EditMode.Home)
+            {
+                _toolMapDecoSetting.GetToggleIsBubble().gameObject.SetActive(true);
+                _toolMapDecoSetting.GetToggleIsStatic().gameObject.SetActive(false);
+            }
+
             if (mode == EditMode.Play || mode == EditMode.Event)
                 _toolBubbleDecoSetting.BaseGem.gameObject.SetActive(true);
             else _toolBubbleDecoSetting.BaseGem.gameObject.SetActive(false);
+
+            if (mode == EditMode.Play)
+            {
+                _toolMapDecoSetting.GetToggleIsBubble().gameObject.SetActive(true);
+                _toolMapDecoSetting.GetToggleIsStatic().gameObject.SetActive(false);
+            }
             if (mode == EditMode.Event)
             {
                 _toolMapDecoSetting.GetToggleIsBubble().gameObject.SetActive(false);

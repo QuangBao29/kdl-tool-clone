@@ -135,6 +135,24 @@ namespace KAP.ToolCreateMap
             }
             _toggleIsBubble.isOn = info.IsBubble;
         }
+        public void ShowStaticKDL()
+        {
+            if (ToolEditMode.Instance.CurrentEditMode == EditMode.Event)
+            {
+                var cur = _editManager.Current;
+                if (cur == null)
+                {
+                    return;
+                }
+                gameObject.SetActive(true);
+                var info = (DecoInfo)cur.deco.Info;
+                if (info == null)
+                {
+                    return;
+                }
+                _toggleIsStatic.isOn = info.IsStatic;
+            }
+        }
         public void OnToggleBubbleChange()
         {
             var cur = _editManager.Current;
@@ -204,27 +222,11 @@ namespace KAP.ToolCreateMap
 
         public void OnToggleStaticChange()
         {
-            if (_curShadow == null)
-                return;
             _toggleIsStatic.isOn = !_toggleIsStatic.isOn;
-            var info = (DecoInfo)_curShadow.Deco.Info;
+            var cur = _editManager.Current;
+            var info = (DecoInfo)cur.deco.Info;
             info.IsStatic = _toggleIsStatic.isOn;
-            if (info.IsStatic)
-            {
-                info.ShadowColor = null;
-                if(_curShadow.IsShowShadow)
-                {
-                    _curShadow.IsShowShadow = false;
-                    foreach (var piece in _curShadow.Deco.LstAreaPieces)
-                    {
-                        foreach (var c in piece.LstChilds)
-                        {
-                            ShowShadowChildRecrusive(c, _curShadow.IsShowShadow);
-                        }
-                    }
-                }
-            }
-            Show();
+            
         }
         
         public void OnToggleColorChange()
