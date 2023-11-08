@@ -516,18 +516,40 @@ namespace KAP.ToolCreateMap
 
             CountDecoUnpack();
             string txt = _txtCurEditMode.text.Substring(0, _txtCurEditMode.text.Length - 4);
-            if (txt == EditMode.Play.ToString())
+            if (txt == EditMode.Play.ToString()
+                || txt == EditMode.Event.ToString())
                 _toolScreenBound.InitRoomPlay(roomId);
             else
                 _toolScreenBound.Init();
         }
         public void OnClickScreenshotAllPlayRoom()
         {
-            StartCoroutine("OnButtonScreenShotMultiRoomClick");
+            string txt = _txtCurEditMode.text.Substring(0, _txtCurEditMode.text.Length - 4);
+            if (txt == EditMode.Play.ToString())
+                StartCoroutine("OnButtonScreenShotMultiRoomClick");
+            else if(txt == EditMode.Event.ToString())
+                StartCoroutine("OnButtonScreenShotMultiRoomEventClick");
+
+
         }
         IEnumerator OnButtonScreenShotMultiRoomClick()
         {
             foreach(var record in _configController.ConfigBubblePlayPosition.Records)
+            {
+                Debug.LogError("record Id: " + record.RoomId);
+                _inputMapId.text = record.RoomId;
+
+                OnButtonImportNewClick();
+
+                _toolScreenShot.OnScreenShotClick();
+
+                yield return new WaitForSeconds(2);
+            }
+        }
+
+        IEnumerator OnButtonScreenShotMultiRoomEventClick()
+        {
+            foreach (var record in _configController.ConfigRoomCloserBetter.Records)
             {
                 Debug.LogError("record Id: " + record.RoomId);
                 _inputMapId.text = record.RoomId;
