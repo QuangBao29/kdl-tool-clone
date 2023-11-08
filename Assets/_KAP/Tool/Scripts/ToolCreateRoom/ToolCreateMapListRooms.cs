@@ -107,16 +107,18 @@ namespace KAP.ToolCreateMap
 
             string _importEventRoomPath = "Assets/_KAP/_GameResources/Maps/Event/";
             string _exportEventRoomPath = "/_KAP/_GameResources/Maps/Event/";
+            string _screenshotEventPath = "_KDL/_GameResources/Textures/Event/";
 
             string _importPoolDecoPath = "Assets/_KAP/_GameResources/Maps/PoolDeco/";
             string _exportPoolDecoPath = "/_KAP/_GameResources/Maps/PoolDeco/";
+            string _screenshotPoolDecoPath = "_KDL/_GameResources/Textures/PoolDeco/";
 
             _dctEditModeData.Add(EditMode.Home, new EditModeData(EditMode.Home, _importThemePath, _exportThemePath, _screenshotRoomHomePath, Color.black, KAPDefine.DefaultMansionID));
             _dctEditModeData.Add(EditMode.Play, new EditModeData(EditMode.Play, _importRoomPath, _exportRoomPath, _screenshotRoomPlayPath, Color.red, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.SeparatedRoom, new EditModeData(EditMode.SeparatedRoom, _importSeparatedRoomsPath, _exportSeparatedRoomsPath, "", Color.yellow, KAPDefine.DefaultRoomId));
             _dctEditModeData.Add(EditMode.OldRoom, new EditModeData(EditMode.OldRoom, _importOldRoomsPath, _exportOldRoomsPath, "", Color.gray, KAPDefine.DefaultOldMansionID));
-            _dctEditModeData.Add(EditMode.Event, new EditModeData(EditMode.Event, _importEventRoomPath, _exportEventRoomPath, "", Color.green, KAPDefine.DefaultEventRoomID));
-            _dctEditModeData.Add(EditMode.PoolDeco, new EditModeData(EditMode.PoolDeco, _importPoolDecoPath, _exportPoolDecoPath, "", Color.cyan, KAPDefine.DefaultPoolDecoID));
+            _dctEditModeData.Add(EditMode.Event, new EditModeData(EditMode.Event, _importEventRoomPath, _exportEventRoomPath, _screenshotEventPath, Color.green, KAPDefine.DefaultEventRoomID));
+            _dctEditModeData.Add(EditMode.PoolDeco, new EditModeData(EditMode.PoolDeco, _importPoolDecoPath, _exportPoolDecoPath, _screenshotPoolDecoPath, Color.cyan, KAPDefine.DefaultPoolDecoID));
         }
 
         private void OnTogglEditThemeChange(EditMode editMode)
