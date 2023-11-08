@@ -406,17 +406,33 @@ namespace KAP.Tools
             string targetFolderPath = _atlasFolderPath + "Event/";
             if (!Directory.Exists(targetFolderPath))
                 Directory.CreateDirectory(targetFolderPath);
-
+            var textureFolderPath = Application.dataPath + @"/_KDL/_GameResources/Textures/Event/";
             var jsonFolderPath = Application.dataPath + @"/_KAP/_GameResources/Maps/Event/";
+            if (!Directory.Exists(textureFolderPath))
+                return;
             if (!Directory.Exists(jsonFolderPath))
                 return;
-            var jsonsFolder = new DirectoryInfo(jsonFolderPath);
-            FileInfo[] allJsons = jsonsFolder.GetFiles("*.json", SearchOption.AllDirectories);
-            foreach (var file in allJsons)
+            var textureFolder = new DirectoryInfo(textureFolderPath);
+            FileInfo[] allTextures = textureFolder.GetFiles("*.png", SearchOption.AllDirectories);
+            foreach (var file in allTextures)
             {
                 KawaiiAtlas atlas = CreateInstance<KawaiiAtlas>();
+                //texture
+                atlas.LstSprites = new List<Sprite>();
+                var objSprites = AssetDatabase.LoadAllAssetRepresentationsAtPath(FileUtil.GetProjectRelativePath(file.FullName.Replace('\\', '/')));
+                foreach (var obj in objSprites)
+                {
+                    var sprite = (Sprite)obj;
+                    if (sprite.rect.width > 512 || sprite.rect.height > 512)
+                    {
+                        Debug.LogError(string.Format("width or height so long: {0}", file.Name));
+                        continue;
+                    }
+                    if (!atlas.LstSprites.Contains(sprite))
+                        atlas.LstSprites.Add(sprite);
+                }
                 //json
-                var jsonFilePath = jsonFolderPath + file.Name;
+                var jsonFilePath = jsonFolderPath + file.Name.Replace(".png", ".json");
 
                 atlas.LstTexts = new List<TextAsset>();
                 var textAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(FileUtil.GetProjectRelativePath(jsonFilePath.Replace('\\', '/')));
@@ -427,7 +443,7 @@ namespace KAP.Tools
                     Debug.LogError("Not found Json File: " + file.Name);
                     continue;
                 }
-                CreateAtlasUtils.CreateAtlas(atlas, targetFolderPath + file.Name.Replace(".json", "") + ".asset", _cloudSettingPath);
+                CreateAtlasUtils.CreateAtlas(atlas, targetFolderPath + file.Name.Replace(".png", "") + ".asset", _cloudSettingPath);
             }
         }
         static void CreatePoolDecoAtlas()
@@ -435,17 +451,33 @@ namespace KAP.Tools
             string targetFolderPath = _atlasFolderPath + "PoolDeco/";
             if (!Directory.Exists(targetFolderPath))
                 Directory.CreateDirectory(targetFolderPath);
-
+            var textureFolderPath = Application.dataPath + @"/_KDL/_GameResources/Textures/PoolDeco/";
             var jsonFolderPath = Application.dataPath + @"/_KAP/_GameResources/Maps/PoolDeco/";
+            if (!Directory.Exists(textureFolderPath))
+                return;
             if (!Directory.Exists(jsonFolderPath))
                 return;
-            var jsonsFolder = new DirectoryInfo(jsonFolderPath);
-            FileInfo[] allJsons = jsonsFolder.GetFiles("*.json", SearchOption.AllDirectories);
-            foreach (var file in allJsons)
+            var textureFolder = new DirectoryInfo(textureFolderPath);
+            FileInfo[] allTextures = textureFolder.GetFiles("*.png", SearchOption.AllDirectories);
+            foreach (var file in allTextures)
             {
                 KawaiiAtlas atlas = CreateInstance<KawaiiAtlas>();
+                //texture
+                atlas.LstSprites = new List<Sprite>();
+                var objSprites = AssetDatabase.LoadAllAssetRepresentationsAtPath(FileUtil.GetProjectRelativePath(file.FullName.Replace('\\', '/')));
+                foreach (var obj in objSprites)
+                {
+                    var sprite = (Sprite)obj;
+                    if (sprite.rect.width > 512 || sprite.rect.height > 512)
+                    {
+                        Debug.LogError(string.Format("width or height so long: {0}", file.Name));
+                        continue;
+                    }
+                    if (!atlas.LstSprites.Contains(sprite))
+                        atlas.LstSprites.Add(sprite);
+                }
                 //json
-                var jsonFilePath = jsonFolderPath + file.Name;
+                var jsonFilePath = jsonFolderPath + file.Name.Replace(".png", ".json");
 
                 atlas.LstTexts = new List<TextAsset>();
                 var textAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(FileUtil.GetProjectRelativePath(jsonFilePath.Replace('\\', '/')));
@@ -456,7 +488,7 @@ namespace KAP.Tools
                     Debug.LogError("Not found Json File: " + file.Name);
                     continue;
                 }
-                CreateAtlasUtils.CreateAtlas(atlas, targetFolderPath + file.Name.Replace(".json", "") + ".asset", _cloudSettingPath);
+                CreateAtlasUtils.CreateAtlas(atlas, targetFolderPath + file.Name.Replace(".png", "") + ".asset", _cloudSettingPath);
             }
         }
     }
