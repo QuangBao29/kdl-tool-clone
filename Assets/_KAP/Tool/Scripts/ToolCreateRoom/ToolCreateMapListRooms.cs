@@ -169,6 +169,8 @@ namespace KAP.ToolCreateMap
                     {
                         roomId = int.Parse(_inputMapId.text);
                         room.Info = new DecoInfo { Id = roomId };
+                        if (!_configController.DctRoomIdPosition.ContainsKey(roomId))
+                            _configController.DctRoomIdPosition.Add(roomId, new List<Vector3>());
                     }
                     else if (ToolEditMode.Instance.CurrentEditMode == EditMode.OldRoom)
                     {
